@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Search</title>
+<script type="text/javascript" th:src="@{/resources/js/jquery-1.8.3.js}"></script>
+<style>
+	body{ margin:0px; padding:0px; background-color: #27AE60; }
+	
+	#searchForm{ width:690px; height:50px; margin:200px auto 0px; }
+	
+	#wordText{ width:600px; height:50px; border:none; font-size:24px; text-indent:10px;
+		margin:0px; padding:0px; float:left; border-radius:6px 0px 0px 6px;}
+		
+	#searchBtn{ height:50px; width:88px; border:1px solid #fff; border-radius:0px 6px 6px 0px;
+		background-color: #27AE60; color:#FFF; display: inline-block;
+		margin:0px; padding:0px; float:right;font-size:20px; font-weight: bold;
+		}
+	
+	#wordInfo{ width:500px;height:360px; background-color: #FFF; margin:30px auto 0px; border-radius: 10px; display:none;}
+	
+	#wordInfoTable tr{ height:40px; }
+	#wordInfoTable tr .left{ width:180px; font-size:18px; font-weight:bold; text-align: right;}
+	#wordInfoTable tr .right{  }
+</style>
+</head>
+<body>
+	<form id="searchForm" onsubmit="return false;" >
+		<input type="text" name="word" id="wordText" />
+		<button id="searchBtn" type="button">Search</button>
+	</form>
+	<div id="wordInfo">
+		<table id="wordInfoTable">
+			<tr>
+				<td class="left">Word : </td>
+				<td class="ri]ght" id="wordContent"></td>
+			</tr>
+			<tr>
+				<td class="left">UK Pronunciation : </td>
+				<td class="ri]ght" id="ukPronunciation"></td>
+			</tr>
+			<tr>
+				<td class="left">US Pronunciation : </td>
+				<td class="ri]ght" id="usPronunciation"></td>
+			</tr>
+			<tr>
+				<td class="left">CN Definition : </td>
+				<td class="ri]ght"  id="cnDefinition"></td>
+			</tr>
+			<tr>
+				<td class="left">EN Definition : </td>
+				<td class="ri]ght" id="enDefinition"></td>
+			</tr>
+			<tr>
+				<td class="left">UK Audio : </td>
+				<td class="ri]ght">
+					<audio controls>
+						<source src="http://media.shanbay.com/audio/uk/umbrella.mp3" type="audio/mpeg" id="ukAudio">
+					</audio>
+				</td>
+			</tr>
+			<tr>
+				<td class="left">US Audio : </td>
+				<td class="ri]ght">
+					<audio controls>
+						<source src="http://media.shanbay.com/audio/uk/umbrella.mp3" type="audio/mpeg"  id="usAudio">
+					</audio>
+				</td>
+			</tr>
+		</table>
+	</div>
+<script type="text/javascript" th:inline="javascript">
+	$(function(){
+		
+	});
+	
+	$("#searchBtn").bind("click",function(){
+		
+		var wordVal = $("#wordText").val();
+		if(wordVal == null || wordVal == ""){
+			return false;
+		}
+		$.post([[${basePath}]] + "search.do",{
+			word : wordVal
+		},function(data){
+			var json = JSON.parse(data);
+			if(json.msg == "SUCCESS"){
+				var wordData = json.data;
+				$("#wordInfo").css("display","block");
+				$("#wordContent").text(wordData.content);
+				$("#ukPronunciation").text(wordData.pronunciations['uk']);
+				$("#usPronunciation").text(wordData.pronunciations['us']);
+				$("#enDefinition").text(wordData.en_definition['defn']);
+				$("#cnDefinition").text(wordData.cn_definition['defn']);
+				$("#usAudio").attr("src",wordData.us_audio);
+				$("#ukAudio").attr("src",wordData.uk_audio);
+				
+				$.post([[${basePath}]] + "saveWord.do",{
+					word : wordVal
+				},function(){
+					console.log("Send Request!");
+				});
+			}
+		});
+		
+	});
+</script>
+</body>
+</html>
