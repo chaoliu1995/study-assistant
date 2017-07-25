@@ -1,3 +1,2 @@
 target/
-src/main/webapp/resources/audio/uk/
-src/main/webapp/resources/audio/us/
+*.mp3
