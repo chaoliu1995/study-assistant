@@ -26,7 +26,7 @@
 </head>
 <body>
 	<form id="searchForm" onsubmit="return false;" >
-		<input type="text" name="word" id="wordText" />
+		<input type="text" name="word" id="wordText" onkeydown="enter(event)" />
 		<button id="searchBtn" type="button">Search</button>
 	</form>
 	<div id="wordInfo">
@@ -53,32 +53,27 @@
 			</tr>
 			<tr>
 				<td class="left">UK Audio : </td>
-				<td class="ri]ght">
-					<audio controls>
-						<source src="http://media.shanbay.com/audio/uk/umbrella.mp3" type="audio/mpeg" id="ukAudio">
-					</audio>
-				</td>
+				<td class="ri]ght" id="ukAudioTd"></td>
 			</tr>
 			<tr>
 				<td class="left">US Audio : </td>
-				<td class="ri]ght">
-					<audio controls>
-						<source src="http://media.shanbay.com/audio/uk/umbrella.mp3" type="audio/mpeg"  id="usAudio">
-					</audio>
-				</td>
+				<td class="ri]ght" id="usAudioTd"></td>
 			</tr>
 		</table>
 	</div>
 <script type="text/javascript" th:inline="javascript">
-	$(function(){
-		
-	});
-	
-	$("#searchBtn").bind("click",function(){
+	function search(){
 		
 		var wordVal = $("#wordText").val();
 		if(wordVal == null || wordVal == ""){
-			return false;
+			return;
+		}
+		var reg= /^[A-Za-z]+$/;
+		if(!reg.test(wordVal)){
+			return;
+		}
+		if(wordVal == $("#wordContent").text()){
+			return;
 		}
 		$.post([[${basePath}]] + "search.do",{
 			word : wordVal
@@ -86,15 +81,22 @@
 			var json = JSON.parse(data);
 			if(json.msg == "SUCCESS"){
 				var wordData = json.data;
-				$("#wordInfo").css("display","block");
+				$("#wordInfo").fadeOut();
 				$("#wordContent").text(wordData.content);
 				$("#ukPronunciation").text(wordData.pronunciations['uk']);
 				$("#usPronunciation").text(wordData.pronunciations['us']);
 				$("#enDefinition").text(wordData.en_definition['defn']);
 				$("#cnDefinition").text(wordData.cn_definition['defn']);
-				$("#usAudio").attr("src",wordData.us_audio);
-				$("#ukAudio").attr("src",wordData.uk_audio);
 				
+				$("#ukAudioTd").html("");
+				$("#usAudioTd").html("");
+				
+				var ukAudio = $('<audio controls id="ukAudio"><source src="'+wordData.uk_audio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
+				var usAudio = $('<audio controls id="usAudio"><source src="'+wordData.us_audio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
+				$("#ukAudioTd").append(ukAudio);
+				$("#usAudioTd").append(usAudio);
+				
+				$("#wordInfo").fadeIn();
 				$.post([[${basePath}]] + "saveWord.do",{
 					word : wordVal
 				},function(){
@@ -103,7 +105,15 @@
 			}
 		});
 		
-	});
+	}
+	
+	$("#searchBtn").bind("click",search);
+	
+	function enter(e){
+		if(e.keyCode==13) {
+			search();
+		}
+	}
 </script>
 </body>
 </html>
