@@ -2,7 +2,6 @@ package com.chaoliu1995.english.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Import;
 
 /**
@@ -11,9 +10,7 @@ import org.springframework.context.annotation.Import;
  *
  */
 @Configuration
-@ComponentScan(basePackages = { "com.chaoliu1995.english" }, excludeFilters = {
-		@ComponentScan.Filter(type = FilterType.REGEX, pattern = { "com.chaoliu1995.english.config.*" })
-		})
+@ComponentScan(basePackages = { "com.chaoliu1995.english" })
 @Import({ DataConfig.class })
 public class AppConfig {
 	

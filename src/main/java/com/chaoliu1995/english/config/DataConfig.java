@@ -25,7 +25,7 @@ import tk.mybatis.spring.mapper.MapperScannerConfigurer;
 @Configuration
 @PropertySource("classpath:/config.properties")
 @EnableTransactionManagement
-public class DataConfig implements EnvironmentAware{
+public class DataConfig implements EnvironmentAware {
 	
     private Environment env;
 	
@@ -45,18 +45,18 @@ public class DataConfig implements EnvironmentAware{
 		dataSource.setUrl(env.getProperty("db.url"));
 		dataSource.setUsername(env.getProperty("db.userName"));
 		dataSource.setPassword(env.getProperty("db.password"));
-		dataSource.setInitialSize(Integer.parseInt(env.getProperty("db.initialSize")));
-		dataSource.setMaxActive(Integer.parseInt(env.getProperty("db.maxActive")));
-		dataSource.setMinIdle(Integer.parseInt(env.getProperty("db.minIdle")));
-		dataSource.setMaxWait(Long.parseLong(env.getProperty("db.maxWait")));
-		dataSource.setTimeBetweenEvictionRunsMillis(Long.parseLong(env.getProperty("db.timeBetweenEvictionRunsMillis")));
-		dataSource.setMinEvictableIdleTimeMillis(Long.parseLong(env.getProperty("db.minEvictableIdleTimeMillis")));
+		dataSource.setInitialSize(env.getProperty("db.initialSize",Integer.class));
+		dataSource.setMaxActive(env.getProperty("db.maxActive",Integer.class));
+		dataSource.setMinIdle(env.getProperty("db.minIdle",Integer.class));
+		dataSource.setMaxWait(env.getProperty("db.maxWait",Long.class));
+		dataSource.setTimeBetweenEvictionRunsMillis(env.getProperty("db.timeBetweenEvictionRunsMillis",Long.class));
+		dataSource.setMinEvictableIdleTimeMillis(env.getProperty("db.minEvictableIdleTimeMillis",Long.class));
 		dataSource.setValidationQuery(env.getProperty("db.validationQuery"));
-		dataSource.setTestOnBorrow(Boolean.parseBoolean(env.getProperty("db.testOnBorrow")));
-		dataSource.setTestOnReturn(Boolean.parseBoolean(env.getProperty("db.testOnReturn")));
-		dataSource.setTestWhileIdle(Boolean.parseBoolean(env.getProperty("db.testWhileIdle")));
-		dataSource.setPoolPreparedStatements(Boolean.parseBoolean(env.getProperty("db.poolPreparedStatements")));
-		dataSource.setMaxPoolPreparedStatementPerConnectionSize(Integer.parseInt(env.getProperty("db.maxPoolPreparedStatementPerConnectionSize")));
+		dataSource.setTestOnBorrow(env.getProperty("db.testOnBorrow",Boolean.class));
+		dataSource.setTestOnReturn(env.getProperty("db.testOnReturn",Boolean.class));
+		dataSource.setTestWhileIdle(env.getProperty("db.testWhileIdle",Boolean.class));
+		dataSource.setPoolPreparedStatements(env.getProperty("db.poolPreparedStatements",Boolean.class));
+		dataSource.setMaxPoolPreparedStatementPerConnectionSize(env.getProperty("db.maxPoolPreparedStatementPerConnectionSize",Integer.class));
 		return dataSource;
 	}
 	
@@ -111,6 +111,5 @@ public class DataConfig implements EnvironmentAware{
 	public PlatformTransactionManager txManager(){
 		return new DataSourceTransactionManager(dataSource());
 	}
-	
 	
 }
