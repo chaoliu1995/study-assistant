@@ -7,6 +7,9 @@ import javax.persistence.Table;
 
 import com.chaoliu1995.english.util.Constants;
 
+import lombok.Data;
+
+@Data
 @Table(name="pronunciations")
 public class TabPronunciations implements java.io.Serializable {
 
@@ -21,37 +24,5 @@ public class TabPronunciations implements java.io.Serializable {
 	private String us;
 	
 	private String uk;
-
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getWordId() {
-		return wordId;
-	}
-
-	public void setWordId(Integer wordId) {
-		this.wordId = wordId;
-	}
-
-	public String getUs() {
-		return us;
-	}
-
-	public void setUs(String us) {
-		this.us = us;
-	}
-
-	public String getUk() {
-		return uk;
-	}
-
-	public void setUk(String uk) {
-		this.uk = uk;
-	}
 	
 }

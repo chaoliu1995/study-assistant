@@ -6,6 +6,9 @@ import javax.persistence.Id;
 
 import com.chaoliu1995.english.util.Constants;
 
+import lombok.Data;
+
+@Data
 public class UsAudioAddresses implements java.io.Serializable {
 	
 	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
@@ -18,27 +21,4 @@ public class UsAudioAddresses implements java.io.Serializable {
 	
 	private String url;
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
-	public Integer getWordId() {
-		return wordId;
-	}
-
-	public void setWordId(Integer wordId) {
-		this.wordId = wordId;
-	}
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
 }

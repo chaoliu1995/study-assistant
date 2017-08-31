@@ -9,4 +9,6 @@ public class Constants {
 	public static final String UK_AUDIO_PATH = "resources/audio/uk/";
 	
 	public static final String US_AUDIO_PATH = "resources/audio/us/";
+	
+	public static final Integer EXCEL_PAGE_SIZE = 2;
 }

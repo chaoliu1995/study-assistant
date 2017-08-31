@@ -1,5 +1,7 @@
 package com.chaoliu1995.english.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +49,7 @@ import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.Constants;
 import com.chaoliu1995.english.util.EntityUtils;
 import com.chaoliu1995.english.util.FileUtils;
+import com.chaoliu1995.english.util.Pager;
 import com.chaoliu1995.english.util.StringUtils;
 
 @Service("wordService")
@@ -292,6 +295,15 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 				enDefnVMapper.insert(enDefnV);
 			}
 		}
+	}
+
+
+	@Override
+	public Pager<TabWord> listTabWordForExcel(Integer currentPage,Integer pageSize,Integer recordTotal) {
+		Pager<TabWord> pager = new Pager<TabWord>(currentPage,pageSize,recordTotal);
+		List<TabWord> wordList = tabWordMapper.listTabWordForPager(pager.getStartNum(), pager.getEndNum(),new TabWord());
+		pager.setRecordList(wordList);
+		return pager;
 	}
 	
 }

@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chaoliu1995.english.dao.TabWordMapper">
-
+	
+	<resultMap id="wordForExcelMap" type="TabWord">
+		<id column="id" property="id" />
+        <result column="content" property="content" />
+        <result column="pronunciation" property="pronunciation" />
+	</resultMap>
+	
 	<insert id="insertReturnKey" parameterType="TabWord" useGeneratedKeys="true" keyProperty="id" >
 	    insert into word (uk_audio, conent_id, 
 	      audio_name, num_sense, content_id, 
@@ -14,4 +20,7 @@
 	      #{content,jdbcType=VARCHAR}, #{pron,jdbcType=VARCHAR}, #{pronunciation,jdbcType=VARCHAR}, 
 	      #{audio,jdbcType=VARCHAR}, #{usAudio,jdbcType=VARCHAR})
 	</insert>
+	<select id="listTabWordForPager" resultMap="wordForExcelMap">
+		select id,content,pronunciation from word limit #{startNum},#{endNum}
+	</select>
 </mapper>
