@@ -23,5 +23,5 @@ public interface TabWordMapper extends Mapper<TabWord> {
 	 * @param word
 	 * @return
 	 */
-	List<TabWord> listTabWordForPager(@Param("startNum")Integer startNum,@Param("endNum")Integer endNum,@Param("word")TabWord word);
+	List<TabWord> listTabWordForPager(@Param("startNum")Integer startNum,@Param("limit")Integer limit,@Param("word")TabWord word);
 }

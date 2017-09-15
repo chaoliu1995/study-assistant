@@ -13,7 +13,6 @@ import lombok.Setter;
  */
 public class Pager<T> {
 	
-	
 	public static final Integer DEFAULT_PAGE_SIZE = 10;		//默认每页的数据量
 	
 	public static final Integer DEFAULT_CURRENT_PAGE = 1;	//默认当前页
@@ -44,10 +43,13 @@ public class Pager<T> {
 	private Integer startNum;	//起始
 	
 	@Getter
-	private Integer endNum;		//
+	private Integer endNum;		//结束
 	
 	public Pager(Integer currentPage, Integer pageSize, Integer recordTotal){
-		this.pageTotal = (int)Math.ceil((double)recordTotal / pageSize);
+		this.pageSize = pageSize;
+		this.pageTotal = (int)Math.ceil((double)recordTotal / pageSize);	//计算总页数
+		this.recordTotal = recordTotal;
+		//防止超出已有页数
 		if(currentPage > pageTotal)
 			this.currentPage = pageTotal;
 		else if(currentPage < 1)
@@ -55,34 +57,18 @@ public class Pager<T> {
 		else
 			this.currentPage = currentPage;
 		
-		this.endNum = currentPage * pageSize;
-		this.startNum = this.endNum - pageSize;
+		this.endNum = this.currentPage * pageSize;	//计算分页结束值
+		this.startNum = this.endNum - pageSize;		//计算分页起始值
 		
-		if(currentPage == 1)
+		//计算上一页、下一页
+		if(this.currentPage == 1)
 			this.prevPage = 1;
 		else
-			this.prevPage = currentPage - 1;
-		if(currentPage == this.pageTotal)
-			this.nextPage = currentPage;
+			this.prevPage = this.currentPage - 1;
+		if(this.currentPage == this.pageTotal)
+			this.nextPage = this.currentPage;
 		else
-			this.nextPage = currentPage + 1;
-	}
-	
-	public Pager(Integer currentPage, Integer recordTotal, Integer pageSize, List<T> recordList){
-		this.currentPage = currentPage;
-		this.recordTotal = recordTotal;
-		this.pageSize = pageSize;
-		this.recordList = recordList;
-		this.pageTotal = (int)Math.ceil((double)recordTotal / pageSize);
-		
-		if(currentPage == 1)
-			this.prevPage = 1;
-		else
-			this.prevPage = currentPage - 1;
-		if(currentPage == this.pageTotal)
-			this.nextPage = currentPage;
-		else
-			this.nextPage = currentPage + 1;
+			this.nextPage = this.currentPage + 1;
 	}
 	
 }

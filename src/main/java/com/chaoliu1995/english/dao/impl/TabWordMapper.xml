@@ -6,6 +6,7 @@
 		<id column="id" property="id" />
         <result column="content" property="content" />
         <result column="pronunciation" property="pronunciation" />
+        <result column="definition" property="definition" />
 	</resultMap>
 	
 	<insert id="insertReturnKey" parameterType="TabWord" useGeneratedKeys="true" keyProperty="id" >
@@ -21,6 +22,6 @@
 	      #{audio,jdbcType=VARCHAR}, #{usAudio,jdbcType=VARCHAR})
 	</insert>
 	<select id="listTabWordForPager" resultMap="wordForExcelMap">
-		select id,content,pronunciation from word limit #{startNum},#{endNum}
+		select id,content,pronunciation,definition from word limit #{startNum},#{limit}
 	</select>
 </mapper>

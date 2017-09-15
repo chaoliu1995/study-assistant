@@ -3,29 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <title>Search</title>
+<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
 <script type="text/javascript" th:src="@{/resources/js/jquery-1.8.3.js}"></script>
 <style>
-	
+	html{background-color: #27AE60;}
 	html,body,input,button{ font-family: Consolas,"Consolas", '微软雅黑', 'Microsoft YaHei UI', 'Hiragino Sans GB',SimSun, SimHei, arial, sans-serif; }
 	
-	body{ margin:0px; padding:0px; background-color: #27AE60; line-height: 1.6; font-size: 14pt; }
+	body{ margin:0px; padding:0px;  font-size: 0.6rem; }
 	
-	#searchForm{ width:80%; height:50px; margin:200px auto 0px; }
+	#searchForm{ width:80%; height:100%; margin:1.2rem auto 0px; }
 	
-	#wordText{ width:60%; height:50px; border:none; font-size:24px; text-indent:10px;
-		margin:0px; padding:0px; float:left; border-radius:6px 0px 0px 6px;}
+	#wordText{ width:100%; height:1.2rem; border:none; text-indent:0.2rem;
+		margin:0px; padding:0px; border-radius:6px; font-size:0.6rem; }
 	
-	.btn{ height:50px; width:20%; background-color: #27AE60; color:#FFF; display: inline-block;
-		margin:0px; padding:0px; font-size:20px; font-weight: bold; }
+	.btn{ height:1.2rem; width:48%; background-color: #27AE60; color:#FFF; display: inline-block; border-radius:6px;
+		margin:0px; padding:0px; font-weight: bold; border:1px solid #fff; margin-top:0.2rem; font-size:0.6rem; }
 	
-	#searchBtn{  border-radius:0px 6px 6px 0px; float:right; border:1px solid #fff;}
-	#emptyBtn{ border:1px solid #fff; border-right:none; }
-	
-	#wordInfo{ width:80%;height:100%; background-color: #FFF; margin:30px auto 0px; border-radius: 10px; display:none;}
+	#wordInfo{ width:80%;height:100%; background-color: #FFF; margin:0.2rem auto 0px; border-radius: 10px; display:none;}
 	
 	#wordInfoTable tr{ height:100%; }
-	#wordInfoTable tr .left{ width:30%; font-size:18px; font-weight:bold; text-align: right;}
-	#wordInfoTable tr .right{ width:70%; }
+	#wordInfoTable tr .left{ width:30%; font-size:0.4rem; font-weight:bold; text-align: right;}
+	#wordInfoTable tr .right{ width:70%; padding:10px 0px;}
+	
+	#ukAudioTd,#usAudioTd{ height:1rem; }
+	
 </style>
 </head>
 <body>
@@ -96,8 +97,8 @@
 				$("#ukAudioTd").html("");
 				$("#usAudioTd").html("");
 				
-				var ukAudio = $('<audio controls id="ukAudio"><source src="'+wordData.uk_audio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
-				var usAudio = $('<audio controls id="usAudio"><source src="'+wordData.us_audio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
+				var ukAudio = $('<audio controls id="ukAudio" style="width:4rem;height:0.5rem;"><source src="'+wordData.uk_audio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
+				var usAudio = $('<audio controls id="usAudio" style="width:4rem;height:0.5rem;"><source src="'+wordData.us_audio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
 				$("#ukAudioTd").append(ukAudio);
 				$("#usAudioTd").append(usAudio);
 				

@@ -3,6 +3,7 @@ package com.chaoliu1995.english.service.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,6 +104,8 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 	@Autowired
 	private EnDefnVMapper enDefnVMapper;
 	
+	@Autowired
+	private Environment env;
 	
 	@Override
 	@Transactional(rollbackFor = Exception.class)
@@ -122,7 +125,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		//保存单词发音文件
 		if(!StringUtils.isEmpty(word.getUk_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",savePath + Constants.UK_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",env.getProperty("file.audioPath") + Constants.UK_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -131,7 +134,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		
 		if(!StringUtils.isEmpty(word.getUs_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",savePath + Constants.US_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",env.getProperty("file.audioPath") + Constants.US_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -139,7 +142,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		
 		//将从扇贝获得的单词数据结构转换为本地数据库实体
 		TabWord tabWord = EntityUtils.wordToTabWord(word);
-		tabWordMapper.insertReturnKey(tabWord);
+		tabWordMapper.insert(tabWord);
 		//获得单词主键
 		int wordId = tabWord.getId();
 		TabPronunciations tp = EntityUtils.pronunciationsToTabPronunciations(word.getPronunciations());
@@ -301,7 +304,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 	@Override
 	public Pager<TabWord> listTabWordForExcel(Integer currentPage,Integer pageSize,Integer recordTotal) {
 		Pager<TabWord> pager = new Pager<TabWord>(currentPage,pageSize,recordTotal);
-		List<TabWord> wordList = tabWordMapper.listTabWordForPager(pager.getStartNum(), pager.getEndNum(),new TabWord());
+		List<TabWord> wordList = tabWordMapper.listTabWordForPager(pager.getStartNum(), pager.getPageSize(),new TabWord());
 		pager.setRecordList(wordList);
 		return pager;
 	}

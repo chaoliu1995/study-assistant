@@ -29,13 +29,4 @@ public class BaseController {
 		model.addAttribute("basePath", basePath);
 	}
 	
-	/**
-	 * 验证码是否正确
-	 * @param str
-	 * @return
-	 */
-	public boolean validCodeIsEqual(String str){
-		String validCode = (String)session.getAttribute("verifyCode");
-		return str.equalsIgnoreCase(validCode);
-	}
 }

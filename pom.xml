@@ -60,7 +60,7 @@
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
+			<version>4.12</version>
 			<scope>test</scope>
 		</dependency>
 
@@ -367,7 +367,8 @@
 				<jdbc.username>root</jdbc.username>
 				<jdbc.password>123456</jdbc.password>
 				<jdbc.url>jdbc:mysql://localhost:3306/english?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false</jdbc.url>
-				<log4j.logFilePath>D:/temp/Englist/log/systemOut.log</log4j.logFilePath>
+				<log4j.logFilePath>D:/temp/Englist/log/English.log</log4j.logFilePath>
+				<file.audioPath>D:/temp/Englist/log/</file.audioPath>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>
@@ -380,7 +381,8 @@
 				<jdbc.username>root</jdbc.username>
 				<jdbc.password>lc1280</jdbc.password>
 				<jdbc.url>jdbc:mysql://localhost:3306/english?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false</jdbc.url>
-				<log4j.logFilePath>/mnt/lc/program/apache-tomcat-7.0.73/logs/systemOut.log</log4j.logFilePath>
+				<log4j.logFilePath>/mnt/lc/file/English/English.log</log4j.logFilePath>
+				<file.audioPath>/mnt/lc/file/English/</file.audioPath>
 			</properties>
 		</profile>
 	</profiles>

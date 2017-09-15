@@ -11,11 +11,27 @@ import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 
+import com.google.gson.Gson;
+
 public class StringUtils {
 	private Random random;
 	private BufferedImage image;
 	private Font font;
 	private int distance;
+	
+	private static Gson gson = new Gson();
+	
+	private StringUtils() {}
+	
+	
+	/**
+	 * object转JSON
+	 * @param obj
+	 * @return
+	 */
+	public static String toJson(Object obj) {
+		return gson.toJson(obj);
+	}
 	
 	 /**
      * The empty String {@code ""}.
