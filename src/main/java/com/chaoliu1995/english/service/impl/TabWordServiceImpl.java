@@ -53,7 +53,7 @@ import com.chaoliu1995.english.util.FileUtils;
 import com.chaoliu1995.english.util.Pager;
 import com.chaoliu1995.english.util.StringUtils;
 
-@Service("wordService")
+@Service("tabWordService")
 public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabWordService {
 	
 	@Autowired
@@ -307,6 +307,20 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		List<TabWord> wordList = tabWordMapper.listTabWordForPager(pager.getStartNum(), pager.getPageSize(),new TabWord());
 		pager.setRecordList(wordList);
 		return pager;
+	}
+
+
+	@Override
+	public TabWord getTabWordByOperateTotalOrderEsc() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void memory(Integer wordId) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

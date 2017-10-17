@@ -17,7 +17,6 @@ import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.Constants;
 import com.chaoliu1995.english.util.HttpUtils;
 import com.chaoliu1995.english.util.StringUtils;
-import com.chaoliu1995.english.util.TerminalUtils;
 import com.google.gson.Gson;
 
 @Controller
@@ -28,13 +27,7 @@ public class SearchController extends BaseController {
 	
 	@RequestMapping("/index")
 	public String page(){
-		String userAgent = request.getHeader( "USER-AGENT" ).toLowerCase();
-		if(!StringUtils.isEmpty(userAgent)){
-			if(TerminalUtils.checkMobile(userAgent)){
-				return "mobile/search";
-			}
-		}
-		return "search";
+		return checkPlatForm("search");
 	}
 	
 	@RequestMapping(value = "/search",method = RequestMethod.POST)

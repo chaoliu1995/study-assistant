@@ -205,5 +205,6 @@ CREATE TABLE `word` (
   `pronunciation` varchar(255) DEFAULT NULL COMMENT '音标',
   `audio` varchar(255) DEFAULT NULL COMMENT '发音的地址',
   `us_audio` varchar(255) DEFAULT NULL COMMENT '发音的地址',
+  `operate_total` int(6) DEFAULT '0' COMMENT '操作总数',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=59 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;

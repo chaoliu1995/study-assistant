@@ -24,4 +24,16 @@ public interface TabWordMapper extends Mapper<TabWord> {
 	 * @return
 	 */
 	List<TabWord> listTabWordForPager(@Param("startNum")Integer startNum,@Param("limit")Integer limit,@Param("word")TabWord word);
+
+	/**
+	 * ESC排序operateTotal字段，获取第一个单词
+	 * @return
+	 */
+	TabWord getByOperateTotalOrderEsc();
+	
+	/**
+	 * 记忆一个单词，operateTotal++
+	 * @param wordId
+	 */
+	int memory(@Param("wordId")Integer wordId);
 }

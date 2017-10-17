@@ -12,14 +12,13 @@
 	
 	#searchForm{ width:80%; height:50px; margin:200px auto 0px; }
 	
-	#wordText{ width:60%; height:50px; border:none; font-size:24px; text-indent:10px;
+	#wordText{ width:70%; height:50px; border:none; font-size:24px; text-indent:10px;
 		margin:0px; padding:0px; float:left; border-radius:6px 0px 0px 6px;}
 	
-	.btn{ height:50px; width:20%; background-color: #27AE60; color:#FFF; display: inline-block;
+	.btn{ height:50px; background-color: #27AE60; color:#FFF; display: inline-block;
 		margin:0px; padding:0px; font-size:20px; font-weight: bold; }
 	
-	#searchBtn{  border-radius:0px 6px 6px 0px; float:right; border:1px solid #fff;}
-	#emptyBtn{ border:1px solid #fff; border-right:none; }
+	#searchBtn{ width:30%; border-radius:0px 6px 6px 0px; float:right; border:1px solid #fff;}
 	
 	#wordInfo{ width:80%;height:100%; background-color: #FFF; margin:30px auto 0px; border-radius: 10px; display:none;}
 	
@@ -31,7 +30,6 @@
 <body>
 	<div id="searchForm" >
 		<input type="text" name="word" id="wordText" onkeydown="enter(event)" />
-		<button id="emptyBtn" type="button" class="btn">Empty</button>
 		<button id="searchBtn" type="button" class="btn">Search</button>
 	</div>
 	<div id="wordInfo">
@@ -70,7 +68,7 @@
 	function search(){
 		
 		var wordVal = $("#wordText").val();
-		if(wordVal == null || wordVal == ""){
+		if(wordVal == null || wordVal == "" || $.trim(wordVal) == ""){
 			return;
 		}
 		var reg= /^[A-Za-z]+$/;
@@ -78,6 +76,7 @@
 			return;
 		}
 		if(wordVal == $("#wordContent").text()){
+			$("#wordText").val("");
 			return;
 		}
 		$.post([[${basePath}]] + "search.do",{

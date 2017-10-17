@@ -33,10 +33,6 @@ public class StringUtils {
 		return gson.toJson(obj);
 	}
 	
-	 /**
-     * The empty String {@code ""}.
-     * @since 2.0
-     */
     public static final String EMPTY = "";
 
 	
@@ -46,7 +42,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static boolean isEmpty(String str){
-		if(str == null || str.length() == 0 || str.equals("undefined")){
+		if(str == null || str.length() == 0){
 			return true;
 		}else{
 			return false;

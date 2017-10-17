@@ -34,6 +34,7 @@ public class TabWord implements java.io.Serializable {
 	private String pronunciation;	//发音
 	private String audio; 		//发音的地址
 	private String usAudio;	//发音的地址
+	private Integer operateTotal;
 	
 	public TabWord(){}
 	

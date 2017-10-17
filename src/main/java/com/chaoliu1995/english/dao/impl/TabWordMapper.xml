@@ -1,27 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chaoliu1995.english.dao.TabWordMapper">
-	
+
 	<resultMap id="wordForExcelMap" type="TabWord">
 		<id column="id" property="id" />
-        <result column="content" property="content" />
-        <result column="pronunciation" property="pronunciation" />
-        <result column="definition" property="definition" />
+		<result column="content" property="content" />
+		<result column="pronunciation" property="pronunciation" />
+		<result column="definition" property="definition" />
 	</resultMap>
-	
-	<insert id="insertReturnKey" parameterType="TabWord" useGeneratedKeys="true" keyProperty="id" >
-	    insert into word (uk_audio, conent_id, 
-	      audio_name, num_sense, content_id, 
-	      url, has_audio, object_id, 
-	      content, pron, pronunciation, 
-	      audio, us_audio)
-	    values (#{ukAudio,jdbcType=VARCHAR}, #{conentId,jdbcType=INTEGER}, 
-	      #{audioName,jdbcType=VARCHAR}, #{numSense,jdbcType=INTEGER}, #{contentId,jdbcType=INTEGER}, 
-	      #{url,jdbcType=VARCHAR}, #{hasAudio,jdbcType=INTEGER}, #{objectId,jdbcType=INTEGER}, 
-	      #{content,jdbcType=VARCHAR}, #{pron,jdbcType=VARCHAR}, #{pronunciation,jdbcType=VARCHAR}, 
-	      #{audio,jdbcType=VARCHAR}, #{usAudio,jdbcType=VARCHAR})
+
+	<resultMap id="BaseResultMap" type="TabWord">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="uk_audio" jdbcType="VARCHAR" property="ukAudio" />
+		<result column="conent_id" jdbcType="INTEGER" property="conentId" />
+		<result column="audio_name" jdbcType="VARCHAR" property="audioName" />
+		<result column="num_sense" jdbcType="INTEGER" property="numSense" />
+		<result column="content_type" jdbcType="VARCHAR" property="contentType" />
+		<result column="sense_id" jdbcType="INTEGER" property="senseId" />
+		<result column="definition" jdbcType="VARCHAR" property="definition" />
+		<result column="content_id" jdbcType="INTEGER" property="contentId" />
+		<result column="url" jdbcType="VARCHAR" property="url" />
+		<result column="has_audio" jdbcType="INTEGER" property="hasAudio" />
+		<result column="object_id" jdbcType="INTEGER" property="objectId" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+		<result column="pron" jdbcType="VARCHAR" property="pron" />
+		<result column="pronunciation" jdbcType="VARCHAR" property="pronunciation" />
+		<result column="audio" jdbcType="VARCHAR" property="audio" />
+		<result column="us_audio" jdbcType="VARCHAR" property="usAudio" />
+		<result column="operate_total" jdbcType="INTEGER" property="operateTotal" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		id, uk_audio, conent_id, audio_name, num_sense,
+		content_type, sense_id,
+		definition,
+		content_id, url, has_audio,
+		object_id, content, pron, pronunciation, audio,
+		us_audio,
+		operate_total
+	</sql>
+
+	<insert id="insertReturnKey" parameterType="TabWord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into word (uk_audio,
+		conent_id,
+		audio_name, num_sense, content_id,
+		url, has_audio, object_id,
+		content, pron, pronunciation,
+		audio, us_audio)
+		values
+		(#{ukAudio,jdbcType=VARCHAR}, #{conentId,jdbcType=INTEGER},
+		#{audioName,jdbcType=VARCHAR}, #{numSense,jdbcType=INTEGER},
+		#{contentId,jdbcType=INTEGER},
+		#{url,jdbcType=VARCHAR},
+		#{hasAudio,jdbcType=INTEGER}, #{objectId,jdbcType=INTEGER},
+		#{content,jdbcType=VARCHAR}, #{pron,jdbcType=VARCHAR},
+		#{pronunciation,jdbcType=VARCHAR},
+		#{audio,jdbcType=VARCHAR},
+		#{usAudio,jdbcType=VARCHAR})
 	</insert>
 	<select id="listTabWordForPager" resultMap="wordForExcelMap">
-		select id,content,pronunciation,definition from word limit #{startNum},#{limit}
+		select
+		id,content,pronunciation,definition from word limit
+		#{startNum},#{limit}
 	</select>
+
+	<select id="getByOperateTotalOrderEsc" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from word order by operate_total limit 0,1;
+	</select>
+	<update id="memory">
+		update word set operate_total = operate_total + 1
+		where id = #{wordId}
+	</update>
 </mapper>
