@@ -6,6 +6,7 @@ import org.springframework.util.Assert;
 
 import com.chaoliu1995.english.base.BaseJunit4Test;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
+import com.chaoliu1995.english.util.Consts;
 
 /** 
 * @Author: LiuChao
@@ -20,13 +21,13 @@ public class TabWordMapperTest extends BaseJunit4Test {
 	
 	@Test
 	public void getByOperateTotalOrderEscTest(){
-		TabWord word = tabWordMapper.getByOperateTotalOrderEsc();
+		TabWord word = tabWordMapper.getByMemoryTotalOrderEsc();
 		Assert.notNull(word, "或许是没有数据");
 	}
 	
 	@Test
 	public void memoryTest(){
-		tabWordMapper.memory(59);
+		tabWordMapper.memory(59,Consts.ORDINARY);
 	}
 	
 }

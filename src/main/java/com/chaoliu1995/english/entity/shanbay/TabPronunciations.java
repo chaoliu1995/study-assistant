@@ -5,7 +5,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.chaoliu1995.english.util.Constants;
+import com.chaoliu1995.english.util.Consts;
 
 import lombok.Data;
 
@@ -13,7 +13,7 @@ import lombok.Data;
 @Table(name="pronunciations")
 public class TabPronunciations implements java.io.Serializable {
 
-	private static final long serialVersionUID = Constants.SERIAL_VERSION_UID;
+	private static final long serialVersionUID = Consts.SERIAL_VERSION_UID;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

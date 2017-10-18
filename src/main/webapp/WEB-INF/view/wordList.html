@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Review</title>
+<script type="text/javascript" th:src="@{/resources/js/jquery-1.8.3.js}"></script>
+<style type="text/css">
+	#pagerForm{ display: none; }
+</style>
+</head>
+<body>
+	<form th:action="@{${basePath}/review/listWord.do}" id="pagerForm">
+		
+	</form>
+	<div id="content">
+		<table>
+			<tr>
+				<th>单词</th>
+			</tr>
+			<tr  th:each="word,iterStat : ${pager.recordList}">
+				<td th:text="${word.content}"></td>
+			</tr>
+		</table>
+	</div>
+<script type="text/javascript">
+	
+</script>
+</body>
+</html>

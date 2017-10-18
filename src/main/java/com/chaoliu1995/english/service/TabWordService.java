@@ -30,8 +30,18 @@ public interface TabWordService extends BaseService<TabWord> {
 	TabWord getTabWordByOperateTotalOrderEsc();
 	
 	/**
-	 * 记忆一个单词，operateTotal++
+	 * 记忆一个单词，memoryTotal 增加
 	 * @param wordId
+	 * @param num
 	 */
-	void memory(Integer wordId);
+	void memory(Integer wordId,byte num);
+	
+	/**
+	 * 分页获取单词集合，根据 实体属性过滤
+	 * @param currentPage
+	 * @param pageSize
+	 * @param word
+	 * @return
+	 */
+	Pager<TabWord> listTabWordForPager(Integer currentPage,Integer pageSize,TabWord word);
 }

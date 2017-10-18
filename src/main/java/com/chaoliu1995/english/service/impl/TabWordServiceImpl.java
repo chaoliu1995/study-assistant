@@ -47,7 +47,7 @@ import com.chaoliu1995.english.model.En_definitions;
 import com.chaoliu1995.english.model.ShanBayResult;
 import com.chaoliu1995.english.model.Word;
 import com.chaoliu1995.english.service.TabWordService;
-import com.chaoliu1995.english.util.Constants;
+import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.EntityUtils;
 import com.chaoliu1995.english.util.FileUtils;
 import com.chaoliu1995.english.util.Pager;
@@ -125,7 +125,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		//保存单词发音文件
 		if(!StringUtils.isEmpty(word.getUk_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",env.getProperty("file.audioPath") + Constants.UK_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",env.getProperty("file.audioPath") + Consts.UK_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -134,7 +134,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		
 		if(!StringUtils.isEmpty(word.getUs_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",env.getProperty("file.audioPath") + Constants.US_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",env.getProperty("file.audioPath") + Consts.US_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -304,7 +304,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 	@Override
 	public Pager<TabWord> listTabWordForExcel(Integer currentPage,Integer pageSize,Integer recordTotal) {
 		Pager<TabWord> pager = new Pager<TabWord>(currentPage,pageSize,recordTotal);
-		List<TabWord> wordList = tabWordMapper.listTabWordForPager(pager.getStartNum(), pager.getPageSize(),new TabWord());
+		List<TabWord> wordList = tabWordMapper.listTabWordForExcel(pager.getStartNum(), pager.getPageSize(),new TabWord());
 		pager.setRecordList(wordList);
 		return pager;
 	}
@@ -312,15 +312,23 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 
 	@Override
 	public TabWord getTabWordByOperateTotalOrderEsc() {
-		// TODO Auto-generated method stub
-		return null;
+		return tabWordMapper.getByMemoryTotalOrderEsc();
 	}
 
 
 	@Override
-	public void memory(Integer wordId) {
-		// TODO Auto-generated method stub
-		
+	public void memory(Integer wordId,byte num) {
+		tabWordMapper.memory(wordId, num);
+	}
+
+
+	@Override
+	public Pager<TabWord> listTabWordForPager(Integer currentPage, Integer pageSize, TabWord word) {
+		int total = tabWordMapper.countByCol(word);
+		Pager<TabWord> pager = new Pager<TabWord>(currentPage,pageSize,total);
+		List<TabWord> wordList = tabWordMapper.listByColForPager(pager.getStartNum(), pager.getPageSize(),word);
+		pager.setRecordList(wordList);
+		return pager;
 	}
 	
 }

@@ -23,17 +23,33 @@ public interface TabWordMapper extends Mapper<TabWord> {
 	 * @param word
 	 * @return
 	 */
-	List<TabWord> listTabWordForPager(@Param("startNum")Integer startNum,@Param("limit")Integer limit,@Param("word")TabWord word);
-
-	/**
-	 * ESC排序operateTotal字段，获取第一个单词
-	 * @return
-	 */
-	TabWord getByOperateTotalOrderEsc();
+	List<TabWord> listTabWordForExcel(@Param("start")Integer start,@Param("limit")Integer limit,@Param("word")TabWord word);
 	
 	/**
-	 * 记忆一个单词，operateTotal++
+	 * 分页获取单词列表
+	 * @param start
+	 * @param limit
+	 * @param word
+	 * @return
+	 */
+	List<TabWord> listByColForPager(@Param("start")Integer start,@Param("limit")Integer limit,@Param("word")TabWord word);
+	
+	/**
+	 * 根据属性，统计单词总数
+	 * @param word
+	 * @return
+	 */
+	Integer countByCol(@Param("word")TabWord word);
+	
+	/**
+	 * ESC排序memoryTotal字段，获取第一个单词
+	 * @return
+	 */
+	TabWord getByMemoryTotalOrderEsc();
+	
+	/**
+	 * 记忆一个单词，memoryTotal 增加
 	 * @param wordId
 	 */
-	int memory(@Param("wordId")Integer wordId);
+	int memory(@Param("wordId")Integer wordId,@Param("num")byte num);
 }

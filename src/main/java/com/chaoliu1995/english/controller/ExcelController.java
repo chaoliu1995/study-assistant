@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.chaoliu1995.english.base.BaseController;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.service.TabWordService;
-import com.chaoliu1995.english.util.Constants;
+import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.Pager;
 
 @Controller
@@ -71,9 +71,9 @@ public class ExcelController extends BaseController {
 			
 			while (flag) {
 				if(pager == null){
-					pager = tabWordService.listTabWordForExcel(Pager.DEFAULT_CURRENT_PAGE,Constants.EXCEL_PAGE_SIZE, total);
+					pager = tabWordService.listTabWordForExcel(Pager.DEFAULT_CURRENT_PAGE,Consts.EXCEL_PAGE_SIZE, total);
 				}else{
-					pager = tabWordService.listTabWordForExcel(pager.getNextPage(),Constants.EXCEL_PAGE_SIZE, total);
+					pager = tabWordService.listTabWordForExcel(pager.getNextPage(),Consts.EXCEL_PAGE_SIZE, total);
 				}
 				
 				for(TabWord word : pager.getRecordList()){
@@ -154,9 +154,9 @@ public class ExcelController extends BaseController {
 			
 			while (flag) {
 				if(pager == null){
-					pager = tabWordService.listTabWordForExcel(Pager.DEFAULT_CURRENT_PAGE,Constants.EXCEL_PAGE_SIZE, total);
+					pager = tabWordService.listTabWordForExcel(Pager.DEFAULT_CURRENT_PAGE,Consts.EXCEL_PAGE_SIZE, total);
 				}else{
-					pager = tabWordService.listTabWordForExcel(pager.getNextPage(),Constants.EXCEL_PAGE_SIZE, total);
+					pager = tabWordService.listTabWordForExcel(pager.getNextPage(),Consts.EXCEL_PAGE_SIZE, total);
 				}
 				
 				for(TabWord word : pager.getRecordList()){

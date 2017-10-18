@@ -46,6 +46,12 @@ public class Pager<T> {
 	private Integer endNum;		//结束
 	
 	public Pager(Integer currentPage, Integer pageSize, Integer recordTotal){
+		if(pageSize == null || pageSize <= 0){
+			pageSize = DEFAULT_PAGE_SIZE;
+		}
+		if(currentPage == null || currentPage <= 0){
+			currentPage = DEFAULT_CURRENT_PAGE;
+		}
 		this.pageSize = pageSize;
 		this.pageTotal = (int)Math.ceil((double)recordTotal / pageSize);	//计算总页数
 		this.recordTotal = recordTotal;
@@ -59,12 +65,16 @@ public class Pager<T> {
 		
 		this.endNum = this.currentPage * pageSize;	//计算分页结束值
 		this.startNum = this.endNum - pageSize;		//计算分页起始值
+		if(this.startNum < 0){
+			this.startNum = 0;
+		}
 		
 		//计算上一页、下一页
 		if(this.currentPage == 1)
 			this.prevPage = 1;
 		else
 			this.prevPage = this.currentPage - 1;
+		
 		if(this.currentPage == this.pageTotal)
 			this.nextPage = this.currentPage;
 		else

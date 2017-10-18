@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.chaoliu1995.english.base.BaseController;
 import com.chaoliu1995.english.model.ShanBayResult;
 import com.chaoliu1995.english.service.TabWordService;
-import com.chaoliu1995.english.util.Constants;
+import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.HttpUtils;
 import com.chaoliu1995.english.util.StringUtils;
 import com.google.gson.Gson;
@@ -35,7 +35,7 @@ public class SearchController extends BaseController {
 	public String send(@RequestParam("word")String word) {
 		Gson gson = new Gson();
 		try {
-			String str = HttpUtils.sendGetRequest(Constants.SHAN_BAY_SEARCH_URL+word,Constants.CHARSET);
+			String str = HttpUtils.sendGetRequest(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
 			return str;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -52,13 +52,11 @@ public class SearchController extends BaseController {
 		if(StringUtils.isEmpty(word)){
 			return;
 		}
-		String str = HttpUtils.sendGetRequest(Constants.SHAN_BAY_SEARCH_URL+word,Constants.CHARSET);
+		String str = HttpUtils.sendGetRequest(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
 		System.out.println(str);
 		Gson gson = new Gson();
 		ShanBayResult shanbay = gson.fromJson(str,ShanBayResult.class);
-		System.out.println();
 		tabWordService.saveWord(shanbay,session.getServletContext().getRealPath("/"));
-		
 	}
 	
 }
