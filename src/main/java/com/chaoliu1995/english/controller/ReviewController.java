@@ -32,7 +32,7 @@ public class ReviewController extends BaseController {
 		return checkPlatForm("review");
 	}
 	
-	@RequestMapping("/getWord")
+	@RequestMapping(value="/getWord",produces = "text/json;charset=UTF-8")
 	@ResponseBody
 	public String getWord(){
 		TabWord word = tabWordService.getTabWordByOperateTotalOrderEsc();
@@ -71,7 +71,7 @@ public class ReviewController extends BaseController {
 		return toJson(resultMap);
 	}
 	
-	@RequestMapping("/listWord")
+	@RequestMapping(value="/listWord",produces = "text/html;charset=UTF-8")
 	public String listWord(Integer currentPage,Integer limit){
 		model.addAttribute("pager",tabWordService.listTabWordForPager(currentPage, limit,new TabWord()));
 		return "wordList";

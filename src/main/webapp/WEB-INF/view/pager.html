@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="pager(pager,path)">
+		<ul class="wzpager wzpager-lg" >
+			<li><a href="javascript:void(0)" onclick="toPage(${pager.prevPage})" id="previousPage">上一页</a></li>
+			<li class="active"><a href="javascript:void(0)" th:text="${pager.currentPage}" ></a></li>
+			<li><a href="javascript:void(0)" id="nextPage" onclick="toPage(${pager.nextPage})">下一页</a></li>
+			<li><span th:text="${pager.pageTotal}"></span></li>
+			<li><span>到第</span></li>
+			<li><span><input type="text" id="jumpInput" /></span></li>
+			<li><span>页</span></li>
+			<li><span id="jumpBtn">跳转</span></li>
+		</ul>
+		<form id="toPageForm" style="display: none;" th:action="${path}" method="post">
+			<input type="hidden" name="currentPage" value="" id="currentPage" />
+		</form>
+	</div>
+</body>
+</html>

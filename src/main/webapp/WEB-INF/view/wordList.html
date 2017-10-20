@@ -2,10 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Review</title>
+<title>Insert title here</title>
 <script type="text/javascript" th:src="@{/resources/js/jquery-1.8.3.js}"></script>
-<style type="text/css">
+<link type="text/css" th:href="@{/resources/css/common.css}" rel="stylesheet" />
+<link type="text/css" th:href="@{/resources/css/pager.css}" rel="stylesheet" />
+<style>
 	#pagerForm{ display: none; }
+	#listTable{ border:1px; }
 </style>
 </head>
 <body>
@@ -13,17 +16,16 @@
 		
 	</form>
 	<div id="content">
-		<table>
+		<table id="listTable">
 			<tr>
 				<th>单词</th>
 			</tr>
 			<tr  th:each="word,iterStat : ${pager.recordList}">
 				<td th:text="${word.content}"></td>
+				<td th:text="${word.definition}"></td>
 			</tr>
 		</table>
 	</div>
-<script type="text/javascript">
-	
-</script>
+	<div th:include="pager :: pager(${pager},${basePath})"></div>
 </body>
 </html>

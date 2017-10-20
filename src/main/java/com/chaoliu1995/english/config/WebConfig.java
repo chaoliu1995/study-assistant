@@ -1,5 +1,8 @@
 package com.chaoliu1995.english.config;
 
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -7,6 +10,8 @@ import javax.servlet.ServletContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
@@ -27,6 +32,17 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 		})
 public class WebConfig {
 	
+	@Bean
+	public StringHttpMessageConverter stringHttpMessageConverter(){
+		StringHttpMessageConverter stringHttpMessageConverter = new StringHttpMessageConverter(Charset.forName("UTF-8"));
+		List<MediaType> mediaTypes = new ArrayList<MediaType>();
+		mediaTypes.add(MediaType.parseMediaType("text/html;charset=UTF-8"));
+		mediaTypes.add(MediaType.parseMediaType("text/plain;charset=UTF-8"));
+		mediaTypes.add(MediaType.parseMediaType("text/json;charset=UTF-8"));
+		stringHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
+		return stringHttpMessageConverter;
+	}
+	
 	/**
 	 * Thymeleaf模板解析器
 	 * @return
@@ -39,6 +55,7 @@ public class WebConfig {
 		templateResolver.setPrefix("/WEB-INF/view/");
 		templateResolver.setSuffix(".html");
 		templateResolver.setTemplateMode("HTML5");
+		templateResolver.setCharacterEncoding("UTF-8");
 		//是否启用缓存
 		templateResolver.setCacheable(false);
 		return templateResolver;
@@ -64,6 +81,7 @@ public class WebConfig {
 	@Bean
 	public ViewResolver viewResolver(SpringTemplateEngine templateEngine){
 		ThymeleafViewResolver viewResolver  = new ThymeleafViewResolver();
+		viewResolver.setCharacterEncoding("UTF-8");
 		viewResolver.setTemplateEngine(templateEngine);
 		return viewResolver;
 	}
