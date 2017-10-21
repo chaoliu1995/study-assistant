@@ -14,6 +14,10 @@ public class Consts {
 	public static final String MESSAGE = "MESSAGE";
 	public static final String PARAMETER_IS_NULL = "参数有null";
 	
+	//login
+	public static final String SESSION_USER = "SESSION_USER";
+	public static final String LOGIN_TIME = "LOGIN_TIME";
+	
 	//扇贝查词API的URL
 	public static final String SHAN_BAY_SEARCH_URL = "https://api.shanbay.com/bdc/search/?word=";
 	

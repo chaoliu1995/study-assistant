@@ -7,11 +7,14 @@
 	    	<div>
 	        	<ul class="nav navbar-nav">
 	        		<li class="active"><a href="#">English</a></li>
-	            	<li><a href="http://www.chaoliu1995.com/English/index.do">Search</a></li>
-	            	<li><a href="http://www.chaoliu1995.com/English/review/page.do">Review</a></li>
-	            	<li><a href="http://www.chaoliu1995.com/English/review/listWord.do">Word</a></li>
+	            	<li><a th:href="${basePath}+'index.do'">Search</a></li>
+	            	<li><a th:href="${basePath}+'review/page.do'">Review</a></li>
+	            	<li><a th:href="${basePath}+'review/listWord.do'">Word</a></li>
 	            </ul>
             </div>
+	        <ul class="nav navbar-nav navbar-right"> 
+	            <li><a th:href="${basePath}+'login/out.do'">LoginOut</a></li> 
+	        </ul>
 	    </div>
     </div>
 </div>
