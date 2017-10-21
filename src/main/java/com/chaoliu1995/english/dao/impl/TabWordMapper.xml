@@ -5,56 +5,55 @@
 	<resultMap id="wordForExcelMap" type="TabWord">
 		<id column="id" property="id" />
 		<result column="content" property="content" />
-		<result column="pronunciation" property="pronunciation" />
-		<result column="definition" property="definition" />
+		<result column="us_pronunciation" property="usPronunciation" />
+		<result column="cn_definition" property="cnDefinition" />
 	</resultMap>
 
 	<resultMap id="BaseResultMap" type="TabWord">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="uk_audio" jdbcType="VARCHAR" property="ukAudio" />
+		<result column="us_audio" jdbcType="VARCHAR" property="usAudio" />
 		<result column="audio_name" jdbcType="VARCHAR" property="audioName" />
 		<result column="content_type" jdbcType="VARCHAR" property="contentType" />
-		<result column="definition" jdbcType="VARCHAR" property="definition" />
+		<result column="cn_definition" jdbcType="VARCHAR" property="cnDefinition" />
+		<result column="en_definition" jdbcType="VARCHAR" property="enDefinition" />
 		<result column="content_id" jdbcType="INTEGER" property="contentId" />
 		<result column="has_audio" jdbcType="INTEGER" property="hasAudio" />
 		<result column="content" jdbcType="VARCHAR" property="content" />
-		<result column="pron" jdbcType="VARCHAR" property="pron" />
-		<result column="pronunciation" jdbcType="VARCHAR" property="pronunciation" />
-		<result column="us_audio" jdbcType="VARCHAR" property="usAudio" />
+		<result column="uk_pronunciation" jdbcType="VARCHAR" property="ukPronunciation" />
+		<result column="us_pronunciation" jdbcType="VARCHAR" property="usPronunciation" />
 		<result column="memory_total" jdbcType="INTEGER" property="memoryTotal" />
 	</resultMap>
-
 	<sql id="Base_Column_List">
-		id, uk_audio , audio_name , content_type, definition,
-		content_id, has_audio , content, pron, pronunciation,
-		us_audio,
-		memory_total
+		id, uk_audio, us_audio, audio_name, content_type,
+		cn_definition,
+		en_definition, content_id,
+		has_audio, content,
+		uk_pronunciation, us_pronunciation, memory_total
 	</sql>
 
 	<insert id="insertReturnKey" parameterType="TabWord"
 		useGeneratedKeys="true" keyProperty="id">
-		insert into word (uk_audio,
-		audio_name, content_id, has_audio,
-		content, pron, pronunciation,
-		us_audio)
-		values
-		(#{ukAudio,jdbcType=VARCHAR},
-		#{audioName,jdbcType=VARCHAR},
-		#{contentId,jdbcType=INTEGER},
+		insert into word
+		<include refid="Base_Column_List" />
+		values (#{id,jdbcType=INTEGER}, #{ukAudio,jdbcType=VARCHAR},
+		#{usAudio,jdbcType=VARCHAR},
+		#{audioName,jdbcType=VARCHAR}, #{contentType,jdbcType=VARCHAR}, #{cnDefinition,jdbcType=VARCHAR},
+		#{enDefinition,jdbcType=VARCHAR}, #{contentId,jdbcType=INTEGER},
 		#{hasAudio,jdbcType=INTEGER},
-		#{content,jdbcType=VARCHAR},
-		#{pron,jdbcType=VARCHAR},
-		#{pronunciation,jdbcType=VARCHAR},
-		#{usAudio,jdbcType=VARCHAR})
+		#{content,jdbcType=VARCHAR}, #{ukPronunciation,jdbcType=VARCHAR},
+		#{usPronunciation,jdbcType=VARCHAR},
+		#{memoryTotal,jdbcType=INTEGER})
 	</insert>
 	<select id="listTabWordForExcel" resultMap="wordForExcelMap">
 		select
-		id,content,pronunciation,definition from word limit
+		id,content,us_pronunciation,cn_definition from word limit
 		#{start},#{limit}
 	</select>
 	<select id="listByColForPager" resultMap="BaseResultMap">
-		select <include refid="Base_Column_List" />
-		from word 
+		select
+		<include refid="Base_Column_List" />
+		from word
 		<if test="word != null">
 			<where>
 

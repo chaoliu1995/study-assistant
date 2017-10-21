@@ -2,6 +2,8 @@ package com.chaoliu1995.english.util;
 
 import com.chaoliu1995.english.entity.shanbay.TabPronunciations;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
+import com.chaoliu1995.english.model.Cn_definition;
+import com.chaoliu1995.english.model.En_definition;
 import com.chaoliu1995.english.model.Pronunciations;
 import com.chaoliu1995.english.model.Word;
 
@@ -17,7 +19,14 @@ public class EntityUtils {
 		tabWord.setUkAudio(word.getUk_audio());
 		tabWord.setAudioName(word.getAudio_name());
 		tabWord.setContentType(word.getContent_type());
-		tabWord.setDefinition(word.getDefinition());
+		En_definition enDef = word.getEn_definition();
+		if(enDef != null){
+			tabWord.setEnDefinition(enDef.getDefn());
+		}
+		Cn_definition cnDef = word.getCn_definition();
+		if(cnDef != null){
+			tabWord.setCnDefinition(cnDef.getDefn());
+		}
 		tabWord.setContentId(word.getContent_id());
 		if(word.isHas_audio()){
 			tabWord.setHasAudio(1);
@@ -25,8 +34,11 @@ public class EntityUtils {
 			tabWord.setHasAudio(0);
 		}
 		tabWord.setContent(word.getContent());
-		tabWord.setPron(word.getPron());
-		tabWord.setPronunciation(word.getPronunciation());
+		Pronunciations pron = word.getPronunciations();
+		if(pron != null){
+			tabWord.setUkPronunciation(pron.getUk());
+			tabWord.setUsPronunciation(pron.getUs());
+		}
 		tabWord.setUsAudio(word.getUs_audio());
 		return tabWord;
 	}

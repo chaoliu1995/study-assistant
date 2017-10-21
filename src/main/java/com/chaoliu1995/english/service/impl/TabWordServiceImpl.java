@@ -142,6 +142,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		
 		//将从扇贝获得的单词数据结构转换为本地数据库实体
 		TabWord tabWord = EntityUtils.wordToTabWord(word);
+		tabWord.setMemoryTotal(0);
 		tabWordMapper.insert(tabWord);
 		//获得单词主键
 		int wordId = tabWord.getId();

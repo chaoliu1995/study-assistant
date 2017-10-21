@@ -3,22 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <title>Search</title>
+<link type="text/css" th:href="@{/resources/bootstrap/bootstrap-theme.min.css}" rel="stylesheet" />
+<link type="text/css" th:href="@{/resources/bootstrap/bootstrap.min.css}" rel="stylesheet" />
+<link type="text/css" th:href="@{/resources/css/common.css}" rel="stylesheet" />
 <script type="text/javascript" th:src="@{/resources/js/jquery-1.8.3.js}"></script>
 <style>
 	
-	html,body,input,button{ font-family: Consolas,"Consolas", '微软雅黑', 'Microsoft YaHei UI', 'Hiragino Sans GB',SimSun, SimHei, arial, sans-serif; }
-	
-	body{ margin:0px; padding:0px; background-color: #27AE60; line-height: 1.6; font-size: 14pt; }
+	body{ background-color: #333;}
 	
 	#searchForm{ width:80%; height:50px; margin:200px auto 0px; }
 	
 	#wordText{ width:70%; height:50px; border:none; font-size:24px; text-indent:10px;
 		margin:0px; padding:0px; float:left; border-radius:6px 0px 0px 6px;}
 	
-	.btn{ height:50px; background-color: #27AE60; color:#FFF; display: inline-block;
-		margin:0px; padding:0px; font-size:20px; font-weight: bold; }
+	.btn{ height:50px; background-color: #333; color:#FFF; display: inline-block;
+		margin:0px; padding:0px; font-size:20px; }
 	
 	#searchBtn{ width:30%; border-radius:0px 6px 6px 0px; float:right; border:1px solid #fff;}
+	
+	#searchBtn:hover{ color:#FFF; }
 	
 	#wordInfo{ width:80%;height:100%; background-color: #FFF; margin:30px auto 0px; border-radius: 10px; display:none;}
 	
@@ -28,41 +31,44 @@
 </style>
 </head>
 <body>
-	<div id="searchForm" >
-		<input type="text" name="word" id="wordText" onkeydown="enter(event)" />
-		<button id="searchBtn" type="button" class="btn">Search</button>
-	</div>
-	<div id="wordInfo">
-		<table id="wordInfoTable">
-			<tr>
-				<td class="left">Word :</td>
-				<td class="ri]ght" id="wordContent"></td>
-			</tr>
-			<tr>
-				<td class="left" title="UK Pronunciation">UK Pron :</td>
-				<td class="ri]ght" id="ukPronunciation"></td>
-			</tr>
-			<tr>
-				<td class="left" title="US Pronunciation">US Pron :</td>
-				<td class="ri]ght" id="usPronunciation"></td>
-			</tr>
-			<tr>
-				<td class="left" title="CN Definition">CN Def :</td>
-				<td class="ri]ght"  id="cnDefinition"></td>
-			</tr>
-			<tr>
-				<td class="left" title="EN Definition">EN Def :</td>
-				<td class="ri]ght" id="enDefinition"></td>
-			</tr>
-			<tr>
-				<td class="left">UK Audio :</td>
-				<td class="ri]ght" id="ukAudioTd"></td>
-			</tr>
-			<tr>
-				<td class="left">US Audio :</td>
-				<td class="ri]ght" id="usAudioTd"></td>
-			</tr>
-		</table>
+	<div th:replace="common/header"></div>
+	<div class="container">
+		<div id="searchForm" >
+			<input type="text" name="word" id="wordText" onkeydown="enter(event)" />
+			<button id="searchBtn" type="button" class="btn">Search</button>
+		</div>
+		<div id="wordInfo">
+			<table id="wordInfoTable">
+				<tr>
+					<td class="left">Word :</td>
+					<td class="ri]ght" id="wordContent"></td>
+				</tr>
+				<tr>
+					<td class="left" title="UK Pronunciation">UK Pron :</td>
+					<td class="ri]ght" id="ukPronunciation"></td>
+				</tr>
+				<tr>
+					<td class="left" title="US Pronunciation">US Pron :</td>
+					<td class="ri]ght" id="usPronunciation"></td>
+				</tr>
+				<tr>
+					<td class="left" title="CN Definition">CN Def :</td>
+					<td class="ri]ght"  id="cnDefinition"></td>
+				</tr>
+				<tr>
+					<td class="left" title="EN Definition">EN Def :</td>
+					<td class="ri]ght" id="enDefinition"></td>
+				</tr>
+				<tr>
+					<td class="left">UK Audio :</td>
+					<td class="ri]ght" id="ukAudioTd"></td>
+				</tr>
+				<tr>
+					<td class="left">US Audio :</td>
+					<td class="ri]ght" id="usAudioTd"></td>
+				</tr>
+			</table>
+		</div>
 	</div>
 <script type="text/javascript" th:inline="javascript">
 	function search(){
@@ -95,8 +101,8 @@
 				$("#ukAudioTd").html("");
 				$("#usAudioTd").html("");
 				
-				var ukAudio = $('<audio controls id="ukAudio"><source src="'+wordData.uk_audio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
-				var usAudio = $('<audio controls id="usAudio"><source src="'+wordData.us_audio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
+				var ukAudio = $('<audio control id="ukAudio"><source src="'+wordData.uk_audio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
+				var usAudio = $('<audio control id="usAudio"><source src="'+wordData.us_audio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
 				$("#ukAudioTd").append(ukAudio);
 				$("#usAudioTd").append(usAudio);
 				
@@ -119,9 +125,6 @@
 		}
 	}
 	
-	$("#emptyBtn").click(function(){
-		$("#wordText").val("");
-	});
 </script>
 </body>
 </html>

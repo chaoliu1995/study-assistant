@@ -371,10 +371,10 @@
 			<id>development</id>
 			<properties>
 				<jdbc.username>root</jdbc.username>
-				<jdbc.password>123456</jdbc.password>
+				<jdbc.password>lc1280</jdbc.password>
 				<jdbc.url>jdbc:mysql://localhost:3306/english?useUnicode=true&amp;characterEncoding=utf-8&amp;useSSL=false</jdbc.url>
-				<log4j.logFilePath>D:/temp/Englist/log/English.log</log4j.logFilePath>
-				<file.audioPath>D:/temp/Englist/log/</file.audioPath>
+				<log4j.logFilePath>E:/temp/Englist/log/English.log</log4j.logFilePath>
+				<file.audioPath>E:/temp/Englist/log/</file.audioPath>
 			</properties>
 			<activation>
 				<activeByDefault>true</activeByDefault>

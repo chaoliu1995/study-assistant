@@ -83,7 +83,7 @@ public class ExcelController extends BaseController {
 					cell.setCellValue(word.getContent());
 					cell.setCellStyle(style);
 					cell = row.createCell(1);
-					cell.setCellValue(word.getPronunciation());
+					cell.setCellValue(word.getUsPronunciation());
 					cell.setCellStyle(style);
 					loopNum += 1;
 				}
@@ -166,10 +166,10 @@ public class ExcelController extends BaseController {
 					cell.setCellValue(word.getContent());
 					cell.setCellStyle(style);
 					cell = row.createCell(1);
-					cell.setCellValue(word.getPronunciation());
+					cell.setCellValue(word.getUsPronunciation());
 					cell.setCellStyle(style);
 					cell = row.createCell(2);
-					cell.setCellValue(word.getDefinition());
+					cell.setCellValue(word.getCnDefinition());
 					cell.setCellStyle(style);
 					loopNum += 1;
 				}

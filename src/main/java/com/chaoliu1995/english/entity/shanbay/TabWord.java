@@ -22,12 +22,13 @@ public class TabWord implements java.io.Serializable {
 	private String usAudio;	//美式发音文件的url
 	private String audioName;	//发音文件的名称
 	private String contentType;	//类型（词汇或是其他什么）
-	private String definition;	//中文释义
+	private String cnDefinition;	//中文释义
+	private String enDefinition;	//英文释义
 	private Integer contentId;	//单词ID
 	private Integer hasAudio;	//是否有语音
 	private String content;		//单词内容
-	private String pron;		//音标？？
-	private String pronunciation;	//发音
+	private String usPronunciation;	//音标(美)
+	private String ukPronunciation;	//音标(英)
 	private Integer memoryTotal;
 	
 	public TabWord(){}

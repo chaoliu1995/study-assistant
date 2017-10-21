@@ -2,30 +2,42 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Word</title>
 <script type="text/javascript" th:src="@{/resources/js/jquery-1.8.3.js}"></script>
+<link type="text/css" th:href="@{/resources/bootstrap/bootstrap-theme.min.css}" rel="stylesheet" />
+<link type="text/css" th:href="@{/resources/bootstrap/bootstrap.min.css}" rel="stylesheet" />
 <link type="text/css" th:href="@{/resources/css/common.css}" rel="stylesheet" />
-<link type="text/css" th:href="@{/resources/css/pager.css}" rel="stylesheet" />
+<script type="text/javascript" th:src="@{/resources/bootstrap/bootstrap.min.js}"></script>
 <style>
-	#pagerForm{ display: none; }
-	#listTable{ border:1px; }
 </style>
 </head>
 <body>
-	<form th:action="@{${basePath}/review/listWord.do}" id="pagerForm">
-		
-	</form>
-	<div id="content">
-		<table id="listTable">
+	<div th:replace="common/header"></div>
+	<div class="container">
+		<table class="table table-bordered table-striped" id="wordTable">
 			<tr>
 				<th>单词</th>
+				<th>音标(US)</th>
+				<th>音标(UK)</th>
+				<th>中文释义</th>
 			</tr>
 			<tr  th:each="word,iterStat : ${pager.recordList}">
 				<td th:text="${word.content}"></td>
-				<td th:text="${word.definition}"></td>
+				<td th:text="${word.usPronunciation}"></td>
+				<td th:text="${word.ukPronunciation}"></td>
+				<td th:text="${word.cnDefinition}"></td>
 			</tr>
 		</table>
+		<nav id="pager">
+			<ul class="pagination pagination-lg">
+				<li><a th:href="${basePath}+'review/listWord.do?currentPage='+${pager.prevPage}">Previous</a></li>
+				<li><span th:text="${pager.currentPage}+'/'+${pager.pageTotal}"></span></li>
+				<li><a th:href="${basePath}+'review/listWord.do?currentPage='+${pager.nextPage}">Next</a></li>
+				<li><span><input type="text" style="width:50px;height:25px;border:none;" /></span></li>
+				<li><span>跳转</span></li>
+			</ul>
+		</nav>
 	</div>
-	<div th:include="pager :: pager(${pager},${basePath})"></div>
+	<div th:replace="common/footer"></div>
 </body>
 </html>

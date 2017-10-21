@@ -13,7 +13,7 @@ import lombok.Setter;
  */
 public class Pager<T> {
 	
-	public static final Integer DEFAULT_PAGE_SIZE = 10;		//默认每页的数据量
+	public static final Integer DEFAULT_PAGE_SIZE = 15;		//默认每页的数据量
 	
 	public static final Integer DEFAULT_CURRENT_PAGE = 1;	//默认当前页
 	
