@@ -7,6 +7,8 @@ public class Consts {
 	
 	public static final long SERIAL_VERSION_UID = -6192949389726527999L;
 	
+	public static final String PRODUCES = "text/json;charset=UTF-8";
+	
 	public static final String EMPTY_STRING = "";
 	public static final String STATUS = "STATUS";
 	public static final String SUCCESS = "SUCCESS";

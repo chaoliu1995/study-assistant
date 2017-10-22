@@ -4,64 +4,56 @@
 <meta charset="UTF-8">
 <title>Search</title>
 <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
-<script type="text/javascript" th:src="@{/resources/js/jquery-1.8.3.js}"></script>
+<script type="text/javascript" th:src="@{/resources/js/jquery.min.js}"></script>
+<link type="text/css" th:href="@{/resources/bootstrap/bootstrap-theme.min.css}" rel="stylesheet" />
+<link type="text/css" th:href="@{/resources/bootstrap/bootstrap.min.css}" rel="stylesheet" />
+<!-- <link type="text/css" th:href="@{/resources/css/common.css}" rel="stylesheet" /> -->
 <style>
-	html{background-color: #27AE60;}
-	html,body,input,button{ font-family: Consolas,"Consolas", '微软雅黑', 'Microsoft YaHei UI', 'Hiragino Sans GB',SimSun, SimHei, arial, sans-serif; }
-	
 	body{ margin:0px; padding:0px;  font-size: 0.6rem; }
-	
 	#searchForm{ width:80%; height:100%; margin:1.2rem auto 0px; }
 	
-	#wordText{ width:100%; height:1.2rem; border:none; text-indent:0.2rem;
-		margin:0px; padding:0px; border-radius:6px; font-size:0.6rem; }
+	#wordText{ width:100%; height:1.2rem;text-indent:0.2rem;font-size:0.6rem; }
 	
-	.btn{ height:1.2rem; width:100%; background-color: #27AE60; color:#FFF; display: inline-block; border-radius:6px;
-		margin:0px; padding:0px; font-weight: bold; border:1px solid #fff; margin-top:0.2rem; font-size:0.6rem; }
+	#searchBtn{ height:1.2rem; width:100%; background-color: #333; color:#FFF; margin-top:0.2rem; font-size:0.5rem; }
 	
-	#wordInfo{ width:80%;height:100%; background-color: #FFF; margin:0.2rem auto 0px; border-radius: 10px; display:none;}
-	
-	#wordInfoTable tr{ height:100%; }
-	#wordInfoTable tr .left{ width:30%; font-size:0.4rem; font-weight:bold; text-align: right;}
-	#wordInfoTable tr .right{ width:70%; padding:10px 0px;}
-	
-	#ukAudioTd,#usAudioTd{ height:1rem; }
-	
+	#wordInfoTable { width:80%; margin:30px auto; }
+	#wordInfoTable tr .left{ width:26%; /* font-size:0.4rem; */ }
+	#usAudioControlBtn,#ukAudioControlBtn{ font-size:0.2rem; }
 </style>
 </head>
 <body>
-	<div id="searchForm" >
-		<input type="text" name="word" id="wordText" onkeydown="enter(event)" />
-		<button id="searchBtn" type="button" class="btn">Search</button>
-	</div>
-	<div id="wordInfo">
-		<table id="wordInfoTable">
+	<div class="container">
+		<div id="searchForm" >
+			<input type="text" class="form-control" name="word" id="wordText" onkeydown="enter(event)" />
+			<button id="searchBtn" class="btn" type="button">Search</button>
+		</div>
+		<table id="wordInfoTable" class="table table-bordered table-striped">
 			<tr>
-				<td class="left">Word :</td>
+				<td class="left">Word</td>
 				<td class="ri]ght" id="wordContent"></td>
 			</tr>
 			<tr>
-				<td class="left" title="UK Pronunciation">UK Pron :</td>
+				<td class="left" title="UK Pronunciation">UK Pron</td>
 				<td class="ri]ght" id="ukPronunciation"></td>
 			</tr>
 			<tr>
-				<td class="left" title="US Pronunciation">US Pron :</td>
+				<td class="left" title="US Pronunciation">US Pron</td>
 				<td class="ri]ght" id="usPronunciation"></td>
 			</tr>
 			<tr>
-				<td class="left" title="CN Definition">CN Def :</td>
+				<td class="left" title="CN Definition">CN Def</td>
 				<td class="ri]ght"  id="cnDefinition"></td>
 			</tr>
 			<tr>
-				<td class="left" title="EN Definition">EN Def :</td>
+				<td class="left" title="EN Definition">EN Def</td>
 				<td class="ri]ght" id="enDefinition"></td>
 			</tr>
 			<tr>
-				<td class="left">UK Audio :</td>
+				<td class="left">UK Audio</td>
 				<td class="ri]ght" id="ukAudioTd"></td>
 			</tr>
 			<tr>
-				<td class="left">US Audio :</td>
+				<td class="left">US Audio</td>
 				<td class="ri]ght" id="usAudioTd"></td>
 			</tr>
 		</table>
@@ -84,7 +76,7 @@
 		$.post([[${basePath}]] + "search.do",{
 			word : wordVal
 		},function(data){
-			var json = JSON.parse(data);
+			var json = data;
 			if(json.msg == "SUCCESS"){
 				var wordData = json.data;
 				$("#wordInfo").fadeOut();
@@ -97,19 +89,44 @@
 				$("#ukAudioTd").html("");
 				$("#usAudioTd").html("");
 				
-				var ukAudio = $('<audio controls id="ukAudio" style="width:4rem;height:0.5rem;"><source src="'+wordData.uk_audio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
-				var usAudio = $('<audio controls id="usAudio" style="width:4rem;height:0.5rem;"><source src="'+wordData.us_audio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
+				var ukAudio = $('<audio control id="ukAudio"><source src="'+wordData.uk_audio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
+				var usAudio = $('<audio control id="usAudio"><source src="'+wordData.us_audio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
 				$("#ukAudioTd").append(ukAudio);
 				$("#usAudioTd").append(usAudio);
-				
+				var usBtn = $('<button class="btn btn-primary btn-lg" id="usAudioControlBtn">Play</button>');
+				var ukBtn = $('<button class="btn btn-primary btn-lg" id="ukAudioControlBtn">Play</button>');
+				$("#ukAudioTd").append(ukBtn);
+				$("#usAudioTd").append(usBtn);
+				initPlayBtn();
 				$("#wordInfo").fadeIn();
 				$.post([[${basePath}]] + "saveWord.do",{
 					word : wordVal
 				},function(){
 					console.log("Send Request!");
 				});
+			}else if(json.STATUS == "ERROR"){
+				alert(json.MESSAGE);
+			}else if(json.id != null && json.id != ""){
+				$("#wordInfo").fadeOut();
+				$("#wordContent").text(json.content);
+				$("#ukPronunciation").text(json.ukPronunciation);
+				$("#usPronunciation").text(json.usPronunciation);
+				$("#enDefinition").text(json.enDefinition);
+				$("#cnDefinition").text(json.cnDefinition);
+				$("#ukAudioTd").html("");
+				$("#usAudioTd").html("");
+				var ukAudio = $('<audio id="ukAudio" id="ukAudio"><source src="'+json.ukAudio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
+				var usAudio = $('<audio id="usAudio" id="usAudio"><source src="'+json.usAudio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
+				var usBtn = $('<button class="btn btn-primary" id="usAudioControlBtn">Play</button>');
+				var ukBtn = $('<button class="btn btn-primary" id="ukAudioControlBtn">Play</button>');
+				$("#ukAudioTd").append(ukAudio);
+				$("#usAudioTd").append(usAudio);
+				$("#ukAudioTd").append(ukBtn);
+				$("#usAudioTd").append(usBtn);
+				initPlayBtn();
+				$("#wordInfo").fadeIn();
 			}
-		});
+		},"JSON");
 		
 	}
 	
@@ -120,10 +137,24 @@
 			search();
 		}
 	}
-	
-	$("#emptyBtn").click(function(){
-		$("#wordText").val("");
-	});
+	function initPlayBtn(){
+		usAudio = $("#usAudio")[0];
+		ukAudio = $("#ukAudio")[0];
+		$("#usAudioControlBtn").click(function(){
+			if(usAudio.paused){
+				usAudio.play();
+			}else{
+				usAudio.pause();
+			}
+		});
+		$("#ukAudioControlBtn").click(function(){
+			if(ukAudio.paused){
+				ukAudio.play();
+			}else{
+				ukAudio.pause();
+			}
+		});
+	}
 </script>
 </body>
 </html>

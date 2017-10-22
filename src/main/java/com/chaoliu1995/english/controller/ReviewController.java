@@ -32,7 +32,7 @@ public class ReviewController extends BaseController {
 		return checkPlatForm("review");
 	}
 	
-	@RequestMapping(value="/getWord",produces = "text/json;charset=UTF-8")
+	@RequestMapping(value="/getWord",produces = Consts.PRODUCES)
 	@ResponseBody
 	public String getWord(){
 		TabWord word = tabWordService.getTabWordByOperateTotalOrderEsc();

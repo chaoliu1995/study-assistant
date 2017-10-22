@@ -14,7 +14,7 @@ public class PasswordUtils {
 	private static final String SERVER_IV = "abcd123e456abdc9"; // 16位
 	// 服务器专用密钥
 	private static final String SERVER_CRYPT_KEY = "8ig*lpk$=Fang5@P"; // 16位
-
+	
 	@Getter
 	private static final String CLIENT_IVV = "0102030405060708";
 	@Getter
@@ -112,7 +112,7 @@ public class PasswordUtils {
 			SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 
-			IvParameterSpec iv1 = new IvParameterSpec(SERVER_IV.getBytes()); // "0102030405060708".getBytes()
+			IvParameterSpec iv1 = new IvParameterSpec(SERVER_IV.getBytes());
 			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv1);
 
 			byte[] encrypted1 = Base64s.decode(decryptString);
@@ -145,7 +145,7 @@ public class PasswordUtils {
 			SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
 
-			IvParameterSpec iv = new IvParameterSpec(ivv.getBytes()); // "0102030405060708".getBytes()
+			IvParameterSpec iv = new IvParameterSpec(ivv.getBytes());
 			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
 
 			// decryptString接收的是前端的加密之后的密码，已经是base64格式的了，见前端注释
