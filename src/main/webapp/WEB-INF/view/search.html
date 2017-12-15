@@ -7,6 +7,7 @@
 <link type="text/css" th:href="@{/resources/bootstrap/bootstrap.min.css}" rel="stylesheet" />
 <link type="text/css" th:href="@{/resources/css/common.css}" rel="stylesheet" />
 <script type="text/javascript" th:src="@{/resources/js/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/resources/bootstrap/bootstrap.min.js}"></script>
 <style>
 	body{ background-color: #333;}
 	#searchForm{ width:80%; height:50px; margin:200px auto 0px; }
@@ -24,6 +25,7 @@
 </head>
 <body>
 	<div th:replace="common/header"></div>
+	<div style="height:30px;"></div>
 	<div class="container">
 		<div id="searchForm" >
 			<input type="text" name="word" id="wordText" onkeydown="enter(event)" />

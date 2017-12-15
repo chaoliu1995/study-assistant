@@ -7,21 +7,25 @@
 <script type="text/javascript" th:src="@{/resources/js/jquery.min.js}"></script>
 <link type="text/css" th:href="@{/resources/bootstrap/bootstrap-theme.min.css}" rel="stylesheet" />
 <link type="text/css" th:href="@{/resources/bootstrap/bootstrap.min.css}" rel="stylesheet" />
-<!-- <link type="text/css" th:href="@{/resources/css/common.css}" rel="stylesheet" /> -->
+<script type="text/javascript" th:src="@{/resources/bootstrap/bootstrap.min.js}"></script>
 <style>
 	body{ margin:0px; padding:0px;  font-size: 0.6rem; }
-	#searchForm{ width:80%; height:100%; margin:1.2rem auto 0px; }
+	#searchForm{ width:90%; height:100%; margin:0px auto; }
 	
 	#wordText{ width:100%; height:1.2rem;text-indent:0.2rem;font-size:0.6rem; }
 	
 	#searchBtn{ height:1.2rem; width:100%; background-color: #333; color:#FFF; margin-top:0.2rem; font-size:0.5rem; }
 	
-	#wordInfoTable { width:80%; margin:30px auto; }
-	#wordInfoTable tr .left{ width:26%; /* font-size:0.4rem; */ }
-	#usAudioControlBtn,#ukAudioControlBtn{ font-size:0.2rem; }
+	#wordInfoTable { width:90%; margin:30px auto; }
+	
+	#wordInfoTable tr .left{ width:23%; }
+	
+	#usAudioControlBtn,#ukAudioControlBtn{ font-size:0.4rem; }
 </style>
 </head>
 <body>
+	<div th:replace="common/mobile-header"></div>
+	<div style="height:2rem;"></div>
 	<div class="container">
 		<div id="searchForm" >
 			<input type="text" class="form-control" name="word" id="wordText" onkeydown="enter(event)" />
@@ -93,8 +97,8 @@
 				var usAudio = $('<audio control id="usAudio"><source src="'+wordData.us_audio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
 				$("#ukAudioTd").append(ukAudio);
 				$("#usAudioTd").append(usAudio);
-				var usBtn = $('<button class="btn btn-primary btn-lg" id="usAudioControlBtn">Play</button>');
-				var ukBtn = $('<button class="btn btn-primary btn-lg" id="ukAudioControlBtn">Play</button>');
+				var usBtn = $('<button class="btn btn-primary btn-lg" id="usAudioControlBtn">play</button>');
+				var ukBtn = $('<button class="btn btn-primary btn-lg" id="ukAudioControlBtn">play</button>');
 				$("#ukAudioTd").append(ukBtn);
 				$("#usAudioTd").append(usBtn);
 				initPlayBtn();
@@ -117,8 +121,8 @@
 				$("#usAudioTd").html("");
 				var ukAudio = $('<audio id="ukAudio" id="ukAudio"><source src="'+json.ukAudio+'" type="audio/mpeg" id="ukAudioSource" /></audio>');
 				var usAudio = $('<audio id="usAudio" id="usAudio"><source src="'+json.usAudio+'" type="audio/mpeg" id="usAudioSource" /></audio>');
-				var usBtn = $('<button class="btn btn-primary" id="usAudioControlBtn">Play</button>');
-				var ukBtn = $('<button class="btn btn-primary" id="ukAudioControlBtn">Play</button>');
+				var usBtn = $('<button class="btn btn-primary" id="usAudioControlBtn">play</button>');
+				var ukBtn = $('<button class="btn btn-primary" id="ukAudioControlBtn">play</button>');
 				$("#ukAudioTd").append(ukAudio);
 				$("#usAudioTd").append(usAudio);
 				$("#ukAudioTd").append(ukBtn);

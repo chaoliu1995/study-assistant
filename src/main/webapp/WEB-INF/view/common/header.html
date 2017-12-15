@@ -1,20 +1,20 @@
-<div class="navbar navbar-inverse navbar-static-top">
+<div class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
-		<div class="container-fluid">
-	    	<div class="navbar-header">
-	        	<a class="navbar-brand hidden-sm" href="http://www.chaoliu1995.com">Chaoliu1995</a>
-	    	</div>
-	    	<div>
-	        	<ul class="nav navbar-nav">
-	        		<li class="active"><a href="#">English</a></li>
-	            	<li><a th:href="${basePath}+'index.do'">Search</a></li>
-	            	<li><a th:href="${basePath}+'review/page.do'">Review</a></li>
-	            	<li><a th:href="${basePath}+'review/listWord.do'">Word</a></li>
-	            </ul>
-            </div>
-	        <ul class="nav navbar-nav navbar-right"> 
-	            <li><a th:href="${basePath}+'login/out.do'">LoginOut</a></li> 
-	        </ul>
-	    </div>
+		<div class="navbar-header">
+			<a th:href="${basePath}+'index.do'" class="navbar-brand">English</a>
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+		</div>
+		<div class="collapse navbar-collapse" id="navbar-collapse">
+			<ul class="nav navbar-nav navbar-right" style="margin-top: 0;">
+				<li><a th:href="${basePath}+'index.do'">Search</a></li>
+            	<li><a th:href="${basePath}+'review/page.do'">Review</a></li>
+            	<li><a th:href="${basePath}+'review/listWord.do'">Word</a></li>
+            	<li><a th:href="${basePath}+'login/out.do'">LoginOut</a></li> 
+			</ul>
+		</div>
     </div>
 </div>

@@ -46,13 +46,13 @@ public class LoginFilter implements Filter {
 		// 当前会话用户为空而且不是请求登录，退出登录，欢迎页面和根目录则退回到应用的根目录
 		String servletPath = httpServletRequest.getServletPath();
 		List<String> pathList = notNeedSessionCheck();
-		
-		if (!pathList.contains(servletPath) && user == null) {
+		chain.doFilter(request, response);
+		/*if (!pathList.contains(servletPath) && user == null) {
 			request.getRequestDispatcher("/login/page.do").forward(request, response);
 		}else{
 			httpServletResponse.setCharacterEncoding(Consts.CHARSET);
 			chain.doFilter(request, response);
-		}
+		}*/
 	}
 
 	@Override

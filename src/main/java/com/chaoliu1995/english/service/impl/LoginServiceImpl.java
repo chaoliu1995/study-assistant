@@ -10,6 +10,7 @@ import com.chaoliu1995.english.service.LoginService;
 import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.security.PasswordUtils;
 
+
 /** 
 * @Author: ChaoLiu
 * @Description: 
@@ -18,7 +19,7 @@ import com.chaoliu1995.english.util.security.PasswordUtils;
 */
 @Service("loginService")
 public class LoginServiceImpl extends BaseServiceImpl<User> implements LoginService {
-
+	
 	@Override
 	public Map<String, String> login(User user,Map<String, String> resultMap) {
 		try {

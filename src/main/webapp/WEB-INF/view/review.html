@@ -16,6 +16,7 @@
 </head>
 <body>
 	<div th:replace="common/header"></div>
+	<div style="height:70px;"></div>
 	<div class="container">
 		<input type="hidden" th:value="${word.id}" id="wordId" />
 		<h1 class="wordContent" th:text="${word.content}"></h1>
@@ -49,8 +50,8 @@
 				<td th:text="${word.cnDefinition}"></td>
 			</tr>
 		</table>
-		<audio control id="usAudio"><source th:src="${word.usAudio}" type="audio/mpeg" id="usAudioSource" /></audio>
-		<audio control id="ukAudio"><source th:src="${word.ukAudio}" type="audio/mpeg" id="ukAudioSource" /></audio>
+		<audio id="usAudio"><source th:src="${word.usAudio}" type="audio/mpeg" id="usAudioSource" /></audio>
+		<audio id="ukAudio"><source th:src="${word.ukAudio}" type="audio/mpeg" id="ukAudioSource" /></audio>
 		<div style="height:450px;"></div>
 	</div>
 	<div th:replace="common/footer"></div>

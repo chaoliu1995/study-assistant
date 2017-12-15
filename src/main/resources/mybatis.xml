@@ -3,6 +3,6 @@
 <configuration>
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL" />
-        <setting name="logImpl" value="LOG4J" />
+        <setting name="logImpl" value="SLF4J" />
 	</settings>
 </configuration>

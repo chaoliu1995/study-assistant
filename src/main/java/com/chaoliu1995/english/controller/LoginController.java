@@ -29,7 +29,7 @@ public class LoginController extends BaseController {
 	
 	@RequestMapping("/page")
 	public String index(){
-		return "login";
+		return checkPlatForm("login");
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class LoginController extends BaseController {
 		if(session != null){
 			session.invalidate();
 		}
-		return "login";
+		return checkPlatForm("login");
 	}
 	
 	/**

@@ -8,8 +8,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-import com.chaoliu1995.english.filter.LoginFilter;
-
 /**
  * web初始化类,替代xml 继承Abs..类后,会同时创建DispatcherServlet和ContextLoaderListener
  * 容器启动及初始化类
@@ -58,12 +56,8 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 		CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
 		characterEncodingFilter.setEncoding("UTF-8");
 		characterEncodingFilter.setForceEncoding(true);
-		//登录校验filter
-		LoginFilter loginFilter = new LoginFilter();
 		// 其他filter
-		return new Filter[] { characterEncodingFilter,loginFilter
-				// 其他filter
-		};
+		return new Filter[] { characterEncodingFilter };
 	}
 	
 }
