@@ -52,6 +52,7 @@ public class LoginController extends BaseController {
 		resultMap = loginService.login(user,resultMap);
 		if(resultMap.get(Consts.STATUS).equals(Consts.SUCCESS)){
 			session.setAttribute(Consts.SESSION_USER, user);
+			session.setMaxInactiveInterval(36000);
 			return toJson(resultMap);
 		}else{
 			session.setAttribute(Consts.LOGIN_TIME, System.currentTimeMillis());

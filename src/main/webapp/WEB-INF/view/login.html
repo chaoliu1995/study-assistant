@@ -8,11 +8,6 @@
 <link type="text/css" th:href="@{/resources/css/common.css}" rel="stylesheet" />
 <script type="text/javascript" th:src="@{/resources/js/jquery.min.js}"></script>
 <script type="text/javascript" th:src="@{/resources/bootstrap/bootstrap.min.js}"></script>
-<!-- <script type="text/javascript" th:src="@{/resources/js/encryption/Base64.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/encryption/AES.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/encryption/md5.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/encryption/sha1.js}"></script>
-<script type="text/javascript" th:src="@{/resources/js/encryption/FrontEnd.js}"></script> -->
 <script type="text/javascript" th:src="@{/resources/js/encryption/encryption.min.js}"></script>
 <style type="text/css">
 	body{ margin:0px; padding:0px; overflow-x:hidden; overflow:hidden;background-color: #333;}
@@ -80,7 +75,7 @@ function login(){
     }
 }
 $("#loginBtn").click(login);
-$('#validCode').keydown(function(e){
+$('#pwd').keydown(function(e){
 	if(e.keyCode==13){
 		login();
 	}

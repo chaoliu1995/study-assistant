@@ -2,6 +2,8 @@ package com.chaoliu1995.english.service.impl;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -55,6 +57,8 @@ import com.chaoliu1995.english.util.StringUtils;
 
 @Service("tabWordService")
 public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabWordService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(TabWordServiceImpl.class);
 	
 	@Autowired
 	private TabWordMapper tabWordMapper;
@@ -110,6 +114,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void saveWord(ShanBayResult sbr,String savePath) {
+		
 		//判断返回信息是否正确
 		if(!sbr.getMsg().equals("SUCCESS") && !sbr.getStatus_code().equals("0")){
 			return;
@@ -119,9 +124,10 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		//判断单词是否已经存在
 		int count = tabWordMapper.selectCount(new TabWord(word.getContent()));
 		if(count > 0){
+			logger.info("单词已存在：" + word.getContent());
 			return;
 		}
-		
+		logger.info("保存新的单词：" + word.getContent());
 		//保存单词发音文件
 		if(!StringUtils.isEmpty(word.getUk_audio())){
 			try {

@@ -7,18 +7,22 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import com.chaoliu1995.english.util.BundleUtils;
+
 import lombok.Getter;
 
 public class PasswordUtils {
+	
 	private PasswordUtils (){}
-	private static final String SERVER_IV = "abcd123e456abdc9"; // 16位
+	
+	private static final String SERVER_IV = BundleUtils.getString("SERVER_IV"); // 16位
 	// 服务器专用密钥
-	private static final String SERVER_CRYPT_KEY = "8ig*lpk$=Fang5@P"; // 16位
+	private static final String SERVER_CRYPT_KEY = BundleUtils.getString("SERVER_CRYPT_KEY"); // 16位
 	
 	@Getter
-	private static final String CLIENT_IVV = "0102030405060708";
+	private static final String CLIENT_IVV = BundleUtils.getString("CLIENT_IVV");
 	@Getter
-	private static final String CLIENT_SKEY = "1234567891234567";
+	private static final String CLIENT_SKEY = BundleUtils.getString("CLIENT_SKEY");
 
 	/**
 	 * 模拟客户端密码加密

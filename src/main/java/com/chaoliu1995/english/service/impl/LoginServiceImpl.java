@@ -2,6 +2,8 @@ package com.chaoliu1995.english.service.impl;
 
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.chaoliu1995.english.base.impl.BaseServiceImpl;
@@ -20,8 +22,11 @@ import com.chaoliu1995.english.util.security.PasswordUtils;
 @Service("loginService")
 public class LoginServiceImpl extends BaseServiceImpl<User> implements LoginService {
 	
+	private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+	
 	@Override
 	public Map<String, String> login(User user,Map<String, String> resultMap) {
+		logger.info("用户登录："+user.getUsername());
 		try {
 			User dbUser = new User();
 			dbUser.setUsername(user.getUsername());
@@ -42,6 +47,7 @@ public class LoginServiceImpl extends BaseServiceImpl<User> implements LoginServ
 			return resultMap;
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.info(e.getMessage());
 			resultMap.put(Consts.MESSAGE, "程序异常！请联系管理员");
 			return resultMap;
 		}

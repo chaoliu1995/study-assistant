@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Login</title>
-<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/flexible.js}"></script>
 <link type="text/css" th:href="@{/resources/bootstrap/bootstrap-theme.min.css}" rel="stylesheet" />
 <link type="text/css" th:href="@{/resources/bootstrap/bootstrap.min.css}" rel="stylesheet" />
 <script type="text/javascript" th:src="@{/resources/js/jquery.min.js}"></script>
@@ -17,18 +17,18 @@
 </head>
 <body>
 	<div style="height:3rem;"></div>
-	<h1 style="color:#FFF;text-align: center;">Chaoliu1995</h1>
+	<h1 style="color:#FFF;text-align: center;">English</h1>
 	<div style="height:1rem;"></div>
 	<div class="container">
 		<div id="loginForm">
 			<div class="input-group input-group-lg">
-	            <span class="input-group-addon">Username</span>
-	            <input type="text" class="form-control" id="uname">
+	            <span class="input-group-addon" style="font-size:0.4rem;">Username</span>
+	            <input type="text" class="form-control" style="font-size:0.4rem;" id="uname">
 	        </div>
 	        <br/>
 	        <div class="input-group input-group-lg">
-	            <span class="input-group-addon">Password</span>
-	            <input type="password" class="form-control" id="pwd">
+	            <span class="input-group-addon" style="font-size:0.4rem;">Password</span>
+	            <input type="password" class="form-control" style="font-size:0.4rem;" id="pwd">
 	        </div>
 	        <br/>
 	        <button type="button" id="loginBtn" class="btn btn-primary btn-lg btn-block">Login</button>
@@ -52,8 +52,9 @@
 		</div>
 	</div>
 <script type="text/javascript" th:inline="javascript">
-function login(){
-    var uname = $("#uname").val();
+
+function doLogin(){
+	var uname = $("#uname").val();
     var pwd = $("#pwd").val();
     if(uname == "" || pwd == "" || uname == undefined || pwd == undefined){
         return;
@@ -64,25 +65,35 @@ function login(){
         var hash2word = hex_sha1(md5word);
         //再用AES加密
         var encodeStr = Encrypt(hash2word);
-		$.post([[${basePath}]]+"login/commit.do",{
-			username : uname,
-			password : encodeStr,
-		},function(data){
-			if(data.STATUS == "SUCCESS"){
-               	window.location.href= [[${basePath}]] + "index.do";
-           	}else{
-           		$("#alertMessage").html(data.MESSAGE);
-           		$('#alertModal').modal('show');
-           	}
-       },"JSON");
-    }
+        
+        login(uname,encodeStr);
+	}
 }
-$("#loginBtn").click(login);
-$('#validCode').keydown(function(e){
+
+function login(uname,pwd){
+    $.post([[${basePath}]]+"login/commit.do",{
+		username : uname,
+		password : pwd,
+	},function(data){
+		if(data.STATUS == "SUCCESS"){
+           	window.location.href= [[${basePath}]] + "index.do";
+       	}else{
+       		$("#alertMessage").html(data.MESSAGE);
+       		$('#alertModal').modal('show');
+       	}
+   },"JSON");
+}
+
+$("#loginBtn").click(doLogin);
+
+$('#pwd').keydown(function(e){
 	if(e.keyCode==13){
-		login();
+		doLogin();
 	}
 });
+
+
+
 </script>
 </body>
 </html>

@@ -1,4 +1,4 @@
 @CHARSET "UTF-8";
 font-family: Consolas,'Consolas', '微软雅黑', 'Microsoft YaHei UI', 'Hiragino Sans GB',SimSun, SimHei, arial, sans-serif; }
-button,input{outline:none;}
-body{ font-size: 0.6rem; }
+button,input{ outline:none !important; }
+body{ font-size: 0.5rem; }

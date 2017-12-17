@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Review</title>
-<script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script>
+<script type="text/javascript" th:src="@{/resources/js/flexible.js}"></script>
 <script type="text/javascript" th:src="@{/resources/js/jquery.min.js}"></script>
 <link type="text/css" th:href="@{/resources/bootstrap/bootstrap-theme.min.css}" rel="stylesheet" />
 <link type="text/css" th:href="@{/resources/bootstrap/bootstrap.min.css}" rel="stylesheet" />
@@ -14,7 +14,8 @@
 	#btnGroup{ text-align:center; }
 	#btnGroup button{ margin:0.1rem; }
 	#wordDetails{ display:none; }
-	#wordDetails .left{ width:21%; }
+	#wordDetails .left{ width:23%; font-size:0.38rem; }
+	#ukAudioControlBtn,#usAudioControlBtn{ width:100%; }
 </style>
 </head>
 <body>
@@ -40,7 +41,7 @@
 		<table class="table table-bordered table-striped" id="wordDetails">
 			<tr>
 				<td class="left">US Pron</td>
-				<td th:text="${word.usPronunciation}" class="ri]ght"></td>
+				<td th:text="${word.usPronunciation}" class="ri]ght" style="font-size:0.4rem;"></td>
 			</tr>
 			<tr>
 				<td class="left">US Audio</td>
@@ -48,7 +49,7 @@
 			</tr>
 			<tr>
 				<td class="left">UK Pron</td>
-				<td th:text="${word.ukPronunciation}" class="ri]ght"></td>
+				<td th:text="${word.ukPronunciation}" class="ri]ght" style="font-size:0.4rem;"></td>
 			</tr>
 			<tr>
 				<td class="left">UK Audio</td>
@@ -56,7 +57,7 @@
 			</tr>
 			<tr>
 				<td class="left">CN Def</td>
-				<td th:text="${word.cnDefinition}" class="ri]ght"></td>
+				<td th:text="${word.cnDefinition}" class="ri]ght" style="font-size:0.4rem;"></td>
 			</tr>
 		</table>
 		<audio id="usAudio"><source th:src="${word.usAudio}" type="audio/mpeg" id="usAudioSource" /></audio>
