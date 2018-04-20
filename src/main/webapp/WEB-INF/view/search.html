@@ -104,7 +104,7 @@
 				$("#usAudioTd").append(usBtn);
 				initPlayBtn();
 				$("#wordInfo").fadeIn();
-				$.post([[${basePath}]] + "saveWord.do",{
+				$.post("/saveWord.do",{
 					word : wordVal
 				},function(){
 					console.log("Send Request!");

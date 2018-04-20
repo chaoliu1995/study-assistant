@@ -71,12 +71,12 @@ function doLogin(){
 }
 
 function login(uname,pwd){
-    $.post([[${basePath}]]+"login/commit.do",{
+    $.post("/login/commit.do",{
 		username : uname,
 		password : pwd,
 	},function(data){
 		if(data.STATUS == "SUCCESS"){
-           	window.location.href= [[${basePath}]] + "index.do";
+           	window.location.href= "/index.do";
        	}else{
        		$("#alertMessage").html(data.MESSAGE);
        		$('#alertModal').modal('show');

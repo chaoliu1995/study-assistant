@@ -77,7 +77,7 @@
 			$("#wordText").val("");
 			return;
 		}
-		$.post([[${basePath}]] + "search.do",{
+		$.post("/search.do",{
 			word : wordVal
 		},function(data){
 			var json = data;
@@ -103,7 +103,7 @@
 				$("#usAudioTd").append(usBtn);
 				initPlayBtn();
 				$("#wordInfo").fadeIn();
-				$.post([[${basePath}]] + "saveWord.do",{
+				$.post("/saveWord.do",{
 					word : wordVal
 				},function(){
 					console.log("Send Request!");
