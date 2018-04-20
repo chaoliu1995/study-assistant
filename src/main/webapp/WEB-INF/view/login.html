@@ -61,12 +61,12 @@ function login(){
         var hash2word = hex_sha1(md5word);
         //再用AES加密
         var encodeStr = Encrypt(hash2word);
-		$.post([[${basePath}]]+"login/commit.do",{
+		$.post("/login/commit.do",{
 			username : uname,
 			password : encodeStr,
 		},function(data){
 			if(data.STATUS == "SUCCESS"){
-               	window.location.href= [[${basePath}]] + "index.do";
+               	window.location.href= "/index.do";
            	}else{
            		$("#alertMessage").html(data.MESSAGE);
            		$('#alertModal').modal('show');

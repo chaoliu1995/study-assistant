@@ -1,15 +1,5 @@
 package com.chaoliu1995.english.controller;
 
-import java.io.IOException;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.chaoliu1995.english.base.BaseController;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.model.ShanBayResult;
@@ -17,6 +7,15 @@ import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.HttpUtils;
 import com.chaoliu1995.english.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.io.IOException;
+import java.util.Map;
 
 @Controller
 public class SearchController extends BaseController {

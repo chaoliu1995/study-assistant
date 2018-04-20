@@ -1,15 +1,13 @@
 package com.chaoliu1995.english.util.security;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import com.chaoliu1995.english.util.BundleUtils;
+import lombok.Getter;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import com.chaoliu1995.english.util.BundleUtils;
-
-import lombok.Getter;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class PasswordUtils {
 	

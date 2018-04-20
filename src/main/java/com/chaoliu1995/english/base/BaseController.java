@@ -1,18 +1,16 @@
 package com.chaoliu1995.english.base;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.chaoliu1995.english.util.Consts;
+import com.chaoliu1995.english.util.StringUtils;
+import com.chaoliu1995.english.util.TerminalUtils;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-
-import com.chaoliu1995.english.util.Consts;
-import com.chaoliu1995.english.util.StringUtils;
-import com.chaoliu1995.english.util.TerminalUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class BaseController {
 
@@ -20,7 +18,6 @@ public abstract class BaseController {
 	protected HttpServletRequest request;
 	protected HttpSession session;
 	protected Model model;
-	protected String basePath;
 	protected String userAgent;
 	
 	@ModelAttribute
@@ -29,11 +26,6 @@ public abstract class BaseController {
 		this.response = response;
 		this.session = request.getSession();
 		this.model = model;
-		if(StringUtils.isEmpty(basePath)){
-			this.basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
-		}
-		this.userAgent = request.getHeader( "USER-AGENT" ).toLowerCase();
-		model.addAttribute("basePath", basePath);
 	}
 	
 	/**

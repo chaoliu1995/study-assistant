@@ -1,7 +1,7 @@
 package com.chaoliu1995.english.util.security;
 
-import java.io.ByteArrayOutputStream;  
-import java.io.IOException;  
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;  
  
 /** 

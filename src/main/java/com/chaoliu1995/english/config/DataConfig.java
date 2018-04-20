@@ -1,10 +1,6 @@
 package com.chaoliu1995.english.config;
 
-import java.io.IOException;
-import java.util.Properties;
-
-import javax.sql.DataSource;
-
+import com.alibaba.druid.pool.DruidDataSource;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.EnvironmentAware;
@@ -17,10 +13,11 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-import com.alibaba.druid.pool.DruidDataSource;
-
 import tk.mybatis.spring.mapper.MapperScannerConfigurer;
+
+import javax.sql.DataSource;
+import java.io.IOException;
+import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:/config.properties")

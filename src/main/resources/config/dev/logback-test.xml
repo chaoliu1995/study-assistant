@@ -2,7 +2,7 @@
 <configuration scan="true" scanPeriod="300 second" debug="false">
 	<property name="APP_NAME" value="English" />
 	<contextName>${APP_NAME}</contextName>
-	<property name="LOG_HOME" value="E:\\logs\\English\\" />
+	<property name="LOG_HOME" value="C:\\logs\\English\\" />
 	<property name="defaultMaxFileSize" value="100MB" />
 	<property name="defaultMaxHistory" value="30" />
 	<property name="defaultCharset" value="UTF-8" />

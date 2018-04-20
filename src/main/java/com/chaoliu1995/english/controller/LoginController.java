@@ -1,18 +1,17 @@
 package com.chaoliu1995.english.controller;
 
-import java.util.Map;
-
+import com.chaoliu1995.english.base.BaseController;
+import com.chaoliu1995.english.entity.User;
+import com.chaoliu1995.english.service.LoginService;
+import com.chaoliu1995.english.util.Consts;
+import com.chaoliu1995.english.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.chaoliu1995.english.base.BaseController;
-import com.chaoliu1995.english.entity.User;
-import com.chaoliu1995.english.service.LoginService;
-import com.chaoliu1995.english.util.Consts;
-import com.chaoliu1995.english.util.StringUtils;
+import java.util.Map;
 
 /** 
 * @Author: ChaoLiu
@@ -21,15 +20,14 @@ import com.chaoliu1995.english.util.StringUtils;
 * @CreateDate: 2017年10月21日 下午6:14:52
 */
 @Controller
-@RequestMapping("/login")
 public class LoginController extends BaseController {
 	
 	@Autowired
 	private LoginService loginService;
-	
-	@RequestMapping("/page")
+
+	@RequestMapping("/")
 	public String index(){
-		return checkPlatForm("login");
+        return checkPlatForm("login");
 	}
 	
 	/**
@@ -37,7 +35,7 @@ public class LoginController extends BaseController {
 	 * @param user
 	 * @return
 	 */
-	@RequestMapping(value="/commit",method=RequestMethod.POST,produces="text/json;charset=utf-8")
+	@RequestMapping(value="/login/commit",method=RequestMethod.POST,produces="text/json;charset=utf-8")
 	@ResponseBody
 	public String login(User user){
 		Map<String,String> resultMap = getResultMap();
@@ -64,7 +62,7 @@ public class LoginController extends BaseController {
 	 * 退出登录
 	 * @return
 	 */
-	@RequestMapping("/out")
+	@RequestMapping("/login/out")
 	public String loginOut(){
 		if(session != null){
 			session.invalidate();

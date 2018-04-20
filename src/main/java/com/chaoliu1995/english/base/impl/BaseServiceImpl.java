@@ -1,13 +1,11 @@
 package com.chaoliu1995.english.base.impl;
 
-import java.util.List;
-
+import com.chaoliu1995.english.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.chaoliu1995.english.base.BaseService;
-
 import tk.mybatis.mapper.common.Mapper;
+
+import java.util.List;
 
 @Service("baseService")
 public abstract class BaseServiceImpl<T> implements BaseService<T> {

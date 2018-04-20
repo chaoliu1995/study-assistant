@@ -1,7 +1,11 @@
 package com.chaoliu1995.english.service.impl;
 
-import java.util.List;
-
+import com.chaoliu1995.english.base.impl.BaseServiceImpl;
+import com.chaoliu1995.english.dao.*;
+import com.chaoliu1995.english.entity.shanbay.*;
+import com.chaoliu1995.english.model.*;
+import com.chaoliu1995.english.service.TabWordService;
+import com.chaoliu1995.english.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,51 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.chaoliu1995.english.base.impl.BaseServiceImpl;
-import com.chaoliu1995.english.dao.CnDefinitionMapper;
-import com.chaoliu1995.english.dao.EnDefinitionMapper;
-import com.chaoliu1995.english.dao.EnDefnAdjMapper;
-import com.chaoliu1995.english.dao.EnDefnAdvMapper;
-import com.chaoliu1995.english.dao.EnDefnArtMapper;
-import com.chaoliu1995.english.dao.EnDefnConjMapper;
-import com.chaoliu1995.english.dao.EnDefnInterjMapper;
-import com.chaoliu1995.english.dao.EnDefnNMapper;
-import com.chaoliu1995.english.dao.EnDefnNumMapper;
-import com.chaoliu1995.english.dao.EnDefnPrepMapper;
-import com.chaoliu1995.english.dao.EnDefnPronMapper;
-import com.chaoliu1995.english.dao.EnDefnVMapper;
-import com.chaoliu1995.english.dao.TabPronunciationsMapper;
-import com.chaoliu1995.english.dao.TabWordMapper;
-import com.chaoliu1995.english.dao.UkAudioAddressesMapper;
-import com.chaoliu1995.english.dao.UsAudioAddressesMapper;
-import com.chaoliu1995.english.entity.shanbay.CnDefinition;
-import com.chaoliu1995.english.entity.shanbay.EnDefinition;
-import com.chaoliu1995.english.entity.shanbay.EnDefnAdj;
-import com.chaoliu1995.english.entity.shanbay.EnDefnAdv;
-import com.chaoliu1995.english.entity.shanbay.EnDefnArt;
-import com.chaoliu1995.english.entity.shanbay.EnDefnConj;
-import com.chaoliu1995.english.entity.shanbay.EnDefnInterj;
-import com.chaoliu1995.english.entity.shanbay.EnDefnN;
-import com.chaoliu1995.english.entity.shanbay.EnDefnNum;
-import com.chaoliu1995.english.entity.shanbay.EnDefnPrep;
-import com.chaoliu1995.english.entity.shanbay.EnDefnPron;
-import com.chaoliu1995.english.entity.shanbay.EnDefnV;
-import com.chaoliu1995.english.entity.shanbay.TabPronunciations;
-import com.chaoliu1995.english.entity.shanbay.TabWord;
-import com.chaoliu1995.english.entity.shanbay.UkAudioAddresses;
-import com.chaoliu1995.english.entity.shanbay.UsAudioAddresses;
-import com.chaoliu1995.english.model.Audio_addresses;
-import com.chaoliu1995.english.model.Cn_definition;
-import com.chaoliu1995.english.model.En_definition;
-import com.chaoliu1995.english.model.En_definitions;
-import com.chaoliu1995.english.model.ShanBayResult;
-import com.chaoliu1995.english.model.Word;
-import com.chaoliu1995.english.service.TabWordService;
-import com.chaoliu1995.english.util.Consts;
-import com.chaoliu1995.english.util.EntityUtils;
-import com.chaoliu1995.english.util.FileUtils;
-import com.chaoliu1995.english.util.Pager;
-import com.chaoliu1995.english.util.StringUtils;
+import java.util.List;
 
 @Service("tabWordService")
 public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabWordService {

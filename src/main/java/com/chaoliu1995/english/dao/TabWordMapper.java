@@ -1,12 +1,10 @@
 package com.chaoliu1995.english.dao;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
 import com.chaoliu1995.english.entity.shanbay.TabWord;
-
+import org.apache.ibatis.annotations.Param;
 import tk.mybatis.mapper.common.Mapper;
+
+import java.util.List;
 
 public interface TabWordMapper extends Mapper<TabWord> {
 	

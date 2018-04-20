@@ -1,12 +1,5 @@
 package com.chaoliu1995.english.config;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
-
-import javax.servlet.ServletContext;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
@@ -15,22 +8,26 @@ import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import javax.servlet.ServletContext;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
 @EnableWebMvc
 @ComponentScan(basePackages = "com.chaoliu1995.english.controller",useDefaultFilters = false, includeFilters = {
 		@ComponentScan.Filter(type = FilterType.ANNOTATION, value = { Controller.class })
 		})
-public class WebConfig {
+public class WebConfig extends WebMvcConfigurerAdapter {
 	
 	@Bean
 	public StringHttpMessageConverter stringHttpMessageConverter(){
@@ -38,7 +35,7 @@ public class WebConfig {
 		List<MediaType> mediaTypes = new ArrayList<MediaType>();
 		mediaTypes.add(MediaType.parseMediaType("text/html;charset=UTF-8"));
 		mediaTypes.add(MediaType.parseMediaType("text/plain;charset=UTF-8"));
-		mediaTypes.add(MediaType.parseMediaType("text/json;charset=UTF-8"));
+		mediaTypes.add(MediaType.parseMediaType("application/json;charset=UTF-8"));
 		stringHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
 		return stringHttpMessageConverter;
 	}
@@ -89,6 +86,7 @@ public class WebConfig {
 	/**
 	 * 配置静态资源的处理 将请求交由Servlet处理,不经过DispatchServlet
 	 */
+	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
 		configurer.enable();
 	}
@@ -97,39 +95,9 @@ public class WebConfig {
 	/**
 	 * 静态文件路径
 	 */
+	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
 		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/");
-	}
-	
-	
-	/**
-	 * SpringMVC中异常的处理配置
-	 * @return
-	 */
-	@Bean
-	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
-		SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
-		simpleMappingExceptionResolver.setDefaultErrorView("error/500");
-		simpleMappingExceptionResolver.setDefaultStatusCode(500);
-
-		// key是异常类型,value是返回的视图名称
-		Properties exceptionMappings = new Properties();
-		//exceptionMappings.setProperty(UnauthorizedException.class.getName(), "error/403");
-		//exceptionMappings.setProperty(UnauthenticatedException.class.getName(), "error/403");
-		exceptionMappings.setProperty(NoHandlerFoundException.class.getName(), "error/404");
-		exceptionMappings.setProperty(Exception.class.getName(), "error/500");
-		exceptionMappings.setProperty(Throwable.class.getName(), "error/500");
-		simpleMappingExceptionResolver.setExceptionMappings(exceptionMappings);
-
-		Properties statusCodes = new Properties();
-		statusCodes.setProperty("error/403", "403");
-		statusCodes.setProperty("error/404", "404");
-		statusCodes.setProperty("error/500", "500");
-		simpleMappingExceptionResolver.setStatusCodes(statusCodes);
-
-		simpleMappingExceptionResolver.setWarnLogCategory(SimpleMappingExceptionResolver.class.getName());
-
-		return simpleMappingExceptionResolver;
 	}
 	
 }

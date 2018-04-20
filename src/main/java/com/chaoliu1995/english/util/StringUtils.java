@@ -1,13 +1,11 @@
 package com.chaoliu1995.english.util;
 
-import java.util.Random;
-import java.util.regex.Pattern;
-
+import com.google.gson.Gson;
+import lombok.Getter;
 import org.apache.commons.text.RandomStringGenerator;
 
-import com.google.gson.Gson;
-
-import lombok.Getter;
+import java.util.Random;
+import java.util.regex.Pattern;
 
 public class StringUtils {
 	

@@ -1,12 +1,11 @@
 package com.chaoliu1995.english.entity.shanbay;
 
+import com.chaoliu1995.english.util.Consts;
+import lombok.Data;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.chaoliu1995.english.util.Consts;
-
-import lombok.Data;
 
 @Data
 public class EnDefnV implements java.io.Serializable {

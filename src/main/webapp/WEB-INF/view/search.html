@@ -78,7 +78,7 @@
 			$("#wordText").val("");
 			return;
 		}
-		$.post([[${basePath}]] + "search.do",{
+		$.post("/search.do",{
 			word : wordVal
 		},function(data){
 			var json = data;

@@ -60,7 +60,7 @@
 	var ukAudio = $("#ukAudio")[0];
 	function memory(status){
 		var wordId = $("#wordId").val();
-		$.post([[${basePath}]]+"review/memory.do",{
+		$.post("/review/memory.do",{
 			wordId : wordId,
 			memoryStatus : status
 		},function(data){

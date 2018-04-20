@@ -29,9 +29,9 @@
 		</table>
 		<nav id="pager">
 			<ul class="pagination pagination-lg">
-				<li><a th:href="${basePath}+'review/listWord.do?currentPage='+${pager.prevPage}">Previous</a></li>
+				<li><a th:href="'/review/listWord.do?currentPage='+${pager.prevPage}">Previous</a></li>
 				<li><span th:text="${pager.currentPage}+'/'+${pager.pageTotal}"></span></li>
-				<li><a th:href="${basePath}+'review/listWord.do?currentPage='+${pager.nextPage}">Next</a></li>
+				<li><a th:href="'/review/listWord.do?currentPage='+${pager.nextPage}">Next</a></li>
 				<li><span><input type="text" id="jumpInput" style="width:50px;height:25px;border:none;" /></span></li>
 				<li><span id="jumpBtn" style="cursor:pointer;">跳转</span></li>
 			</ul>
@@ -44,7 +44,7 @@
 			if(page == null || page == ""){
 				return;
 			}
-			window.location.href=[[${basePath}]]+"review/listWord.do?currentPage="+page;
+			window.location.href="/review/listWord.do?currentPage="+page;
 		});
 	</script>
 </body>

@@ -1,12 +1,12 @@
 package com.chaoliu1995.english.config;
 
-import javax.servlet.Filter;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-
 import org.springframework.core.annotation.Order;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+
+import javax.servlet.Filter;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 
 /**
  * web初始化类,替代xml 继承Abs..类后,会同时创建DispatcherServlet和ContextLoaderListener
@@ -42,7 +42,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 	 */
 	@Override
 	protected String[] getServletMappings() {
-		return new String[] { "*.do" };
+		return new String[] { "*.do","/" };
 	}
 	
 	/**

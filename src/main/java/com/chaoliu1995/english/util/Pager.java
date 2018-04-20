@@ -1,9 +1,9 @@
 package com.chaoliu1995.english.util;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 /** 
  * @ClassName: Pager<T> 
