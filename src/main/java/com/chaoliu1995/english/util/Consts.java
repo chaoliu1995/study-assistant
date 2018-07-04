@@ -4,16 +4,15 @@ package com.chaoliu1995.english.util;
  * 项目中的一些常量
  */
 public class Consts {
-	
+	private Consts(){}
+
 	public static final long SERIAL_VERSION_UID = -6192949389726527999L;
 	
-	public static final String PRODUCES = "text/json;charset=UTF-8";
-	
 	public static final String EMPTY_STRING = "";
-	public static final String STATUS = "STATUS";
-	public static final String SUCCESS = "SUCCESS";
-	public static final String ERROR = "ERROR";
-	public static final String MESSAGE = "MESSAGE";
+	public static final String STATUS = "status";
+	public static final String SUCCESS = "success";
+	public static final String ERROR = "error";
+	public static final String MESSAGE = "message";
 	public static final String PARAMETER_IS_NULL = "参数有null";
 	
 	//login
@@ -27,9 +26,6 @@ public class Consts {
 	public static final String UK_AUDIO_PATH = "audio/uk/";
 	
 	public static final String US_AUDIO_PATH = "audio/us/";
-	
-	//下载excel文件时，每次从数据库获取的数据数量
-	public static final Integer EXCEL_PAGE_SIZE = 20;
 	
 	public static final String CHARSET = "UTF-8";
 	

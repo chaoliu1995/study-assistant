@@ -1,15 +1,17 @@
 package com.chaoliu1995.english.service.impl;
 
-import com.chaoliu1995.english.base.impl.BaseServiceImpl;
+import com.chaoliu1995.english.dao.UserMapper;
+import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.entity.User;
 import com.chaoliu1995.english.service.LoginService;
 import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.security.PasswordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
+import java.util.List;
 
 
 /** 
@@ -19,36 +21,46 @@ import java.util.Map;
 * @CreateDate: 2017年10月21日 下午7:49:29
 */
 @Service("loginService")
-public class LoginServiceImpl extends BaseServiceImpl<User> implements LoginService {
+public class LoginServiceImpl implements LoginService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
+
+	@Autowired
+	private PasswordUtils passwordUtils;
+
+    @Autowired
+	private UserMapper userMapper;
 	
 	@Override
-	public Map<String, String> login(User user,Map<String, String> resultMap) {
+    public void login(User user, ResultDTO<Object> resultDTO) {
 		logger.info("用户登录："+user.getUsername());
 		try {
 			User dbUser = new User();
 			dbUser.setUsername(user.getUsername());
-			dbUser = this.getOne(dbUser);
-			if(dbUser == null){
-				resultMap.put(Consts.MESSAGE, "账号不存在");
-				return resultMap;
+			List<User> userList = userMapper.select(dbUser);
+
+			if(userList == null || userList.size() < 1){
+				resultDTO.setMessage("账号不存在");
+				return;
 			}
+			if(userList.size() > 1){
+			    logger.error("同一用户名下存在多条数据：" + user.getUsername());
+                resultDTO.setMessage("用户数据异常");
+                return;
+            }
+			dbUser = userList.get(0);
 			//客户端密文AES解密
-			String decryptPwd = PasswordUtils.decryptAES(user.getPassword(), PasswordUtils.getCLIENT_IVV(), PasswordUtils.getCLIENT_SKEY());
+			String decryptPwd = passwordUtils.decryptAES(user.getPassword(), passwordUtils.getCLIENT_IVV(), passwordUtils.getCLIENT_SKEY());
 			//服务器密文AES解密
-			String serverPwd = PasswordUtils.decryptAES(dbUser.getPassword());
+			String serverPwd = passwordUtils.decryptAES(dbUser.getPassword());
 			if(serverPwd.equals(decryptPwd)){
-				resultMap.put(Consts.STATUS, Consts.SUCCESS);
-				return resultMap;
+				resultDTO.setStatus(Consts.SUCCESS);
 			}
-			resultMap.put(Consts.MESSAGE, "密码错误");
-			return resultMap;
+			resultDTO.setMessage("密码错误");
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e.getMessage());
-			resultMap.put(Consts.MESSAGE, "程序异常！请联系管理员");
-			return resultMap;
+			resultDTO.setMessage("程序异常！请联系管理员");
 		}
 	}
 	

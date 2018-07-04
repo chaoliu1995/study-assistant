@@ -1,25 +1,27 @@
 package com.chaoliu1995.english.filter;
 
+import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.entity.User;
 import com.chaoliu1995.english.util.Consts;
+import com.chaoliu1995.english.util.StringUtils;
+import org.springframework.http.MediaType;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.Arrays;
 import java.util.List;
 
 
 /** 
 * @Author: ChaoLiu
-* @Description: 校验是否登录
+* @Description: 登录拦截器
 * @Email: chaoliu1995@qq.com
 * @CreateDate: 2017年10月21日 下午9:12:40
 */
-@WebFilter(filterName="loginFilter", urlPatterns="*.do")
 public class LoginFilter implements Filter {
 	
 	@Override
@@ -41,7 +43,13 @@ public class LoginFilter implements Filter {
 		String servletPath = httpServletRequest.getServletPath();
 		List<String> pathList = notNeedSessionCheck();
 		if (!pathList.contains(servletPath) && user == null) {
-			request.getRequestDispatcher("/login/page.do").forward(request, response);
+            response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+			Writer writer = response.getWriter();
+			ResultDTO<Object> resultDTO = ResultDTO.init();
+			resultDTO.setMessage("用户未登录");
+			writer.write(StringUtils.toJson(resultDTO));
+			writer.flush();
+			writer.close();
 		}else{
 			httpServletResponse.setCharacterEncoding(Consts.CHARSET);
 			chain.doFilter(request, response);
@@ -54,7 +62,7 @@ public class LoginFilter implements Filter {
 	}
 
 	private List<String> notNeedSessionCheck() {
-		String[] paths = new String[] { "/login/commit.do","/login/out.do","/login/page.do" };
+		String[] paths = new String[] { "/login/commit","/login/out"};
 		return Arrays.asList(paths);
 	}
 }

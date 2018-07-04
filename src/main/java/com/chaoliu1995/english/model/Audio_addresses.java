@@ -1,10 +1,15 @@
 package com.chaoliu1995.english.model;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * 单词发音文件url地址
  * @author Administrator
  *
  */
+@NoArgsConstructor
+@Data
 public class Audio_addresses {
 	private String[] uk;
 	private String[] us;

@@ -1,7 +1,9 @@
 package com.chaoliu1995.english.util.security;
 
-import com.chaoliu1995.english.util.BundleUtils;
 import lombok.Getter;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -9,18 +11,26 @@ import javax.crypto.spec.SecretKeySpec;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+@Component("passwordUtils")
 public class PasswordUtils {
-	
-	private PasswordUtils (){}
-	
-	private static final String SERVER_IV = BundleUtils.getString("SERVER_IV"); // 16位
+
+	@Value("${SERVER_IV}")
+	@Setter
+	private String SERVER_IV; // 16位
 	// 服务器专用密钥
-	private static final String SERVER_CRYPT_KEY = BundleUtils.getString("SERVER_CRYPT_KEY"); // 16位
-	
+	@Value("${SERVER_CRYPT_KEY}")
+	@Setter
+	private String SERVER_CRYPT_KEY; // 16位
+
+	@Value("${CLIENT_IVV}")
 	@Getter
-	private static final String CLIENT_IVV = BundleUtils.getString("CLIENT_IVV");
+	@Setter
+	private String CLIENT_IVV;
+
+	@Value("${CLIENT_SKEY}")
 	@Getter
-	private static final String CLIENT_SKEY = BundleUtils.getString("CLIENT_SKEY");
+	@Setter
+	private String CLIENT_SKEY;
 
 	/**
 	 * 模拟客户端密码加密
@@ -28,7 +38,7 @@ public class PasswordUtils {
 	 * @return 返回加密之后的字符串
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static String encryptMd5Hash(String encryptStr) throws NoSuchAlgorithmException {
+	public String encryptMd5Hash(String encryptStr) throws NoSuchAlgorithmException {
 		MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 		// 输入的字符串转换成字节数组
 		byte[] inputByteArray = encryptStr.getBytes();
@@ -63,7 +73,7 @@ public class PasswordUtils {
 		return strHexString.toString();
 	}
 
-	public static String byteArrayToHex(byte[] byteArray) {
+	public String byteArrayToHex(byte[] byteArray) {
 		// 首先初始化一个字符数组，用来存放每个16进制字符
 		char[] hexDigits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
 		// new一个字符数组，这个就是用来组成结果字符串的（解释一下：一个byte是八位二进制，也就是2位十六进制字符（2的8次方等于16的2次方））
@@ -86,7 +96,7 @@ public class PasswordUtils {
 	 * @return 返回密文
 	 * @throws Exception
 	 */
-	public static String encryptAES(String encryptString, String serverSalt) throws Exception {
+	public String encryptAES(String encryptString, String serverSalt) throws Exception {
 		byte[] raw = SERVER_CRYPT_KEY.getBytes();
 		// 最后一个参数 加密的方式
 		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
@@ -108,7 +118,7 @@ public class PasswordUtils {
 	 * @return 返回明文
 	 * @throws Exception
 	 */
-	public static String decryptAES(String decryptString) {
+	public String decryptAES(String decryptString) {
 		try {
 			byte[] raw = SERVER_CRYPT_KEY.getBytes();
 			SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");

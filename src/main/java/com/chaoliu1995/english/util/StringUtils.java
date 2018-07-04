@@ -70,5 +70,11 @@ public class StringUtils {
 		millis += rd.nextInt();
 		return str + String.valueOf(millis);
 	}
-	
+
+	public static boolean equals(String a, String b){
+		if(a.equals(b)){
+			return true;
+		}
+		return false;
+	}
 }

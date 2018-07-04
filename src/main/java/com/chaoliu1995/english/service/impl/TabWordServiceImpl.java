@@ -1,7 +1,9 @@
 package com.chaoliu1995.english.service.impl;
 
-import com.chaoliu1995.english.base.impl.BaseServiceImpl;
+import com.chaoliu1995.english.config.Config;
 import com.chaoliu1995.english.dao.*;
+import com.chaoliu1995.english.dto.ResultDTO;
+import com.chaoliu1995.english.dto.SearchListDTO;
 import com.chaoliu1995.english.entity.shanbay.*;
 import com.chaoliu1995.english.model.*;
 import com.chaoliu1995.english.service.TabWordService;
@@ -9,14 +11,13 @@ import com.chaoliu1995.english.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service("tabWordService")
-public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabWordService {
+public class TabWordServiceImpl implements TabWordService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(TabWordServiceImpl.class);
 	
@@ -67,13 +68,13 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 	
 	@Autowired
 	private EnDefnVMapper enDefnVMapper;
-	
-	@Autowired
-	private Environment env;
-	
-	@Override
+
+    @Autowired
+    private Config englishConfig;
+
+    @Override
 	@Transactional(rollbackFor = Exception.class)
-	public void saveWord(ShanBayResult sbr,String savePath) {
+	public void saveWord(ShanBayResult sbr) {
 		
 		//判断返回信息是否正确
 		if(!sbr.getMsg().equals("SUCCESS") && !sbr.getStatus_code().equals("0")){
@@ -91,7 +92,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		//保存单词发音文件
 		if(!StringUtils.isEmpty(word.getUk_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",env.getProperty("file.audioPath") + Consts.UK_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",englishConfig.getFileAudioPath() + Consts.UK_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -100,7 +101,7 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		
 		if(!StringUtils.isEmpty(word.getUs_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",env.getProperty("file.audioPath") + Consts.US_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",englishConfig.getFileAudioPath() + Consts.US_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -267,16 +268,6 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 		}
 	}
 
-
-	@Override
-	public Pager<TabWord> listTabWordForExcel(Integer currentPage,Integer pageSize,Integer recordTotal) {
-		Pager<TabWord> pager = new Pager<TabWord>(currentPage,pageSize,recordTotal);
-		List<TabWord> wordList = tabWordMapper.listTabWordForExcel(pager.getStartNum(), pager.getPageSize(),new TabWord());
-		pager.setRecordList(wordList);
-		return pager;
-	}
-
-
 	@Override
 	public TabWord getTabWordByOperateTotalOrderEsc() {
 		return tabWordMapper.getByMemoryTotalOrderEsc();
@@ -290,12 +281,31 @@ public class TabWordServiceImpl extends BaseServiceImpl<TabWord> implements TabW
 
 
 	@Override
-	public Pager<TabWord> listTabWordForPager(Integer currentPage, Integer pageSize, TabWord word) {
-		int total = tabWordMapper.countByCol(word);
-		Pager<TabWord> pager = new Pager<TabWord>(currentPage,pageSize,total);
-		List<TabWord> wordList = tabWordMapper.listByColForPager(pager.getStartNum(), pager.getPageSize(),word);
+	public Pager<TabWord> listTabWordForPager(SearchListDTO searchListDTO) {
+		int total = tabWordMapper.countBySearchListDTO(searchListDTO);
+		Pager<TabWord> pager = new Pager<TabWord>(searchListDTO.getCurrentPage(),searchListDTO.getPageSize(),total);
+		searchListDTO.setStart(pager.getStartNum());
+		searchListDTO.setLimit(pager.getPageSize());
+		List<TabWord> wordList = tabWordMapper.listBySearchListDTO(searchListDTO);
 		pager.setRecordList(wordList);
 		return pager;
 	}
-	
+
+	@Override
+	public void search(String word, ResultDTO<TabWord> resultDTO) {
+		List<TabWord> tabWordList = tabWordMapper.select(new TabWord(word));
+		if(tabWordList != null && tabWordList.size() > 0){
+			resultDTO.setData(tabWordList.get(0));
+			return;
+		}
+		try {
+			String result = HttpUtils.get(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
+			ShanBayResult shanbay = StringUtils.getGson().fromJson(result,ShanBayResult.class);
+			this.saveWord(shanbay);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultDTO.setMessage("请求扇贝API出现异常");
+			return;
+		}
+	}
 }

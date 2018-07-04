@@ -1,16 +1,16 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
+import com.chaoliu1995.english.dto.ResultDTO;
+import com.chaoliu1995.english.dto.WordMemoryDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.Consts;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.Map;
+import org.springframework.web.bind.annotation.RestController;
 
 /** 
 * @Author: LiuChao
@@ -18,61 +18,55 @@ import java.util.Map;
 * @Email: chaoliu1995@QQ.com
 * @CreateDate: 2017年10月17日 下午1:28:38
 */
-@Controller
+@RestController
 @RequestMapping("/review")
 public class ReviewController extends BaseController {
 	
 	@Autowired
 	private TabWordService tabWordService;
-	
-	@RequestMapping("/page")
-	public String page(){
-		model.addAttribute("word", tabWordService.getTabWordByOperateTotalOrderEsc());
-		return checkPlatForm("review");
-	}
-	
-	@RequestMapping(value="/getWord",produces = Consts.PRODUCES)
-	@ResponseBody
-	public String getWord(){
+
+	@RequestMapping(value="/getWord", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResultDTO<TabWord> getWord(){
+		ResultDTO<TabWord> resultDTO = new ResultDTO<TabWord>();
+		resultDTO.setStatus(Consts.ERROR);
 		TabWord word = tabWordService.getTabWordByOperateTotalOrderEsc();
 		if(word == null){
-			return Consts.EMPTY_STRING;
+			resultDTO.setMessage("程序异常");
+			return resultDTO;
 		}
-		return toJson(word);
+		resultDTO.setData(word);
+		resultDTO.setStatus(Consts.SUCCESS);
+		return resultDTO;
 	}
 	
 	@RequestMapping("/memory")
-	@ResponseBody
-	public String memory(@RequestParam("wordId")Integer wordId,@RequestParam("memoryStatus")byte memoryStatus){
-		Map<String,String> resultMap = getResultMap();
-		if(wordId == null){
-			resultMap.put(Consts.MESSAGE, Consts.PARAMETER_IS_NULL);
-			return toJson(resultMap);
+	public ResultDTO<Object> memory(@RequestBody WordMemoryDTO wordMemoryDTO){
+		ResultDTO<Object> resultDTO = ResultDTO.init();
+		if(wordMemoryDTO == null || wordMemoryDTO.getWordId() == null){
+			resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
+			return resultDTO;
 		}
-		switch(memoryStatus){
+		switch(wordMemoryDTO.getMemoryStatus()){
 			case Consts.ORDINARY:
-				tabWordService.memory(wordId,Consts.ORDINARY);
+				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.ORDINARY);
 				break;
 			case Consts.FAMILIAR:
-				tabWordService.memory(wordId,Consts.FAMILIAR);
+				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.FAMILIAR);
 				break;
 			case Consts.VERY_FAMILIAR:
-				tabWordService.memory(wordId,Consts.VERY_FAMILIAR);
+				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.VERY_FAMILIAR);
 				break;
 			case Consts.STRANGE:
-				tabWordService.memory(wordId,Consts.STRANGE);
+				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.STRANGE);
 				break;
 			case Consts.VERY_STRANGE:
-				tabWordService.memory(wordId,Consts.VERY_STRANGE);
+				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.VERY_STRANGE);
 				break;
+			default:
+			    resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
+			    return resultDTO;
 		}
-		resultMap.put(Consts.STATUS, Consts.SUCCESS);
-		return toJson(resultMap);
-	}
-	
-	@RequestMapping(value="/listWord",produces = "text/html;charset=UTF-8")
-	public String listWord(Integer currentPage,Integer limit){
-		model.addAttribute("pager",tabWordService.listTabWordForPager(currentPage, limit,new TabWord()));
-		return "wordList";
+		resultDTO.setStatus(Consts.SUCCESS);
+		return resultDTO;
 	}
 }

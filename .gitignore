@@ -5,3 +5,5 @@ target/
 src/main/resources/config/prod
 .idea
 English.iml
+english.log
+src/main/resources/application-prod.properties

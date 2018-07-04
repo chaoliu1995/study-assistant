@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chaoliu1995.english.dao.TabWordMapper">
+
+	<resultMap id="wordForExcelMap" type="TabWord">
+		<id column="id" property="id" />
+		<result column="content" property="content" />
+		<result column="us_pronunciation" property="usPronunciation" />
+		<result column="cn_definition" property="cnDefinition" />
+	</resultMap>
+
+	<resultMap id="BaseResultMap" type="TabWord">
+		<id column="id" jdbcType="INTEGER" property="id" />
+		<result column="uk_audio" jdbcType="VARCHAR" property="ukAudio" />
+		<result column="us_audio" jdbcType="VARCHAR" property="usAudio" />
+		<result column="audio_name" jdbcType="VARCHAR" property="audioName" />
+		<result column="content_type" jdbcType="VARCHAR" property="contentType" />
+		<result column="cn_definition" jdbcType="VARCHAR" property="cnDefinition" />
+		<result column="en_definition" jdbcType="VARCHAR" property="enDefinition" />
+		<result column="content_id" jdbcType="INTEGER" property="contentId" />
+		<result column="has_audio" jdbcType="INTEGER" property="hasAudio" />
+		<result column="content" jdbcType="VARCHAR" property="content" />
+		<result column="uk_pronunciation" jdbcType="VARCHAR" property="ukPronunciation" />
+		<result column="us_pronunciation" jdbcType="VARCHAR" property="usPronunciation" />
+		<result column="memory_total" jdbcType="INTEGER" property="memoryTotal" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, uk_audio, us_audio, audio_name, content_type,
+		cn_definition,
+		en_definition, content_id,
+		has_audio, content,
+		uk_pronunciation, us_pronunciation, memory_total
+	</sql>
+
+	<insert id="insertReturnKey" parameterType="TabWord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into word
+		<include refid="Base_Column_List" />
+		values (#{id,jdbcType=INTEGER}, #{ukAudio,jdbcType=VARCHAR},
+		#{usAudio,jdbcType=VARCHAR},
+		#{audioName,jdbcType=VARCHAR}, #{contentType,jdbcType=VARCHAR}, #{cnDefinition,jdbcType=VARCHAR},
+		#{enDefinition,jdbcType=VARCHAR}, #{contentId,jdbcType=INTEGER},
+		#{hasAudio,jdbcType=INTEGER},
+		#{content,jdbcType=VARCHAR}, #{ukPronunciation,jdbcType=VARCHAR},
+		#{usPronunciation,jdbcType=VARCHAR},
+		#{memoryTotal,jdbcType=INTEGER})
+	</insert>
+	<select id="listBySearchListDTO" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from word
+		<if test="searchListDTO.word != null">
+			<where>
+				content like #{searchListDTO.word}
+			</where>
+		</if>
+		limit #{searchListDTO.start},#{searchListDTO.limit}
+	</select>
+	<select id="countBySearchListDTO" resultType="java.lang.Integer">
+		select count(id) from word
+		<if test="searchListDTO.word != null">
+			<where>
+				content like #{searchListDTO.word}
+			</where>
+		</if>
+	</select>
+	<select id="getByMemoryTotalOrderEsc" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from word order by memory_total limit 0,1;
+	</select>
+	<update id="memory">
+		update word set memory_total = memory_total + #{num}
+		where id = #{wordId}
+	</update>
+</mapper>
