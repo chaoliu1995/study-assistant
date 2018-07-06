@@ -41,4 +41,11 @@ public interface TabWordService {
 	 * @return
 	 */
 	void search(String word,ResultDTO<TabWord> resultDTO);
+
+	/**
+	 * 请求ShanBayAPI查询单词
+	 * @param word
+	 * @return
+	 */
+	ShanBayResult requestShanBay(String word);
 }

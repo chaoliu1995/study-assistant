@@ -296,11 +296,15 @@ public class TabWordServiceImpl implements TabWordService {
 		List<TabWord> tabWordList = tabWordMapper.select(new TabWord(word));
 		if(tabWordList != null && tabWordList.size() > 0){
 			resultDTO.setData(tabWordList.get(0));
+			resultDTO.setStatus(Consts.SUCCESS);
 			return;
 		}
 		try {
-			String result = HttpUtils.get(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
-			ShanBayResult shanbay = StringUtils.getGson().fromJson(result,ShanBayResult.class);
+			ShanBayResult shanbay = requestShanBay(word);
+			if(shanbay == null){
+                resultDTO.setMessage("请求扇贝API出现异常");
+			    return;
+            }
 			this.saveWord(shanbay);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -308,4 +312,10 @@ public class TabWordServiceImpl implements TabWordService {
 			return;
 		}
 	}
+
+    @Override
+    public ShanBayResult requestShanBay(String word) {
+        String result = HttpUtils.get(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
+        return StringUtils.getGson().fromJson(result,ShanBayResult.class);
+    }
 }

@@ -55,6 +55,7 @@ public class LoginServiceImpl implements LoginService {
 			String serverPwd = passwordUtils.decryptAES(dbUser.getPassword());
 			if(serverPwd.equals(decryptPwd)){
 				resultDTO.setStatus(Consts.SUCCESS);
+				return;
 			}
 			resultDTO.setMessage("密码错误");
 		} catch (Exception e) {
