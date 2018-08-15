@@ -1,5 +1,6 @@
 package com.chaoliu1995.english.service;
 
+import com.chaoliu1995.english.dto.PagerResultDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.dto.SearchListDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
@@ -27,12 +28,12 @@ public interface TabWordService {
 	 */
 	void memory(Integer wordId,byte num);
 
-    /**
-     * 分页获取单词集合，根据 实体属性过滤
-     * @param searchListDTO
-     * @return
-     */
-	Pager<TabWord> listTabWordForPager(SearchListDTO searchListDTO);
+	/**
+	 * 分页获取单词集合，根据 实体属性过滤
+	 * @param resultDTO
+	 * @param searchListDTO
+	 */
+	void listTabWordForPager(ResultDTO<PagerResultDTO<TabWord>> resultDTO,SearchListDTO searchListDTO);
 
 	/**
 	 * 搜索单词

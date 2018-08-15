@@ -2,6 +2,7 @@ package com.chaoliu1995.english.service.impl;
 
 import com.chaoliu1995.english.config.Config;
 import com.chaoliu1995.english.dao.*;
+import com.chaoliu1995.english.dto.PagerResultDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.dto.SearchListDTO;
 import com.chaoliu1995.english.entity.shanbay.*;
@@ -281,14 +282,17 @@ public class TabWordServiceImpl implements TabWordService {
 
 
 	@Override
-	public Pager<TabWord> listTabWordForPager(SearchListDTO searchListDTO) {
+	public void listTabWordForPager(ResultDTO<PagerResultDTO<TabWord>> resultDTO,SearchListDTO searchListDTO) {
 		int total = tabWordMapper.countBySearchListDTO(searchListDTO);
 		Pager<TabWord> pager = new Pager<TabWord>(searchListDTO.getCurrentPage(),searchListDTO.getPageSize(),total);
 		searchListDTO.setStart(pager.getStartNum());
 		searchListDTO.setLimit(pager.getPageSize());
 		List<TabWord> wordList = tabWordMapper.listBySearchListDTO(searchListDTO);
-		pager.setRecordList(wordList);
-		return pager;
+		PagerResultDTO<TabWord> pagerResultDTO = new PagerResultDTO<>();
+		pagerResultDTO.setTotal(total);
+		pagerResultDTO.setData(wordList);
+		resultDTO.setData(pagerResultDTO);
+		resultDTO.setStatus(Consts.SUCCESS);
 	}
 
 	@Override

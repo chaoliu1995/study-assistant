@@ -1,6 +1,8 @@
 package com.chaoliu1995.english.dto;
 
 import com.chaoliu1995.english.util.Consts;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.Serializable;
 
@@ -11,5 +13,8 @@ import java.io.Serializable;
  */
 public class SearchListDTO extends PagerDTO implements Serializable{
     private static final long serialVersionUID = Consts.SERIAL_VERSION_UID;
+    @Getter
+    @Setter
     private String word;
+
 }

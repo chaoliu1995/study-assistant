@@ -1,14 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chaoliu1995.english.dao.TabWordMapper">
-
-	<resultMap id="wordForExcelMap" type="TabWord">
-		<id column="id" property="id" />
-		<result column="content" property="content" />
-		<result column="us_pronunciation" property="usPronunciation" />
-		<result column="cn_definition" property="cnDefinition" />
-	</resultMap>
-
 	<resultMap id="BaseResultMap" type="TabWord">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="uk_audio" jdbcType="VARCHAR" property="ukAudio" />
@@ -49,7 +41,7 @@
 		select
 		<include refid="Base_Column_List" />
 		from word
-		<if test="searchListDTO.word != null">
+		<if test="searchListDTO.word != null and searchListDTO.word != ''">
 			<where>
 				content like #{searchListDTO.word}
 			</where>
@@ -70,7 +62,7 @@
 		from word order by memory_total limit 0,1;
 	</select>
 	<update id="memory">
-		update word set memory_total = memory_total + #{num}
+		update word set memory_total = memory_total + (#{num})
 		where id = #{wordId}
 	</update>
 </mapper>

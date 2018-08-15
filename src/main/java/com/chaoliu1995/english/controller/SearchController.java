@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
+import com.chaoliu1995.english.dto.PagerResultDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.dto.SearchDTO;
 import com.chaoliu1995.english.dto.SearchListDTO;
@@ -48,13 +49,13 @@ public class SearchController extends BaseController {
      * @return
      */
     @RequestMapping(value="/list",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResultDTO<List<TabWord>> listWord(@RequestBody SearchListDTO searchListDTO){
-	    ResultDTO<List<TabWord>> resultDTO = new ResultDTO<List<TabWord>>();
+    public ResultDTO<PagerResultDTO<TabWord>> listWord(@RequestBody SearchListDTO searchListDTO){
+	    ResultDTO<PagerResultDTO<TabWord>> resultDTO = new ResultDTO<PagerResultDTO<TabWord>>();
+	    resultDTO.setStatus(Consts.ERROR);
 	    if(searchListDTO == null){
 	        searchListDTO = new SearchListDTO();
         }
-        Pager<TabWord> pager = tabWordService.listTabWordForPager(searchListDTO);
-        resultDTO.setData(pager.getRecordList());
+        tabWordService.listTabWordForPager(resultDTO,searchListDTO);
         resultDTO.setStatus(Consts.SUCCESS);
         return resultDTO;
     }

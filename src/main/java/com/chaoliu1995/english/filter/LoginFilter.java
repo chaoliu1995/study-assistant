@@ -62,7 +62,7 @@ public class LoginFilter implements Filter {
 	}
 
 	private List<String> notNeedSessionCheck() {
-		String[] paths = new String[] { "/login/commit","/login/out"};
+		String[] paths = new String[] { "/login/commit","/login/out","/login/status"};
 		return Arrays.asList(paths);
 	}
 }
