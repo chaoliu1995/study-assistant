@@ -38,11 +38,11 @@ public class LoginController extends BaseController {
 			resultDTO.setMessage("请将数据填写完整");
 			return resultDTO;
 		}
-		/*Long currentTimeMillis = (Long)session.getAttribute(Consts.LOGIN_TIME);
+		Long currentTimeMillis = (Long)session.getAttribute(Consts.LOGIN_TIME);
 		if(currentTimeMillis != null && (System.currentTimeMillis() - currentTimeMillis) < 60000){
             resultDTO.setMessage("两次登录请求之间的间隔不得小于一分钟");
             return resultDTO;
-		}*/
+		}
 		loginService.login(user,resultDTO);
 		if(resultDTO.getStatus().equals(Consts.SUCCESS)){
 			session.setAttribute(Consts.SESSION_USER, user);

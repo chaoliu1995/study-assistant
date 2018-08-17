@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,6 +30,16 @@ public class LoginFilter implements Filter {
 		
 	}
 
+	private static List<String> urlList = new ArrayList<String>();
+
+	static {
+		urlList.add("/");
+		urlList.add("/login/commit");
+		urlList.add("/login/out");
+		urlList.add("/login/status");
+		urlList.add("/index.html");
+	}
+
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response,
 			FilterChain chain) throws IOException, ServletException {
@@ -41,8 +52,7 @@ public class LoginFilter implements Filter {
 		
 		// 当前会话用户为空而且不是请求登录，退出登录，欢迎页面和根目录则退回到应用的根目录
 		String servletPath = httpServletRequest.getServletPath();
-		List<String> pathList = notNeedSessionCheck();
-		if (!pathList.contains(servletPath) && user == null) {
+		if (isBlock(servletPath) && user == null) {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 			Writer writer = response.getWriter();
 			ResultDTO<Object> resultDTO = ResultDTO.init();
@@ -61,8 +71,12 @@ public class LoginFilter implements Filter {
 		
 	}
 
-	private List<String> notNeedSessionCheck() {
-		String[] paths = new String[] { "/login/commit","/login/out","/login/status"};
-		return Arrays.asList(paths);
+	private boolean isBlock(String url) {
+		if(urlList.contains(url)){
+			return false;
+		}else if(url.indexOf("/static") != -1){
+		    return false;
+        }
+		return true;
 	}
 }

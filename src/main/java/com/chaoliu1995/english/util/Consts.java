@@ -9,10 +9,8 @@ public class Consts {
 	public static final long SERIAL_VERSION_UID = -6192949389726527999L;
 	
 	public static final String EMPTY_STRING = "";
-	public static final String STATUS = "status";
 	public static final String SUCCESS = "success";
 	public static final String ERROR = "error";
-	public static final String MESSAGE = "message";
 	public static final String PARAMETER_IS_NULL = "参数有null";
 	
 	//login

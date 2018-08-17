@@ -71,7 +71,7 @@ public class TabWordServiceImpl implements TabWordService {
 	private EnDefnVMapper enDefnVMapper;
 
     @Autowired
-    private Config englishConfig;
+    private Config projectConfig;
 
     @Override
 	@Transactional(rollbackFor = Exception.class)
@@ -93,7 +93,7 @@ public class TabWordServiceImpl implements TabWordService {
 		//保存单词发音文件
 		if(!StringUtils.isEmpty(word.getUk_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",englishConfig.getFileAudioPath() + Consts.UK_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",projectConfig.getFileAudioPath() + Consts.UK_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -102,7 +102,7 @@ public class TabWordServiceImpl implements TabWordService {
 		
 		if(!StringUtils.isEmpty(word.getUs_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",englishConfig.getFileAudioPath() + Consts.US_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",projectConfig.getFileAudioPath() + Consts.US_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -309,6 +309,10 @@ public class TabWordServiceImpl implements TabWordService {
                 resultDTO.setMessage("请求扇贝API出现异常");
 			    return;
             }
+			if(!shanbay.getMsg().equals("SUCCESS") || !shanbay.getStatus_code().equals("0")){
+				resultDTO.setMessage(shanbay.getMsg());
+				return;
+			}
 			this.saveWord(shanbay);
 		} catch (Exception e) {
 			e.printStackTrace();

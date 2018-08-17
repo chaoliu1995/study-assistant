@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * @Description:
  * @Date: 2018/7/4 14:02
  */
-@Component("englishConfig")
+@Component("projectConfig")
 public class Config {
 
     @Getter
