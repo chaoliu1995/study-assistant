@@ -27,11 +27,4 @@ public class Consts {
 	
 	public static final String CHARSET = "UTF-8";
 	
-	//review
-	//对单词的熟悉程度
-	public static final byte VERY_STRANGE = -2;	//非常陌生的
-	public static final byte STRANGE = -1;		//陌生的
-	public static final byte ORDINARY = 1;		//普通的
-	public static final byte FAMILIAR = 2;		//熟悉的
-	public static final byte VERY_FAMILIAR = 3;	//非常熟悉的
 }

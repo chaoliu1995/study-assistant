@@ -14,14 +14,14 @@
 		<result column="content" jdbcType="VARCHAR" property="content" />
 		<result column="uk_pronunciation" jdbcType="VARCHAR" property="ukPronunciation" />
 		<result column="us_pronunciation" jdbcType="VARCHAR" property="usPronunciation" />
-		<result column="memory_total" jdbcType="INTEGER" property="memoryTotal" />
+        <result column="show_time" jdbcType="INTEGER" property="showTime" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, uk_audio, us_audio, audio_name, content_type,
 		cn_definition,
 		en_definition, content_id,
 		has_audio, content,
-		uk_pronunciation, us_pronunciation, memory_total
+		uk_pronunciation, us_pronunciation, show_time
 	</sql>
 
 	<insert id="insertReturnKey" parameterType="TabWord"
@@ -35,7 +35,7 @@
 		#{hasAudio,jdbcType=INTEGER},
 		#{content,jdbcType=VARCHAR}, #{ukPronunciation,jdbcType=VARCHAR},
 		#{usPronunciation,jdbcType=VARCHAR},
-		#{memoryTotal,jdbcType=INTEGER})
+		#{showTime,jdbcType=INTEGER})
 	</insert>
 	<select id="listBySearchListDTO" resultMap="BaseResultMap">
 		select
@@ -56,13 +56,12 @@
 			</where>
 		</if>
 	</select>
-	<select id="getByMemoryTotalOrderEsc" resultMap="BaseResultMap">
+	<select id="getByShowTime" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from word order by memory_total limit 0,1;
+		from word where show_time &lt; UNIX_TIMESTAMP() order by RAND() limit 0,1;
 	</select>
 	<update id="memory">
-		update word set memory_total = memory_total + (#{num})
-		where id = #{wordId}
+		update word set show_time = #{wordMemoryDTO.nextShowTime} where id = #{wordMemoryDTO.wordId}
 	</update>
 </mapper>

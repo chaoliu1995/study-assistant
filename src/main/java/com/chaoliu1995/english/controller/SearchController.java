@@ -8,7 +8,6 @@ import com.chaoliu1995.english.dto.SearchListDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.Consts;
-import com.chaoliu1995.english.util.Pager;
 import com.chaoliu1995.english.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/word")

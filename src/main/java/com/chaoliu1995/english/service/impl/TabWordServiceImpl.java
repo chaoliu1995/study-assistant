@@ -5,6 +5,7 @@ import com.chaoliu1995.english.dao.*;
 import com.chaoliu1995.english.dto.PagerResultDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.dto.SearchListDTO;
+import com.chaoliu1995.english.dto.WordMemoryDTO;
 import com.chaoliu1995.english.entity.shanbay.*;
 import com.chaoliu1995.english.model.*;
 import com.chaoliu1995.english.service.TabWordService;
@@ -110,7 +111,7 @@ public class TabWordServiceImpl implements TabWordService {
 		
 		//将从扇贝获得的单词数据结构转换为本地数据库实体
 		TabWord tabWord = EntityUtils.wordToTabWord(word);
-		tabWord.setMemoryTotal(0);
+		tabWord.setShowTime((System.currentTimeMillis() / 1000) + 86400);
 		tabWordMapper.insert(tabWord);
 		//获得单词主键
 		int wordId = tabWord.getId();
@@ -271,13 +272,13 @@ public class TabWordServiceImpl implements TabWordService {
 
 	@Override
 	public TabWord getTabWordByOperateTotalOrderEsc() {
-		return tabWordMapper.getByMemoryTotalOrderEsc();
+		return tabWordMapper.getByShowTime();
 	}
 
 
 	@Override
-	public void memory(Integer wordId,byte num) {
-		tabWordMapper.memory(wordId, num);
+	public void memory(WordMemoryDTO wordMemoryDTO) {
+		tabWordMapper.memory(wordMemoryDTO);
 	}
 
 

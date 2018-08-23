@@ -16,5 +16,6 @@ import java.io.Serializable;
 public class WordMemoryDTO implements Serializable {
     private static final long serialVersionUID = Consts.SERIAL_VERSION_UID;
     private Integer wordId;
-    private byte memoryStatus;
+    private Integer memoryStatus;
+    private Long nextShowTime;
 }

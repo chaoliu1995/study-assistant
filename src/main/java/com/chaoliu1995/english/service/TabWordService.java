@@ -3,9 +3,9 @@ package com.chaoliu1995.english.service;
 import com.chaoliu1995.english.dto.PagerResultDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.dto.SearchListDTO;
+import com.chaoliu1995.english.dto.WordMemoryDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.model.ShanBayResult;
-import com.chaoliu1995.english.util.Pager;
 
 public interface TabWordService {
 	
@@ -20,13 +20,12 @@ public interface TabWordService {
 	 * @return
 	 */
 	TabWord getTabWordByOperateTotalOrderEsc();
-	
+
 	/**
 	 * 记忆一个单词，memoryTotal 增加
-	 * @param wordId
-	 * @param num
+	 * @param wordMemoryDTO
 	 */
-	void memory(Integer wordId,byte num);
+	void memory(WordMemoryDTO wordMemoryDTO);
 
 	/**
 	 * 分页获取单词集合，根据 实体属性过滤

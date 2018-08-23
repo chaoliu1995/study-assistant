@@ -25,6 +25,10 @@ public class ReviewController extends BaseController {
 	@Autowired
 	private TabWordService tabWordService;
 
+    /**
+     * 随机获取一个陌生的单词
+     * @return
+     */
 	@RequestMapping(value="/getWord", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDTO<TabWord> getWord(){
 		ResultDTO<TabWord> resultDTO = new ResultDTO<TabWord>();
@@ -38,34 +42,25 @@ public class ReviewController extends BaseController {
 		resultDTO.setStatus(Consts.SUCCESS);
 		return resultDTO;
 	}
-	
+
+    /**
+     * 修改单词的熟悉程度
+     * @param wordMemoryDTO
+     * @return
+     */
 	@RequestMapping("/memory")
 	public ResultDTO<Object> memory(@RequestBody WordMemoryDTO wordMemoryDTO){
 		ResultDTO<Object> resultDTO = ResultDTO.init();
-		if(wordMemoryDTO == null || wordMemoryDTO.getWordId() == null){
+		if(wordMemoryDTO == null || wordMemoryDTO.getWordId() == null || wordMemoryDTO.getMemoryStatus() == null){
 			resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
 			return resultDTO;
 		}
-		switch(wordMemoryDTO.getMemoryStatus()){
-			case Consts.ORDINARY:
-				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.ORDINARY);
-				break;
-			case Consts.FAMILIAR:
-				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.FAMILIAR);
-				break;
-			case Consts.VERY_FAMILIAR:
-				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.VERY_FAMILIAR);
-				break;
-			case Consts.STRANGE:
-				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.STRANGE);
-				break;
-			case Consts.VERY_STRANGE:
-				tabWordService.memory(wordMemoryDTO.getWordId(),Consts.VERY_STRANGE);
-				break;
-			default:
-			    resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
-			    return resultDTO;
-		}
+        if(wordMemoryDTO.getMemoryStatus() > 365 || wordMemoryDTO.getMemoryStatus() < 1){
+            resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
+            return resultDTO;
+        }
+        wordMemoryDTO.setNextShowTime(System.currentTimeMillis() / 1000 + (86400 * wordMemoryDTO.getMemoryStatus()));
+		tabWordService.memory(wordMemoryDTO);
 		resultDTO.setStatus(Consts.SUCCESS);
 		return resultDTO;
 	}

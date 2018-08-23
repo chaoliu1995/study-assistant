@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.dao;
 
 import com.chaoliu1995.english.dto.SearchListDTO;
+import com.chaoliu1995.english.dto.WordMemoryDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -32,14 +33,15 @@ public interface TabWordMapper extends Mapper<TabWord> {
 	Integer countBySearchListDTO(@Param("searchListDTO")SearchListDTO searchListDTO);
 	
 	/**
-	 * ESC排序memoryTotal字段，获取第一个单词
+	 * 随机获取一个出现时间小于当前时间的单词
 	 * @return
 	 */
-	TabWord getByMemoryTotalOrderEsc();
-	
+	TabWord getByShowTime();
+
 	/**
-	 * 记忆一个单词，memoryTotal 增加
-	 * @param wordId
+	 * 记忆一个单词
+	 * @param wordMemoryDTO
+	 * @return
 	 */
-	int memory(@Param("wordId")Integer wordId,@Param("num")byte num);
+	int memory(@Param("wordMemoryDTO")WordMemoryDTO wordMemoryDTO);
 }
