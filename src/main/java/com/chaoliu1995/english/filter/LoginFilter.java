@@ -36,7 +36,11 @@ public class LoginFilter implements Filter {
 		urlList.add("/login/commit");
 		urlList.add("/login/out");
 		urlList.add("/login/status");
+		urlList.add("/login/verifyCode");
 		urlList.add("/index.html");
+		urlList.add("/swagger-ui.html");
+		urlList.add("/v2/api-docs");
+		urlList.add("/swagger-resources/configuration/ui");
 	}
 
 	@Override
@@ -73,7 +77,7 @@ public class LoginFilter implements Filter {
 	private boolean isBlock(String url) {
 		if(urlList.contains(url)){
 			return false;
-		}else if(url.indexOf("/static") != -1){
+		}else if(url.indexOf("/static") != -1 || url.indexOf("/webjars") != -1 || url.indexOf("/swagger") != -1){
 		    return false;
         }
 		return true;

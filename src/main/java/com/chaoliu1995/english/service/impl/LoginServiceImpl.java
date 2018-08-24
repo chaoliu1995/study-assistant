@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.service.impl;
 
 import com.chaoliu1995.english.dao.UserMapper;
+import com.chaoliu1995.english.dto.LoginDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.entity.User;
 import com.chaoliu1995.english.service.LoginService;
@@ -32,11 +33,11 @@ public class LoginServiceImpl implements LoginService {
 	private UserMapper userMapper;
 	
 	@Override
-    public void login(User user, ResultDTO<Object> resultDTO) {
-		logger.info("用户登录："+user.getUsername());
+    public void login(LoginDTO loginDTO, ResultDTO<Object> resultDTO) {
+		logger.info("用户登录："+loginDTO.getUsername());
 		try {
 			User dbUser = new User();
-			dbUser.setUsername(user.getUsername());
+			dbUser.setUsername(loginDTO.getUsername());
 			List<User> userList = userMapper.select(dbUser);
 
 			if(userList == null || userList.size() < 1){
@@ -44,13 +45,13 @@ public class LoginServiceImpl implements LoginService {
 				return;
 			}
 			if(userList.size() > 1){
-			    logger.error("同一用户名下存在多条数据：" + user.getUsername());
+			    logger.error("同一用户名下存在多条数据：" + loginDTO.getUsername());
                 resultDTO.setMessage("用户数据异常");
                 return;
             }
 			dbUser = userList.get(0);
 			//客户端密文AES解密
-			String decryptPwd = passwordUtils.decryptAES(user.getPassword(), passwordUtils.getCLIENT_IVV(), passwordUtils.getCLIENT_SKEY());
+			String decryptPwd = passwordUtils.decryptAES(loginDTO.getPassword(), passwordUtils.getCLIENT_IVV(), passwordUtils.getCLIENT_SKEY());
 			//服务器密文AES解密
 			String serverPwd = passwordUtils.decryptAES(dbUser.getPassword());
 			if(serverPwd.equals(decryptPwd)){

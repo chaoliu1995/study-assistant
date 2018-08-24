@@ -31,8 +31,8 @@ public class Swagger2 {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("English 项目的 API")
-                .description("").contact(new Contact("chaoliu1995","http://github.com/chaoliu1995","chaoliu1995@gmail.com"))
+                .title("Spring Boot使用 Swagger2 构建RestFul API")
+                .description("").contact(new Contact("chaoliu1995","http://www.chaoliu1995.com","chaoliu1995@gmail.com"))
                 .version("1.0")
                 .build();
     }

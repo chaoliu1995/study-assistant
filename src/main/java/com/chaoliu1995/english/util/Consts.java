@@ -15,14 +15,14 @@ public class Consts {
 	
 	//login
 	public static final String SESSION_USER = "SESSION_USER";
-	public static final String LOGIN_TIME = "LOGIN_TIME";
+	public static final String VERITY_CODE = "verityCode";
+    public static final String PREVIOU_VERITY_CODE = "previouVerityCode";
 	
 	//扇贝查词API的URL
 	public static final String SHAN_BAY_SEARCH_URL = "https://api.shanbay.com/bdc/search/?word=";
 	
 	//存储单词发音文件的路径
 	public static final String UK_AUDIO_PATH = "audio/uk/";
-	
 	public static final String US_AUDIO_PATH = "audio/us/";
 	
 	public static final String CHARSET = "UTF-8";
