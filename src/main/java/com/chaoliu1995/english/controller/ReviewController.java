@@ -2,6 +2,7 @@ package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
 import com.chaoliu1995.english.dto.ResultDTO;
+import com.chaoliu1995.english.dto.WaitReviewDTO;
 import com.chaoliu1995.english.dto.WordMemoryDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.service.TabWordService;
@@ -30,16 +31,10 @@ public class ReviewController extends BaseController {
      * @return
      */
 	@RequestMapping(value="/getWord", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDTO<TabWord> getWord(){
-		ResultDTO<TabWord> resultDTO = new ResultDTO<TabWord>();
+	public ResultDTO<WaitReviewDTO> getWord(){
+		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<WaitReviewDTO>();
 		resultDTO.setStatus(Consts.ERROR);
-		TabWord word = tabWordService.getTabWordByOperateTotalOrderEsc();
-		if(word == null){
-			resultDTO.setMessage("程序异常");
-			return resultDTO;
-		}
-		resultDTO.setData(word);
-		resultDTO.setStatus(Consts.SUCCESS);
+		tabWordService.getWaitReviewWord(resultDTO);
 		return resultDTO;
 	}
 

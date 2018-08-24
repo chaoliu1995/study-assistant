@@ -1,9 +1,6 @@
 package com.chaoliu1995.english.service;
 
-import com.chaoliu1995.english.dto.PagerResultDTO;
-import com.chaoliu1995.english.dto.ResultDTO;
-import com.chaoliu1995.english.dto.SearchListDTO;
-import com.chaoliu1995.english.dto.WordMemoryDTO;
+import com.chaoliu1995.english.dto.*;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.model.ShanBayResult;
 
@@ -16,10 +13,10 @@ public interface TabWordService {
 	void saveWord(ShanBayResult sbr);
 
 	/**
-	 * ESC排序operateTotal字段，获取第一个单词
-	 * @return
+	 * 随机获取一个待复习的单词
+	 * @param resultDTO
 	 */
-	TabWord getTabWordByOperateTotalOrderEsc();
+	void getWaitReviewWord(ResultDTO<WaitReviewDTO> resultDTO);
 
 	/**
 	 * 记忆一个单词，memoryTotal 增加

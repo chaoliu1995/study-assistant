@@ -26,5 +26,5 @@ public class Consts {
 	public static final String US_AUDIO_PATH = "audio/us/";
 	
 	public static final String CHARSET = "UTF-8";
-	
+
 }

@@ -44,4 +44,10 @@ public interface TabWordMapper extends Mapper<TabWord> {
 	 * @return
 	 */
 	int memory(@Param("wordMemoryDTO")WordMemoryDTO wordMemoryDTO);
+
+	/**
+	 * 查询待复习单词总数
+	 * @return
+	 */
+	int countForWaitReview();
 }

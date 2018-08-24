@@ -2,14 +2,12 @@ package com.chaoliu1995.english.service.impl;
 
 import com.chaoliu1995.english.config.Config;
 import com.chaoliu1995.english.dao.*;
-import com.chaoliu1995.english.dto.PagerResultDTO;
-import com.chaoliu1995.english.dto.ResultDTO;
-import com.chaoliu1995.english.dto.SearchListDTO;
-import com.chaoliu1995.english.dto.WordMemoryDTO;
+import com.chaoliu1995.english.dto.*;
 import com.chaoliu1995.english.entity.shanbay.*;
 import com.chaoliu1995.english.model.*;
 import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.*;
+import com.sun.javafx.scene.control.TableColumnSortTypeWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -271,8 +269,18 @@ public class TabWordServiceImpl implements TabWordService {
 	}
 
 	@Override
-	public TabWord getTabWordByOperateTotalOrderEsc() {
-		return tabWordMapper.getByShowTime();
+	public void getWaitReviewWord(ResultDTO<WaitReviewDTO> resultDTO){
+        WaitReviewDTO waitReviewDTO = new WaitReviewDTO();
+        TabWord tabWord = tabWordMapper.getByShowTime();
+        if(tabWord == null){
+            resultDTO.setMessage("所有待复习的单词已全部复习完成");
+            return;
+        }
+        waitReviewDTO.setWord(tabWord);
+        int total = tabWordMapper.countForWaitReview();
+        waitReviewDTO.setTotal(total);
+        resultDTO.setData(waitReviewDTO);
+        resultDTO.setStatus(Consts.SUCCESS);
 	}
 
 
@@ -315,6 +323,10 @@ public class TabWordServiceImpl implements TabWordService {
 				return;
 			}
 			this.saveWord(shanbay);
+			tabWordList = tabWordMapper.select(new TabWord(word));
+			resultDTO.setData(tabWordList.get(0));
+			resultDTO.setStatus(Consts.SUCCESS);
+			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultDTO.setMessage("请求扇贝API出现异常");

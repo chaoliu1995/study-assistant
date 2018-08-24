@@ -59,9 +59,12 @@
 	<select id="getByShowTime" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from word where show_time &lt; UNIX_TIMESTAMP() order by RAND() limit 0,1;
+		from word where show_time &lt; UNIX_TIMESTAMP() order by RAND() limit 0,1
 	</select>
 	<update id="memory">
 		update word set show_time = #{wordMemoryDTO.nextShowTime} where id = #{wordMemoryDTO.wordId}
 	</update>
+	<select id="countForWaitReview" resultType="java.lang.Integer">
+		select COUNT(1) from word where show_time &lt; UNIX_TIMESTAMP()
+	</select>
 </mapper>
