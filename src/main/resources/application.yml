@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: dev
+server:
+  tomcat:
+    access-log-enabled: true
+    max-threads: 1000
+    min-spare-threads: 30
+    uri-encoding: UTF-8
+http:
+  encoding:
+    force: true
+    charset: UTF-8
+    enabled: true
+mybatis:
+  config-location: classpath:mybatis/mybatis-config.xml
+  mapperLocations: classpath:mybatis/mapper/*.xml
+  type-aliases-package: com.chaoliu1995.english.entity,tk.mybatis.springboot.model
+mapper:
+  mappers: tk.mybatis.mapper.common.Mapper
+  notEmpty: true

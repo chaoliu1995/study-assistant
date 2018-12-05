@@ -1,8 +1,7 @@
 package com.chaoliu1995.english.service;
 
+import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.dto.LoginDTO;
-import com.chaoliu1995.english.dto.ResultDTO;
-import com.chaoliu1995.english.entity.User;
 
 /** 
 * @Author: ChaoLiu
@@ -17,6 +16,6 @@ public interface LoginService {
 	 * @param loginDTO
 	 * @return
 	 */
-    void login(LoginDTO loginDTO, ResultDTO<Object> resultDTO);
+    void login(LoginDTO loginDTO, BaseResult result);
 	
 }

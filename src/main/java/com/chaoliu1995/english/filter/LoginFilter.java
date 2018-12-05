@@ -1,6 +1,6 @@
 package com.chaoliu1995.english.filter;
 
-import com.chaoliu1995.english.dto.ResultDTO;
+import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.entity.User;
 import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.StringUtils;
@@ -58,9 +58,9 @@ public class LoginFilter implements Filter {
 		if (isBlock(servletPath) && user == null) {
             response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
 			Writer writer = response.getWriter();
-			ResultDTO<Object> resultDTO = ResultDTO.init();
-			resultDTO.setMessage("用户未登录");
-			writer.write(StringUtils.toJson(resultDTO));
+			BaseResult result = new BaseResult();
+			result.setMessage("用户未登录");
+			writer.write(StringUtils.toJson(result));
 			writer.flush();
 			writer.close();
 		}else{

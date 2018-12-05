@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
+import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.dto.LoginDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.entity.User;
@@ -15,7 +16,10 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 
@@ -36,31 +40,32 @@ public class LoginController extends BaseController {
     @ApiOperation(value="登录信息提交", notes="")
 	@RequestMapping(value="/commit", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-	public ResultDTO<Object> login(@RequestBody LoginDTO loginDTO){
-        ResultDTO<Object> resultDTO = ResultDTO.init();
+	public BaseResult login(@RequestBody LoginDTO loginDTO){
+        BaseResult result = new BaseResult();
 		if(!checkUser(loginDTO)){
-			resultDTO.setMessage("请将参数填写完整");
-			return resultDTO;
+            result.setMessage("请将参数填写完整");
+			return result;
 		}
         if(session.getAttribute(Consts.VERITY_CODE) == null){
             session.setAttribute(Consts.VERITY_CODE,Consts.EMPTY_STRING);
         }
         if(session.getAttribute(Consts.VERITY_CODE).toString().equalsIgnoreCase(session.getAttribute(Consts.PREVIOU_VERITY_CODE).toString())) {
-            resultDTO.setMessage("每个验证码只可以被使用一次，请重新请求验证码后再进行登录");
-            return resultDTO;
+            result.setMessage("每个验证码只可以被使用一次，请重新请求验证码后再进行登录");
+            return result;
         }
         if(!loginDTO.getVerifyCode().equalsIgnoreCase(session.getAttribute(Consts.VERITY_CODE).toString())) {
-            resultDTO.setMessage("验证码错误");
+            result.setMessage("验证码错误");
             session.setAttribute(Consts.PREVIOU_VERITY_CODE, session.getAttribute(Consts.VERITY_CODE));
-            return resultDTO;
+            return result;
         }
-		loginService.login(loginDTO,resultDTO);
-        if(resultDTO.getStatus().equals(Consts.SUCCESS)){
+		loginService.login(loginDTO,result);
+        if(result.getStatus().equals(Consts.SUCCESS)){
             User user = new User();
             user.setUsername(loginDTO.getUsername());
             session.setAttribute(Consts.SESSION_USER, user);
+            session.setMaxInactiveInterval(60*60*10);
         }
-		return resultDTO;
+		return result;
 
 	}
 
@@ -91,23 +96,23 @@ public class LoginController extends BaseController {
     @ApiOperation(value="退出登录", notes="")
 	@RequestMapping(value = "/out", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-	public ResultDTO<Object> loginOut(){
-		ResultDTO<Object> resultDTO = ResultDTO.init();
+	public BaseResult loginOut(){
+        BaseResult result = new BaseResult();
 		if(session != null){
 			session.invalidate();
 		}else{
-			resultDTO.setMessage("当前用户未登录");
-			return resultDTO;
+            result.setMessage("当前用户未登录");
+			return result;
 		}
-		resultDTO.setStatus(Consts.SUCCESS);
-		return resultDTO;
+        result.setStatus(Consts.SUCCESS);
+		return result;
 	}
 
     @ApiOperation(value="查询登录状态", notes="")
 	@RequestMapping(value = "/status", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-	public ResultDTO<Object> status(){
-        ResultDTO<Object> resultDTO = ResultDTO.init();
+	public ResultDTO<Boolean> status(){
+        ResultDTO resultDTO = new ResultDTO();
         resultDTO.setStatus(Consts.SUCCESS);
         if(session.getAttribute(Consts.SESSION_USER) == null){
             resultDTO.setData(new Boolean(false));

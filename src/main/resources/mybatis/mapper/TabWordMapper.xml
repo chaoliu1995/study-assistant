@@ -67,4 +67,18 @@
 	<select id="countForWaitReview" resultType="java.lang.Integer">
 		select COUNT(1) from word where show_time &lt; UNIX_TIMESTAMP()
 	</select>
+
+	<select id="getByBookIdAndShowTime" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from word where id in (
+			select distinct word_id from book_word where book_id in (${bookIds})
+		) and show_time &lt; UNIX_TIMESTAMP() order by RAND() limit 0,1
+	</select>
+
+	<select id="countByBookIdAndShowTime" resultType="Integer">
+		select COUNT(1) from word where id in (
+			select distinct word_id from book_word where book_id in (${bookIds})
+		) and show_time &lt; UNIX_TIMESTAMP()
+	</select>
 </mapper>

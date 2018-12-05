@@ -1,10 +1,10 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
+import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.dto.WaitReviewDTO;
 import com.chaoliu1995.english.dto.WordMemoryDTO;
-import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.Consts;
 import io.swagger.annotations.Api;
@@ -34,8 +34,15 @@ public class ReviewController extends BaseController {
 	@RequestMapping(value="/getWord", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDTO<WaitReviewDTO> getWord(){
 		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<WaitReviewDTO>();
-		resultDTO.setStatus(Consts.ERROR);
 		tabWordService.getWaitReviewWord(resultDTO);
+		return resultDTO;
+	}
+
+	@ApiOperation(value="随机获取指定书籍中一个待复习的单词", notes="")
+	@RequestMapping(value="/book/word", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResultDTO<WaitReviewDTO> getWordByBookId(@RequestBody Integer bookId){
+		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<WaitReviewDTO>();
+		//tabWordService.getWaitReviewWord(resultDTO);
 		return resultDTO;
 	}
 
@@ -46,19 +53,19 @@ public class ReviewController extends BaseController {
      */
     @ApiOperation(value="判断单词的熟悉程度，以决定其下次出现的时间", notes="")
 	@RequestMapping(value = "/memory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDTO<Object> memory(@RequestBody WordMemoryDTO wordMemoryDTO){
-		ResultDTO<Object> resultDTO = ResultDTO.init();
+	public BaseResult memory(@RequestBody WordMemoryDTO wordMemoryDTO){
+		BaseResult result = new BaseResult();
 		if(wordMemoryDTO == null || wordMemoryDTO.getWordId() == null || wordMemoryDTO.getMemoryStatus() == null){
-			resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
-			return resultDTO;
+			result.setMessage(Consts.PARAMETER_IS_NULL);
+			return result;
 		}
         if(wordMemoryDTO.getMemoryStatus() > 365 || wordMemoryDTO.getMemoryStatus() < 1){
-            resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
-            return resultDTO;
+			result.setMessage(Consts.PARAMETER_IS_NULL);
+            return result;
         }
         wordMemoryDTO.setNextShowTime(System.currentTimeMillis() / 1000 + (86400 * wordMemoryDTO.getMemoryStatus()));
 		tabWordService.memory(wordMemoryDTO);
-		resultDTO.setStatus(Consts.SUCCESS);
-		return resultDTO;
+		result.setStatus(Consts.SUCCESS);
+		return result;
 	}
 }

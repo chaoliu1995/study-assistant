@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chaoliu1995.english.dao.BookMapper">
+    <select id="getByname" resultType="Book">
+        SELECT id,name,child_ids AS childIds FROM book WHERE name = #{name}
+    </select>
+
+    <sql id="listSQL">
+        <where>
+            <if test="listDTO.name != null and listDTO.name != ''">
+                name LIKE CONCAT('%',#{listDTO.name},'%')
+            </if>
+        </where>
+    </sql>
+
+    <select id="countByListBookDTO" resultType="Integer">
+        SELECT COUNT(1) FROM book
+        <include refid="listSQL"></include>
+    </select>
+
+    <select id="listByListBookDTO" resultType="Book">
+        SELECT id,name FROM book
+        <include refid="listSQL"></include>
+        LIMIT #{listDTO.start},#{listDTO.rows}
+    </select>
+</mapper>

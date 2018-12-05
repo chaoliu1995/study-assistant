@@ -3,11 +3,11 @@ package com.chaoliu1995.english.service.impl;
 import com.chaoliu1995.english.config.Config;
 import com.chaoliu1995.english.dao.*;
 import com.chaoliu1995.english.dto.*;
+import com.chaoliu1995.english.entity.Book;
 import com.chaoliu1995.english.entity.shanbay.*;
 import com.chaoliu1995.english.model.*;
 import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.*;
-import com.sun.javafx.scene.control.TableColumnSortTypeWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,10 @@ public class TabWordServiceImpl implements TabWordService {
     @Autowired
     private Config projectConfig;
 
-    @Override
+	@Autowired
+	private BookMapper bookMapper;
+
+	@Override
 	@Transactional(rollbackFor = Exception.class)
 	public void saveWord(ShanBayResult sbr) {
 		
@@ -291,17 +294,15 @@ public class TabWordServiceImpl implements TabWordService {
 
 
 	@Override
-	public void listTabWordForPager(ResultDTO<PagerResultDTO<TabWord>> resultDTO,SearchListDTO searchListDTO) {
+	public void listTabWordForPager(ResultsDTO<TabWord> resultsDTO, SearchListDTO searchListDTO) {
 		int total = tabWordMapper.countBySearchListDTO(searchListDTO);
 		Pager<TabWord> pager = new Pager<TabWord>(searchListDTO.getCurrentPage(),searchListDTO.getPageSize(),total);
 		searchListDTO.setStart(pager.getStartNum());
 		searchListDTO.setLimit(pager.getPageSize());
 		List<TabWord> wordList = tabWordMapper.listBySearchListDTO(searchListDTO);
-		PagerResultDTO<TabWord> pagerResultDTO = new PagerResultDTO<>();
-		pagerResultDTO.setTotal(total);
-		pagerResultDTO.setData(wordList);
-		resultDTO.setData(pagerResultDTO);
-		resultDTO.setStatus(Consts.SUCCESS);
+		resultsDTO.setTotal(total);
+		resultsDTO.setData(wordList);
+		resultsDTO.setStatus(Consts.SUCCESS);
 	}
 
 	@Override
@@ -339,4 +340,30 @@ public class TabWordServiceImpl implements TabWordService {
         String result = HttpUtils.get(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
         return StringUtils.getGson().fromJson(result,ShanBayResult.class);
     }
+
+	@Override
+	public void getWaitReviewWordByBookId(Integer bookId, ResultDTO<WaitReviewDTO> resultDTO) {
+		WaitReviewDTO waitReviewDTO = new WaitReviewDTO();
+		Book book = bookMapper.selectByPrimaryKey(bookId);
+		if(book == null){
+			resultDTO.setMessage("书籍不存在");
+			return;
+		}
+		String bookIds;
+		if(StringUtils.isEmpty(book.getChildIds())){
+			bookIds = book.getId().toString();
+		}else{
+			bookIds = book.getChildIds().substring(1) + book.getId();
+		}
+		TabWord tabWord = tabWordMapper.getByBookIdAndShowTime(bookIds);
+		if(tabWord == null){
+			resultDTO.setMessage("所有待复习的单词已全部复习完成");
+			return;
+		}
+		waitReviewDTO.setWord(tabWord);
+		int total = tabWordMapper.countByBookIdAndShowTime(bookIds);
+		waitReviewDTO.setTotal(total);
+		resultDTO.setData(waitReviewDTO);
+		resultDTO.setStatus(Consts.SUCCESS);
+	}
 }

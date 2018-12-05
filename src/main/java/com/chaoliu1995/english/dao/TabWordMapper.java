@@ -39,6 +39,18 @@ public interface TabWordMapper extends Mapper<TabWord> {
 	TabWord getByShowTime();
 
 	/**
+	 * 指定书籍，随机获取一个出现时间小于当前时间的单词
+	 * @return
+	 */
+	TabWord getByBookIdAndShowTime(@Param("bookIds") String bookIds);
+
+	/**
+	 * 查询待复习单词总数
+	 * @return
+	 */
+	int countByBookIdAndShowTime(@Param("bookIds") String bookIds);
+
+	/**
 	 * 记忆一个单词
 	 * @param wordMemoryDTO
 	 * @return

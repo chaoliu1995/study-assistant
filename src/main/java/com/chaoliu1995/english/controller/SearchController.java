@@ -1,8 +1,8 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
-import com.chaoliu1995.english.dto.PagerResultDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
+import com.chaoliu1995.english.dto.ResultsDTO;
 import com.chaoliu1995.english.dto.SearchDTO;
 import com.chaoliu1995.english.dto.SearchListDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
@@ -35,7 +35,6 @@ public class SearchController extends BaseController {
 	@RequestMapping(value = "/search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDTO<TabWord> search(@RequestBody SearchDTO searchDTO) {
 		ResultDTO<TabWord> resultDTO = new ResultDTO<TabWord>();
-		resultDTO.setStatus(Consts.ERROR);
 		if(searchDTO != null && StringUtils.isEmpty(searchDTO.getWord())){
 			resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
 			return resultDTO;
@@ -51,14 +50,12 @@ public class SearchController extends BaseController {
      */
     @ApiOperation(value="分页获取单词列表", notes="")
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResultDTO<PagerResultDTO<TabWord>> listWord(@RequestBody SearchListDTO searchListDTO){
-	    ResultDTO<PagerResultDTO<TabWord>> resultDTO = new ResultDTO<PagerResultDTO<TabWord>>();
-	    resultDTO.setStatus(Consts.ERROR);
+    public ResultsDTO<TabWord> listWord(@RequestBody SearchListDTO searchListDTO){
+		ResultsDTO<TabWord> resultsDTO = new ResultsDTO<>();
 	    if(searchListDTO == null){
 	        searchListDTO = new SearchListDTO();
         }
-        tabWordService.listTabWordForPager(resultDTO,searchListDTO);
-        resultDTO.setStatus(Consts.SUCCESS);
-        return resultDTO;
+        tabWordService.listTabWordForPager(resultsDTO,searchListDTO);
+        return resultsDTO;
     }
 }

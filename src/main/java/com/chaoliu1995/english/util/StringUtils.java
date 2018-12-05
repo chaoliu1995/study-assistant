@@ -2,15 +2,12 @@ package com.chaoliu1995.english.util;
 
 import com.google.gson.Gson;
 import lombok.Getter;
-import org.apache.commons.text.RandomStringGenerator;
 
 import java.util.Random;
 import java.util.regex.Pattern;
 
 public class StringUtils {
-	
-	@Getter
-	private static RandomStringGenerator generator = new RandomStringGenerator.Builder().withinRange('0','z').build();
+
 	@Getter
 	private static Gson gson = new Gson();
 	

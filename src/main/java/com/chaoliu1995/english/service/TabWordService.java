@@ -26,10 +26,10 @@ public interface TabWordService {
 
 	/**
 	 * 分页获取单词集合，根据 实体属性过滤
-	 * @param resultDTO
+	 * @param resultsDTO
 	 * @param searchListDTO
 	 */
-	void listTabWordForPager(ResultDTO<PagerResultDTO<TabWord>> resultDTO,SearchListDTO searchListDTO);
+	void listTabWordForPager(ResultsDTO<TabWord> resultsDTO, SearchListDTO searchListDTO);
 
 	/**
 	 * 搜索单词
@@ -45,4 +45,11 @@ public interface TabWordService {
 	 * @return
 	 */
 	ShanBayResult requestShanBay(String word);
+
+	/**
+	 * 随机获取指定书籍中一个待复习的单词
+	 * @param bookId
+	 * @param resultDTO
+	 */
+	void getWaitReviewWordByBookId(Integer bookId, ResultDTO<WaitReviewDTO> resultDTO);
 }
