@@ -12,4 +12,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ListBookDTO extends BasePager {
     private String name;
+    private Integer userId;
 }

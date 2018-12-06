@@ -6,21 +6,27 @@ import lombok.Data;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 
 /**
  * @Author: ChaoLiu
- * @Description:
- * @Date: 2018/12/5 14:05
+ * @Description: 用户书籍关联实体
+ * @Date: 2018/12/6 18:23
  */
 @Data
-public class Book implements java.io.Serializable {
+public class UserBook implements Serializable {
 
     private static final long serialVersionUID = Consts.SERIAL_VERSION_UID;
+
+    public UserBook(Integer userId, Integer bookId){
+        this.userId = userId;
+        this.bookId = bookId;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
     private Integer userId;
-    private String childIds;
+    private Integer bookId;
+    private Byte status;
 }

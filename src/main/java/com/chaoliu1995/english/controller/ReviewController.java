@@ -32,17 +32,9 @@ public class ReviewController extends BaseController {
 
     @ApiOperation(value="随机获取一个待复习的单词", notes="")
 	@RequestMapping(value="/getWord", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDTO<WaitReviewDTO> getWord(){
-		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<WaitReviewDTO>();
-		tabWordService.getWaitReviewWord(resultDTO);
-		return resultDTO;
-	}
-
-	@ApiOperation(value="随机获取指定书籍中一个待复习的单词", notes="")
-	@RequestMapping(value="/book/word", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDTO<WaitReviewDTO> getWordByBookId(@RequestBody Integer bookId){
-		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<WaitReviewDTO>();
-		//tabWordService.getWaitReviewWord(resultDTO);
+	public ResultDTO<WaitReviewDTO> getWord(@RequestBody Integer bookId){
+		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<>();
+		tabWordService.getWaitReviewWord(getUserId(),bookId,resultDTO);
 		return resultDTO;
 	}
 
@@ -64,7 +56,8 @@ public class ReviewController extends BaseController {
             return result;
         }
         wordMemoryDTO.setNextShowTime(System.currentTimeMillis() / 1000 + (86400 * wordMemoryDTO.getMemoryStatus()));
-		tabWordService.memory(wordMemoryDTO);
+		wordMemoryDTO.setUserId(getUserId());
+        tabWordService.memory(wordMemoryDTO);
 		result.setStatus(Consts.SUCCESS);
 		return result;
 	}

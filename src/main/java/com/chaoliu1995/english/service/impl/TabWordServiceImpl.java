@@ -4,8 +4,11 @@ import com.chaoliu1995.english.config.Config;
 import com.chaoliu1995.english.dao.*;
 import com.chaoliu1995.english.dto.*;
 import com.chaoliu1995.english.entity.Book;
+import com.chaoliu1995.english.entity.UserBook;
+import com.chaoliu1995.english.entity.UserWord;
 import com.chaoliu1995.english.entity.shanbay.*;
 import com.chaoliu1995.english.model.*;
+import com.chaoliu1995.english.mq.Producer;
 import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.*;
 import org.slf4j.Logger;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.jms.Queue;
 import java.util.List;
 
 @Service("tabWordService")
@@ -75,22 +79,22 @@ public class TabWordServiceImpl implements TabWordService {
 	@Autowired
 	private BookMapper bookMapper;
 
+	@Autowired
+	private Producer producer;
+
+	@Autowired
+	private UserWordMapper userWordMapper;
+
+	@Autowired
+	private BookWordMapper bookWordMapper;
+
+	@Autowired
+	private UserBookMapper userBookMapper;
+
 	@Override
 	@Transactional(rollbackFor = Exception.class)
-	public void saveWord(ShanBayResult sbr) {
-		
-		//判断返回信息是否正确
-		if(!sbr.getMsg().equals("SUCCESS") && !sbr.getStatus_code().equals("0")){
-			return;
-		}
+	public TabWord saveWord(ShanBayResult sbr) {
 		Word word = sbr.getData();
-		
-		//判断单词是否已经存在
-		int count = tabWordMapper.selectCount(new TabWord(word.getContent()));
-		if(count > 0){
-			logger.info("单词已存在：" + word.getContent());
-			return;
-		}
 		logger.info("保存新的单词：" + word.getContent());
 		//保存单词发音文件
 		if(!StringUtils.isEmpty(word.getUk_audio())){
@@ -112,7 +116,6 @@ public class TabWordServiceImpl implements TabWordService {
 		
 		//将从扇贝获得的单词数据结构转换为本地数据库实体
 		TabWord tabWord = EntityUtils.wordToTabWord(word);
-		tabWord.setShowTime((System.currentTimeMillis() / 1000) + 86400);
 		tabWordMapper.insert(tabWord);
 		//获得单词主键
 		int wordId = tabWord.getId();
@@ -269,29 +272,62 @@ public class TabWordServiceImpl implements TabWordService {
 				enDefnVMapper.insert(enDefnV);
 			}
 		}
+		return tabWord;
 	}
 
 	@Override
-	public void getWaitReviewWord(ResultDTO<WaitReviewDTO> resultDTO){
+	public void getWaitReviewWord(Integer userId, Integer bookId, ResultDTO<WaitReviewDTO> resultDTO){
         WaitReviewDTO waitReviewDTO = new WaitReviewDTO();
-        TabWord tabWord = tabWordMapper.getByShowTime();
-        if(tabWord == null){
-            resultDTO.setMessage("所有待复习的单词已全部复习完成");
-            return;
-        }
-        waitReviewDTO.setWord(tabWord);
-        int total = tabWordMapper.countForWaitReview();
-        waitReviewDTO.setTotal(total);
-        resultDTO.setData(waitReviewDTO);
-        resultDTO.setStatus(Consts.SUCCESS);
+        if(bookId == null){
+			Integer wordId = userWordMapper.getWordIdByShowTime(userId);
+			if(wordId == null){
+				resultDTO.setMessage("所有待复习的单词已全部复习完成");
+				return;
+			}
+			TabWord tabWord = tabWordMapper.selectByPrimaryKey(wordId);
+			waitReviewDTO.setWord(tabWord);
+			int total = userWordMapper.countForWaitReview(userId);
+			waitReviewDTO.setTotal(total);
+			resultDTO.setData(waitReviewDTO);
+			resultDTO.setStatus(Consts.SUCCESS);
+			return;
+		}
+
+		Book book = bookMapper.selectByPrimaryKey(bookId);
+		if(book == null){
+			resultDTO.setMessage("书籍不存在");
+			return;
+		}
+		UserBook userBook = new UserBook(userId,bookId);
+		userBook = userBookMapper.selectOne(userBook);
+		if(userBook == null){
+			resultDTO.setMessage("当前登录用户和此书籍没有关联，禁止操作");
+			return;
+		}
+		String bookIds;
+		if(StringUtils.isEmpty(book.getChildIds())){
+			bookIds = book.getId().toString();
+		}else{
+			bookIds = book.getChildIds().substring(1) + book.getId();
+		}
+		Integer wordId = bookWordMapper.randomGetWaitReviewWordIdByBookIds(bookIds,userId);
+		if(wordId == null){
+			resultDTO.setMessage("所有待复习的单词已全部复习完成");
+			return;
+		}
+		TabWord tabWord = tabWordMapper.selectByPrimaryKey(wordId);
+		waitReviewDTO.setWord(tabWord);
+		int total = bookWordMapper.countWaitReviewByBookIds(bookIds,userId);
+		waitReviewDTO.setTotal(total);
+		resultDTO.setData(waitReviewDTO);
+		resultDTO.setStatus(Consts.SUCCESS);
 	}
 
 
 	@Override
 	public void memory(WordMemoryDTO wordMemoryDTO) {
-		tabWordMapper.memory(wordMemoryDTO);
+		userWordMapper.memory(wordMemoryDTO);
 	}
-
 
 	@Override
 	public void listTabWordForPager(ResultsDTO<TabWord> resultsDTO, SearchListDTO searchListDTO) {
@@ -305,65 +341,44 @@ public class TabWordServiceImpl implements TabWordService {
 		resultsDTO.setStatus(Consts.SUCCESS);
 	}
 
+
 	@Override
-	public void search(String word, ResultDTO<TabWord> resultDTO) {
-		List<TabWord> tabWordList = tabWordMapper.select(new TabWord(word));
-		if(tabWordList != null && tabWordList.size() > 0){
-			resultDTO.setData(tabWordList.get(0));
-			resultDTO.setStatus(Consts.SUCCESS);
-			return;
-		}
+	public void search(String word, ResultDTO<TabWord> resultDTO,Integer userId) {
+		ShanBayResult shanBay;
+		String result;
 		try {
-			ShanBayResult shanbay = requestShanBay(word);
-			if(shanbay == null){
-                resultDTO.setMessage("请求扇贝API出现异常");
-			    return;
-            }
-			if(!shanbay.getMsg().equals("SUCCESS") || !shanbay.getStatus_code().equals("0")){
-				resultDTO.setMessage(shanbay.getMsg());
-				return;
-			}
-			this.saveWord(shanbay);
-			tabWordList = tabWordMapper.select(new TabWord(word));
-			resultDTO.setData(tabWordList.get(0));
-			resultDTO.setStatus(Consts.SUCCESS);
-			return;
+			result = HttpUtils.get(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
+			shanBay = StringUtils.getGson().fromJson(result,ShanBayResult.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			resultDTO.setMessage("请求扇贝API出现异常");
 			return;
 		}
+		if(shanBay == null){
+			resultDTO.setMessage("请求扇贝API出现异常");
+			return;
+		}
+		if(!shanBay.getMsg().equals("SUCCESS") || !shanBay.getStatus_code().equals("0")){
+			resultDTO.setMessage(shanBay.getMsg());
+			return;
+		}
+		TabWord tabWord = saveWord(shanBay);
+		if(tabWord == null || tabWord.getId() == null){
+			resultDTO.setMessage("保存单词出现异常");
+			return;
+		}
+		producer.sendMessage(Consts.USER_WORD_QUEUE,StringUtils.getGson().toJson(new UserWord(userId,tabWord.getId())));
+		resultDTO.setData(tabWord);
+		resultDTO.setStatus(Consts.SUCCESS);
 	}
 
-    @Override
-    public ShanBayResult requestShanBay(String word) {
-        String result = HttpUtils.get(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
-        return StringUtils.getGson().fromJson(result,ShanBayResult.class);
-    }
-
 	@Override
-	public void getWaitReviewWordByBookId(Integer bookId, ResultDTO<WaitReviewDTO> resultDTO) {
-		WaitReviewDTO waitReviewDTO = new WaitReviewDTO();
-		Book book = bookMapper.selectByPrimaryKey(bookId);
-		if(book == null){
-			resultDTO.setMessage("书籍不存在");
+	public void getWord(String word, ResultDTO<TabWord> resultDTO) {
+		List<TabWord> tabWordList = tabWordMapper.select(new TabWord(word));
+		if(tabWordList == null || tabWordList.size() < 1){
 			return;
 		}
-		String bookIds;
-		if(StringUtils.isEmpty(book.getChildIds())){
-			bookIds = book.getId().toString();
-		}else{
-			bookIds = book.getChildIds().substring(1) + book.getId();
-		}
-		TabWord tabWord = tabWordMapper.getByBookIdAndShowTime(bookIds);
-		if(tabWord == null){
-			resultDTO.setMessage("所有待复习的单词已全部复习完成");
-			return;
-		}
-		waitReviewDTO.setWord(tabWord);
-		int total = tabWordMapper.countByBookIdAndShowTime(bookIds);
-		waitReviewDTO.setTotal(total);
-		resultDTO.setData(waitReviewDTO);
+		resultDTO.setData(tabWordList.get(0));
 		resultDTO.setStatus(Consts.SUCCESS);
 	}
 }

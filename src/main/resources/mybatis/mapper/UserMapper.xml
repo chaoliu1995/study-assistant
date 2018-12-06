@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chaoliu1995.english.dao.UserMapper">
+
+    <update id="updateReviewingBookByPrimaryKey">
+        UPDATE user SET reviewing_book_id = #{bookId} WHERE id = #{userId}
+    </update>
+
+    <update id="updateAddingBookByPrimaryKey">
+        UPDATE user SET adding_book_id = #{bookId} WHERE id = #{userId}
+    </update>
+
+</mapper>

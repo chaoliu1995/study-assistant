@@ -14,29 +14,15 @@
 		<result column="content" jdbcType="VARCHAR" property="content" />
 		<result column="uk_pronunciation" jdbcType="VARCHAR" property="ukPronunciation" />
 		<result column="us_pronunciation" jdbcType="VARCHAR" property="usPronunciation" />
-        <result column="show_time" jdbcType="INTEGER" property="showTime" />
 	</resultMap>
 	<sql id="Base_Column_List">
 		id, uk_audio, us_audio, audio_name, content_type,
 		cn_definition,
 		en_definition, content_id,
 		has_audio, content,
-		uk_pronunciation, us_pronunciation, show_time
+		uk_pronunciation, us_pronunciation
 	</sql>
 
-	<insert id="insertReturnKey" parameterType="TabWord"
-		useGeneratedKeys="true" keyProperty="id">
-		insert into word
-		<include refid="Base_Column_List" />
-		values (#{id,jdbcType=INTEGER}, #{ukAudio,jdbcType=VARCHAR},
-		#{usAudio,jdbcType=VARCHAR},
-		#{audioName,jdbcType=VARCHAR}, #{contentType,jdbcType=VARCHAR}, #{cnDefinition,jdbcType=VARCHAR},
-		#{enDefinition,jdbcType=VARCHAR}, #{contentId,jdbcType=INTEGER},
-		#{hasAudio,jdbcType=INTEGER},
-		#{content,jdbcType=VARCHAR}, #{ukPronunciation,jdbcType=VARCHAR},
-		#{usPronunciation,jdbcType=VARCHAR},
-		#{showTime,jdbcType=INTEGER})
-	</insert>
 	<select id="listBySearchListDTO" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
@@ -56,29 +42,5 @@
 			</where>
 		</if>
 	</select>
-	<select id="getByShowTime" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from word where show_time &lt; UNIX_TIMESTAMP() order by RAND() limit 0,1
-	</select>
-	<update id="memory">
-		update word set show_time = #{wordMemoryDTO.nextShowTime} where id = #{wordMemoryDTO.wordId}
-	</update>
-	<select id="countForWaitReview" resultType="java.lang.Integer">
-		select COUNT(1) from word where show_time &lt; UNIX_TIMESTAMP()
-	</select>
 
-	<select id="getByBookIdAndShowTime" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from word where id in (
-			select distinct word_id from book_word where book_id in (${bookIds})
-		) and show_time &lt; UNIX_TIMESTAMP() order by RAND() limit 0,1
-	</select>
-
-	<select id="countByBookIdAndShowTime" resultType="Integer">
-		select COUNT(1) from word where id in (
-			select distinct word_id from book_word where book_id in (${bookIds})
-		) and show_time &lt; UNIX_TIMESTAMP()
-	</select>
 </mapper>

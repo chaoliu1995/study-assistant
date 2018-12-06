@@ -28,7 +28,6 @@ public class TabWord implements java.io.Serializable {
 	private String content;		//单词内容
 	private String usPronunciation;	//音标(美)
 	private String ukPronunciation;	//音标(英)
-	private Long showTime; //下次出现时间
 	
 	public TabWord(){}
 	

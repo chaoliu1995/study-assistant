@@ -16,7 +16,7 @@ import java.util.List;
 @Component("bookMapper")
 public interface BookMapper extends Mapper<Book> {
 
-    Book getByName(@Param("name") String name);
+    Book getByNameAndUserId(@Param("name") String name,@Param("userId") Integer userId);
 
     int countByListBookDTO(@Param("listDTO") ListBookDTO listDTO);
 

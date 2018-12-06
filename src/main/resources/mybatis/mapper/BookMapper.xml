@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chaoliu1995.english.dao.BookMapper">
-    <select id="getByname" resultType="Book">
-        SELECT id,name,child_ids AS childIds FROM book WHERE name = #{name}
+    <select id="getByNameAndUserId" resultType="Book">
+        SELECT id,name,user_id AS userId,child_ids AS childIds FROM book WHERE user_id = #{userId} AND name = #{name}
     </select>
 
     <sql id="listSQL">
         <where>
+            user_id = #{listDTO.userId}
             <if test="listDTO.name != null and listDTO.name != ''">
-                name LIKE CONCAT('%',#{listDTO.name},'%')
+                AND name LIKE CONCAT('%',#{listDTO.name},'%')
             </if>
         </where>
     </sql>

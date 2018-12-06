@@ -1,10 +1,9 @@
 package com.chaoliu1995.english.service;
 
-import com.chaoliu1995.english.EnglishApplication;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
-import com.chaoliu1995.english.model.ShanBayResult;
 import com.chaoliu1995.english.util.Consts;
+import com.chaoliu1995.english.util.ConstsTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,14 +28,8 @@ public class TabWordServiceTest {
         String word = "umbrella";
         ResultDTO<TabWord> resultDTO = new ResultDTO<TabWord>();
         resultDTO.setStatus(Consts.ERROR);
-        tabWordService.search(word,resultDTO);
+        tabWordService.search(word,resultDTO,ConstsTest.userId);
         Assert.assertTrue(resultDTO.getStatus().equals(Consts.SUCCESS));
     }
 
-    @Test
-    public void testRequestShanBay(){
-        String word = "umbrella";
-        ShanBayResult shanBayResult = tabWordService.requestShanBay(word);
-        Assert.assertNotNull(shanBayResult);
-    }
 }

@@ -5,18 +5,21 @@ import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.model.ShanBayResult;
 
 public interface TabWordService {
-	
+
 	/**
 	 * 保存单词信息
 	 * @param sbr
+	 * @return
 	 */
-	void saveWord(ShanBayResult sbr);
+	TabWord saveWord(ShanBayResult sbr);
 
 	/**
-	 * 随机获取一个待复习的单词
+	 * 随机获取一个指定用户，指定书籍的待复习的单词
+	 * @param userId
+	 * @param bookId
 	 * @param resultDTO
 	 */
-	void getWaitReviewWord(ResultDTO<WaitReviewDTO> resultDTO);
+	void getWaitReviewWord(Integer userId, Integer bookId, ResultDTO<WaitReviewDTO> resultDTO);
 
 	/**
 	 * 记忆一个单词，memoryTotal 增加
@@ -37,19 +40,12 @@ public interface TabWordService {
 	 * @param resultDTO
 	 * @return
 	 */
-	void search(String word,ResultDTO<TabWord> resultDTO);
+	void search(String word,ResultDTO<TabWord> resultDTO,Integer userId);
 
 	/**
-	 * 请求ShanBayAPI查询单词
+	 * 查询单词
 	 * @param word
-	 * @return
-	 */
-	ShanBayResult requestShanBay(String word);
-
-	/**
-	 * 随机获取指定书籍中一个待复习的单词
-	 * @param bookId
 	 * @param resultDTO
 	 */
-	void getWaitReviewWordByBookId(Integer bookId, ResultDTO<WaitReviewDTO> resultDTO);
+	void getWord(String word, ResultDTO<TabWord> resultDTO);
 }

@@ -4,6 +4,7 @@ package com.chaoliu1995.english.util;
  * 项目中的一些常量
  */
 public class Consts {
+
 	private Consts(){}
 
 	public static final long SERIAL_VERSION_UID = -6192949389726527999L;
@@ -27,4 +28,9 @@ public class Consts {
 	
 	public static final String CHARSET = "UTF-8";
 
+	public static final Byte ONE = 1;
+
+	public static final String USER_WORD_QUEUE = "userWord.queue";
+
+	public static final Byte BOOK_STATUS_DEFAULT = ONE;
 }

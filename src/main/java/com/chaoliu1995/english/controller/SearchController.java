@@ -5,7 +5,9 @@ import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.dto.ResultsDTO;
 import com.chaoliu1995.english.dto.SearchDTO;
 import com.chaoliu1995.english.dto.SearchListDTO;
+import com.chaoliu1995.english.entity.UserWord;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
+import com.chaoliu1995.english.mq.Producer;
 import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.StringUtils;
@@ -26,6 +28,9 @@ public class SearchController extends BaseController {
 	@Autowired
 	private TabWordService tabWordService;
 
+	@Autowired
+	private Producer producer;
+
     /**
      * 查询单词
      * @param searchDTO
@@ -39,7 +44,12 @@ public class SearchController extends BaseController {
 			resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
 			return resultDTO;
 		}
-        tabWordService.search(searchDTO.getWord(),resultDTO);
+		tabWordService.getWord(searchDTO.getWord(),resultDTO);
+		if(resultDTO.getData() != null){
+			producer.sendMessage(Consts.USER_WORD_QUEUE,StringUtils.getGson().toJson(new UserWord(getUserId(),resultDTO.getData().getId())));
+			return resultDTO;
+		}
+        tabWordService.search(searchDTO.getWord(),resultDTO,getUserId());
 		return resultDTO;
 	}
 

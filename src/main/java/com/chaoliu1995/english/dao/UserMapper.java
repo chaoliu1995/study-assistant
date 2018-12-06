@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.dao;
 
 import com.chaoliu1995.english.entity.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import tk.mybatis.mapper.common.Mapper;
 
@@ -12,5 +13,9 @@ import tk.mybatis.mapper.common.Mapper;
 */
 @Component("userMapper")
 public interface UserMapper extends Mapper<User> {
-	
+
+    void updateReviewingBookByPrimaryKey(@Param("userId") Integer userId, @Param("bookId") Integer bookId);
+
+    void updateAddingBookByPrimaryKey(@Param("userId") Integer userId, @Param("bookId") Integer bookId);
+
 }

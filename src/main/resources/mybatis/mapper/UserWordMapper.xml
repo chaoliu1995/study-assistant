@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chaoliu1995.english.dao.UserWordMapper">
+
+    <update id="updateSearchCountByPrimaryKey">
+        UPDATE user_word SET search_count = search_count + 1 WHERE id = #{search_count}
+    </update>
+
+    <select id="getWordIdByShowTime" resultType="Integer">
+        SELECT word_id FROM user_word WHERE user_id = #{userId} AND show_time &lt; UNIX_TIMESTAMP() ORDER BY RAND() limit 0,1
+    </select>
+
+    <select id="countForWaitReview" resultType="Integer">
+		SELECT COUNT(1) FROM user_word WHERE user_id = #{userId} AND show_time &lt; UNIX_TIMESTAMP()
+	</select>
+
+    <update id="memory">
+		UPDATE user_word SET show_time = #{wordMemoryDTO.nextShowTime} WHERE user_id = #{wordMemoryDTO.userId} AND word_id = #{wordMemoryDTO.wordId}
+	</update>
+</mapper>

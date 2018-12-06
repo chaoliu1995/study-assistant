@@ -1,5 +1,7 @@
 package com.chaoliu1995.english.base;
 
+import com.chaoliu1995.english.entity.User;
+import com.chaoliu1995.english.util.Consts;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,5 +19,21 @@ public abstract class BaseController {
 		this.request = request;
 		this.response = response;
 		this.session = request.getSession();
+	}
+
+	/**
+	 * 获取当前登录用户的id
+	 * @return
+	 */
+	protected Integer getUserId(){
+		return ((User)session.getAttribute(Consts.SESSION_USER)).getId();
+	}
+
+	/**
+	 * 获取当前登录用户
+	 * @return
+	 */
+	protected User getUser(){
+		return (User) session.getAttribute(Consts.SESSION_USER);
 	}
 }

@@ -15,14 +15,15 @@ public interface BookWordService {
      * @param name
      * @param resultDTO
      */
-    void add(String name, ResultDTO<Book> resultDTO);
+    void add(String name, Integer userId, ResultDTO<Book> resultDTO);
 
     /**
      * 添加书籍和单词的关联
      * @param insertBookWordDTO
+     * @param userId
      * @param result
      */
-    void addWord(InsertBookWordDTO insertBookWordDTO, BaseResult result);
+    void addWord(InsertBookWordDTO insertBookWordDTO, Integer userId, BaseResult result);
 
     /**
      * 分页获取书籍数据
@@ -30,4 +31,11 @@ public interface BookWordService {
      * @param resultsDTO
      */
     void listBook(ListBookDTO listDTO, ResultsDTO<Book> resultsDTO);
+
+    /**
+     * 根据id查询书籍信息
+     * @param bookId
+     * @return
+     */
+    Book getBookById(Integer bookId);
 }

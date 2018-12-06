@@ -33,23 +33,28 @@ public class BookWordServiceImpl implements BookWordService {
     private TabWordMapper tabWordMapper;
 
     @Override
-    public void add(String name, ResultDTO<Book> resultDTO) {
-        Book book = bookMapper.getByName(name);
+    public void add(String name, Integer userId, ResultDTO<Book> resultDTO) {
+        Book book = bookMapper.getByNameAndUserId(name,userId);
         if(book != null){
             resultDTO.setMessage("书籍名称已存在");
             return;
         }
         book = new Book();
         book.setName(name);
+        book.setUserId(userId);
         bookMapper.insert(book);
         resultDTO.setStatus(Consts.SUCCESS);
     }
 
     @Override
-    public void addWord(InsertBookWordDTO insertBookWordDTO, BaseResult result) {
+    public void addWord(InsertBookWordDTO insertBookWordDTO, Integer userId, BaseResult result) {
         Book book = bookMapper.selectByPrimaryKey(insertBookWordDTO.getBookId());
         if(book == null){
             result.setMessage("书籍不存在");
+            return;
+        }
+        if((book.getUserId() - userId) != 0){
+            result.setMessage("当前用户不是此书籍的创建者，禁止添加单词");
             return;
         }
         TabWord tabWord = tabWordMapper.selectByPrimaryKey(insertBookWordDTO.getWordId());
@@ -80,5 +85,10 @@ public class BookWordServiceImpl implements BookWordService {
         resultsDTO.setData(list);
         resultsDTO.setTotal(total);
         resultsDTO.setStatus(Consts.SUCCESS);
+    }
+
+    @Override
+    public Book getBookById(Integer bookId) {
+        return bookMapper.selectByPrimaryKey(bookId);
     }
 }
