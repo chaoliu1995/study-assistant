@@ -1,5 +1,6 @@
 package com.chaoliu1995.english.service;
 
+import com.chaoliu1995.english.dao.ReviewWordDTO;
 import com.chaoliu1995.english.dto.*;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.model.ShanBayResult;
@@ -15,11 +16,10 @@ public interface TabWordService {
 
 	/**
 	 * 随机获取一个指定用户，指定书籍的待复习的单词
-	 * @param userId
-	 * @param bookId
+	 * @param reviewWordDTO
 	 * @param resultDTO
 	 */
-	void getWaitReviewWord(Integer userId, Integer bookId, ResultDTO<WaitReviewDTO> resultDTO);
+	void getWaitReviewWord(ReviewWordDTO reviewWordDTO, ResultDTO<WaitReviewDTO> resultDTO);
 
 	/**
 	 * 记忆一个单词，showTime 增加

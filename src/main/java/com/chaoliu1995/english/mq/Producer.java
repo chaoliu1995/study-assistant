@@ -18,4 +18,5 @@ public class Producer {
     public void sendMessage(String queue, final Object message) {
         jmsTemplate.convertAndSend(queue, message);
     }
+
 }

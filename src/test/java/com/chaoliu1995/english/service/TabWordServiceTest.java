@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.service;
 
 import com.chaoliu1995.english.EnglishApplicationTest;
+import com.chaoliu1995.english.dao.ReviewWordDTO;
 import com.chaoliu1995.english.dao.TabWordMapper;
 import com.chaoliu1995.english.dao.UserWordMapper;
 import com.chaoliu1995.english.dto.*;
@@ -39,14 +40,14 @@ public class TabWordServiceTest extends EnglishApplicationTest {
 
     @Test
     public void testGetWaitReviewWord(){
-        Integer userId = ConstsTest.USER_ID;
-        Integer bookId = null;
+        ReviewWordDTO reviewWordDTO = new ReviewWordDTO();
+        reviewWordDTO.setUserId(ConstsTest.USER_ID);
         ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<>();
-        tabWordService.getWaitReviewWord(userId,bookId,resultDTO);
+        tabWordService.getWaitReviewWord(reviewWordDTO,resultDTO);
         Assert.assertTrue(resultDTO.getStatus().equals(Consts.SUCCESS));
-        bookId = 1;
+        reviewWordDTO.setBookId(ConstsTest.BOOK_ID);
         resultDTO = new ResultDTO<>();
-        tabWordService.getWaitReviewWord(userId,bookId,resultDTO);
+        tabWordService.getWaitReviewWord(reviewWordDTO,resultDTO);
         Assert.assertTrue(resultDTO.getStatus().equals(Consts.SUCCESS));
     }
 

@@ -38,6 +38,6 @@ logging:
   level:
     org.springframework: INFO
     com.chaoliu1995.english.dao: DEBUG
-    com.chaoliu1995.english: INFO
+    com.chaoliu1995.english: DEBUG
   file: english.log
   path: /

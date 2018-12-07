@@ -37,4 +37,7 @@ public class Consts {
 	public static final Integer ONE_THOUSAND = 1000;
 
 	public static final String TIMEOUT = "timeout";
+
+	public static final String REVIEWING = "reviewing";
+	public static final String ADDING = "adding";
 }

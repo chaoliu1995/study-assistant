@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
+import com.chaoliu1995.english.dao.UpdateCurrentBookDTO;
 import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.entity.Book;
@@ -32,25 +33,33 @@ public class UserController extends BaseController {
 
     @ApiOperation(value="修改正在复习的书籍", notes="")
     @RequestMapping(value="/reviewingBook/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public BaseResult updateReviewingBook(@RequestBody Integer bookId){
+    public BaseResult updateReviewingBook(@RequestBody UpdateCurrentBookDTO updateDTO){
         BaseResult result = new BaseResult();
-        if(bookId == null){
+        if(updateDTO.getBookId() == null){
             result.setMessage("书籍id不能为空");
             return result;
         }
-        userService.updateReviewingBook(getUser().getId(),bookId,result);
+        updateDTO.setUserId(getUser().getId());
+        userService.updateCurrentBook(updateDTO,Consts.REVIEWING,result);
+        if (result.getStatus().equals(Consts.SUCCESS)){
+            getUser().setReviewingBookId(updateDTO.getBookId());
+        }
         return result;
     }
 
     @ApiOperation(value="修改正在添加单词的书籍", notes="")
     @RequestMapping(value="/addingBook/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public BaseResult updateAddingBook(@RequestBody Integer bookId){
+    public BaseResult updateAddingBook(@RequestBody UpdateCurrentBookDTO updateDTO){
         BaseResult result = new BaseResult();
-        if(bookId == null){
+        if(updateDTO.getBookId() == null){
             result.setMessage("书籍id不能为空");
             return result;
         }
-        userService.updateAddingBook(getUser().getId(),bookId,result);
+        updateDTO.setUserId(getUser().getId());
+        userService.updateCurrentBook(updateDTO,Consts.ADDING,result);
+        if (result.getStatus().equals(Consts.SUCCESS)){
+            getUser().setAddingBookId(updateDTO.getBookId());
+        }
         return result;
     }
 

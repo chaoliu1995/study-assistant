@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.service.impl;
 
 import com.chaoliu1995.english.dao.BookMapper;
+import com.chaoliu1995.english.dao.UpdateCurrentBookDTO;
 import com.chaoliu1995.english.dao.UserMapper;
 import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.entity.Book;
@@ -24,24 +25,18 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public void updateReviewingBook(Integer userId, Integer bookId, BaseResult result) {
-        Book book = bookMapper.selectByPrimaryKey(bookId);
+    public void updateCurrentBook(UpdateCurrentBookDTO updateDTO, String type, BaseResult result) {
+        Book book = bookMapper.selectByPrimaryKey(updateDTO.getBookId());
         if(book == null){
             result.setMessage("书籍不存在");
             return;
         }
-        userMapper.updateReviewingBookByPrimaryKey(userId,bookId);
+        if(type.equals(Consts.REVIEWING)){
+            userMapper.updateReviewingBookByPrimaryKey(updateDTO.getUserId(),updateDTO.getBookId());
+        }else if(type.equals(Consts.ADDING)){
+            userMapper.updateAddingBookByPrimaryKey(updateDTO.getUserId(),updateDTO.getBookId());
+        }
         result.setStatus(Consts.SUCCESS);
     }
 
-    @Override
-    public void updateAddingBook(Integer userId, Integer bookId, BaseResult result) {
-        Book book = bookMapper.selectByPrimaryKey(bookId);
-        if(book == null){
-            result.setMessage("书籍不存在");
-            return;
-        }
-        userMapper.updateAddingBookByPrimaryKey(userId,bookId);
-        result.setStatus(Consts.SUCCESS);
-    }
 }

@@ -275,10 +275,10 @@ public class TabWordServiceImpl implements TabWordService {
 	}
 
 	@Override
-	public void getWaitReviewWord(Integer userId, Integer bookId, ResultDTO<WaitReviewDTO> resultDTO){
+	public void getWaitReviewWord(ReviewWordDTO reviewWordDTO, ResultDTO<WaitReviewDTO> resultDTO){
         WaitReviewDTO waitReviewDTO = new WaitReviewDTO();
-        if(bookId == null){
-			Integer wordId = userWordMapper.getWordIdByShowTime(userId);
+        if(reviewWordDTO.getBookId() == null){
+			Integer wordId = userWordMapper.getWordIdByShowTime(reviewWordDTO.getUserId());
 			if(wordId == null){
 				resultDTO.setMessage("所有待复习的单词已全部复习完成");
 				resultDTO.setStatus(Consts.SUCCESS);
@@ -286,19 +286,19 @@ public class TabWordServiceImpl implements TabWordService {
 			}
 			TabWord tabWord = tabWordMapper.selectByPrimaryKey(wordId);
 			waitReviewDTO.setWord(tabWord);
-			int total = userWordMapper.countForWaitReview(userId);
+			int total = userWordMapper.countForWaitReview(reviewWordDTO.getUserId());
 			waitReviewDTO.setTotal(total);
 			resultDTO.setData(waitReviewDTO);
 			resultDTO.setStatus(Consts.SUCCESS);
 			return;
 		}
 
-		Book book = bookMapper.selectByPrimaryKey(bookId);
+		Book book = bookMapper.selectByPrimaryKey(reviewWordDTO.getBookId());
 		if(book == null){
 			resultDTO.setMessage("书籍不存在");
 			return;
 		}
-		UserBook userBook = new UserBook(userId,bookId);
+		UserBook userBook = new UserBook(reviewWordDTO.getUserId(),reviewWordDTO.getBookId());
 		userBook = userBookMapper.selectOne(userBook);
 		if(userBook == null){
 			resultDTO.setMessage("当前登录用户和此书籍没有关联，禁止操作");
@@ -310,14 +310,14 @@ public class TabWordServiceImpl implements TabWordService {
 		}else{
 			bookIds = book.getChildIds().substring(1) + book.getId();
 		}
-		Integer wordId = bookWordMapper.randomGetWaitReviewWordIdByBookIds(bookIds,userId);
+		Integer wordId = bookWordMapper.randomGetWaitReviewWordIdByBookIds(bookIds,reviewWordDTO.getUserId());
 		if(wordId == null){
 			resultDTO.setMessage("所有待复习的单词已全部复习完成");
 			return;
 		}
 		TabWord tabWord = tabWordMapper.selectByPrimaryKey(wordId);
 		waitReviewDTO.setWord(tabWord);
-		int total = bookWordMapper.countWaitReviewByBookIds(bookIds,userId);
+		int total = bookWordMapper.countWaitReviewByBookIds(bookIds,reviewWordDTO.getUserId());
 		waitReviewDTO.setTotal(total);
 		resultDTO.setData(waitReviewDTO);
 		resultDTO.setStatus(Consts.SUCCESS);

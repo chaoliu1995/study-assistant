@@ -3,7 +3,7 @@
 <mapper namespace="com.chaoliu1995.english.dao.UserWordMapper">
 
     <update id="updateSearchCountByPrimaryKey">
-        UPDATE user_word SET search_count = search_count + 1 WHERE id = #{search_count}
+        UPDATE user_word SET search_count = search_count + 1 WHERE id = #{userWordId}
     </update>
 
     <select id="getWordIdByShowTime" resultType="Integer">

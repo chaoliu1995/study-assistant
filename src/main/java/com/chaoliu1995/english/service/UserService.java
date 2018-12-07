@@ -1,5 +1,6 @@
 package com.chaoliu1995.english.service;
 
+import com.chaoliu1995.english.dao.UpdateCurrentBookDTO;
 import com.chaoliu1995.english.dto.BaseResult;
 
 /**
@@ -11,16 +12,9 @@ public interface UserService {
 
     /**
      * 修改正在复习的书籍
-     * @param userId
-     * @param bookId
+     * @param updateDTO
+     * @param result
      */
-    void updateReviewingBook(Integer userId, Integer bookId, BaseResult result);
-
-    /**
-     * 修改正在添加单词的书籍
-     * @param userId
-     * @param bookId
-     */
-    void updateAddingBook(Integer userId, Integer bookId, BaseResult result);
+    void updateCurrentBook(UpdateCurrentBookDTO updateDTO, String type, BaseResult result);
 
 }

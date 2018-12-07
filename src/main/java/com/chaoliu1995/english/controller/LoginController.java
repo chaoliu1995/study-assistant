@@ -4,9 +4,7 @@ import com.chaoliu1995.english.base.BaseController;
 import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.dto.LoginDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
-import com.chaoliu1995.english.service.LoginService;
 import com.chaoliu1995.english.util.Consts;
-import com.chaoliu1995.english.util.StringUtils;
 import com.chaoliu1995.english.util.VerifyCodeUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -14,14 +12,15 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 /** 
@@ -33,19 +32,16 @@ import java.io.IOException;
 @Api(description = "登录相关接口", basePath = "/login")
 @Controller
 public class LoginController extends BaseController {
-	
-	@Autowired
-	private LoginService loginService;
 
     @ApiOperation(value="登录信息提交", notes="")
 	@RequestMapping(value="/login", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-	public BaseResult login(@RequestBody LoginDTO loginDTO){
+	public BaseResult login(@RequestBody @Valid LoginDTO loginDTO, BindingResult bindingResult){
         BaseResult result = new BaseResult();
-		if(!checkUser(loginDTO)){
-            result.setMessage("请将参数填写完整");
-			return result;
-		}
+        if (bindingResult.hasErrors()){
+            result.setMessage(bindingResult.getAllErrors().get(0).getDefaultMessage());
+            return result;
+        }
         if(session.getAttribute(Consts.VERITY_CODE) == null){
             session.setAttribute(Consts.VERITY_CODE,Consts.EMPTY_STRING);
         }
@@ -119,17 +115,5 @@ public class LoginController extends BaseController {
         result.setStatus(Consts.SUCCESS);
         return result;
     }
-	
-	/**
-	 * 校验用户信息是否完整
-	 * @param loginDTO
-	 * @return
-	 */
-	private boolean checkUser(LoginDTO loginDTO){
-		if(StringUtils.isEmpty(loginDTO.getUsername()) || StringUtils.isEmpty(loginDTO.getPassword()) || StringUtils.isEmpty(loginDTO.getVerifyCode())){
-			return false;
-		}else{
-			return true;
-		}
-	}
+
 }

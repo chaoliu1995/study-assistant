@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
+import com.chaoliu1995.english.dao.ReviewWordDTO;
 import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.dto.ResultDTO;
 import com.chaoliu1995.english.dto.WaitReviewDTO;
@@ -32,9 +33,10 @@ public class ReviewController extends BaseController {
 
     @ApiOperation(value="随机获取一个待复习的单词", notes="")
 	@RequestMapping(value="/getWord", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDTO<WaitReviewDTO> getWord(@RequestBody Integer bookId){
+	public ResultDTO<WaitReviewDTO> getWord(@RequestBody ReviewWordDTO reviewWordDTO){
 		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<>();
-		tabWordService.getWaitReviewWord(getUser().getId(),bookId,resultDTO);
+		reviewWordDTO.setUserId(getUser().getId());
+		tabWordService.getWaitReviewWord(reviewWordDTO,resultDTO);
 		return resultDTO;
 	}
 
