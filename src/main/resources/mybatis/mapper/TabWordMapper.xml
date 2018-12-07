@@ -22,25 +22,27 @@
 		has_audio, content,
 		uk_pronunciation, us_pronunciation
 	</sql>
-
+	
+	<sql id="ListWordSQL">
+		<where>
+			u.user_id = #{searchListDTO.userId}
+			<if test="searchListDTO.word != null and searchListDTO.word != ''">
+				AND content like CONCAT('%',#{searchListDTO.word},'%')
+			</if>
+		</where>
+	</sql>
+	
 	<select id="listBySearchListDTO" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from word
-		<if test="searchListDTO.word != null and searchListDTO.word != ''">
-			<where>
-				content like #{searchListDTO.word}
-			</where>
-		</if>
-		limit #{searchListDTO.start},#{searchListDTO.limit}
+		SELECT w.id, uk_audio, us_audio, audio_name, content_type,
+		cn_definition,en_definition, content_id,has_audio, content,
+		uk_pronunciation, us_pronunciation
+		FROM word w RIGHT JOIN user_word u ON w.id = u.word_id
+		<include refid="ListWordSQL"></include>
+		limit #{searchListDTO.start},#{searchListDTO.rows}
 	</select>
-	<select id="countBySearchListDTO" resultType="java.lang.Integer">
-		select count(id) from word
-		<if test="searchListDTO.word != null">
-			<where>
-				content like #{searchListDTO.word}
-			</where>
-		</if>
+	<select id="countBySearchListDTO" resultType="Integer">
+		SELECT COUNT(w.id) FROM word w RIGHT JOIN user_word u ON w.id = u.word_id
+		<include refid="ListWordSQL"></include>
 	</select>
 
 </mapper>

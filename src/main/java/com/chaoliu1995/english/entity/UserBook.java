@@ -2,6 +2,7 @@ package com.chaoliu1995.english.entity;
 
 import com.chaoliu1995.english.util.Consts;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,6 +15,7 @@ import java.io.Serializable;
  * @Date: 2018/12/6 18:23
  */
 @Data
+@NoArgsConstructor
 public class UserBook implements Serializable {
 
     private static final long serialVersionUID = Consts.SERIAL_VERSION_UID;

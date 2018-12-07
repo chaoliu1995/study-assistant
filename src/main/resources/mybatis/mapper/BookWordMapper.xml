@@ -4,13 +4,13 @@
 
     <select id="randomGetWaitReviewWordIdByBookIds" resultType="Integer">
         SELECT u.word_id FROM (SELECT DISTINCT word_id FROM book_word WHERE book_id in (${bookIds})) b INNER JOIN
-        (SELECT word_id FROM user_word WHERE userId = #{userId}) u ON b.word_id = u.word_id
+        (SELECT word_id,show_time FROM user_word WHERE user_id = #{userId}) u ON b.word_id = u.word_id
         WHERE u.show_time &lt; UNIX_TIMESTAMP() ORDER BY RAND() limit 0,1
     </select>
 
     <select id="countWaitReviewByBookIds" resultType="Integer">
         SELECT COUNT(1) FROM (SELECT DISTINCT word_id FROM book_word WHERE book_id in (${bookIds})) b INNER JOIN
-        (SELECT word_id FROM user_word WHERE userId = #{userId}) u ON b.word_id = u.word_id
+        (SELECT word_id,show_time FROM user_word WHERE user_id = #{userId}) u ON b.word_id = u.word_id
         WHERE u.show_time &lt; UNIX_TIMESTAMP()
     </select>
 

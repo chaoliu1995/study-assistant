@@ -35,7 +35,7 @@ public class BookWordController extends BaseController {
             resultDTO.setMessage("书籍名称不可以为空");
             return resultDTO;
         }
-        bookWordService.add(name,getUserId(),resultDTO);
+        bookWordService.addBook(name,getUserId(),resultDTO);
         return resultDTO;
     }
 

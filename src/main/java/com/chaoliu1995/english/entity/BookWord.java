@@ -22,5 +22,4 @@ public class BookWord implements java.io.Serializable {
     private Integer id;
     private Integer bookId;
     private Integer wordId;
-    private Long showTime;
 }

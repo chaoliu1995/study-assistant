@@ -33,4 +33,6 @@ public class Consts {
 	public static final String USER_WORD_QUEUE = "userWord.queue";
 
 	public static final Byte BOOK_STATUS_DEFAULT = ONE;
+
+	public static final Integer ONE_THOUSAND = 1000;
 }

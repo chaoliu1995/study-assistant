@@ -32,6 +32,7 @@ public class Consumer {
         UserWord dbUserWord = userWordMapper.selectOne(userWord);
         if(dbUserWord == null){
             userWord.setSearchCount(Consts.ONE.intValue());
+            userWord.setShowTime(System.currentTimeMillis() / Consts.ONE_THOUSAND);
             userWordMapper.insert(userWord);
         }else{
             userWordMapper.updateSearchCountByPrimaryKey(dbUserWord.getId());

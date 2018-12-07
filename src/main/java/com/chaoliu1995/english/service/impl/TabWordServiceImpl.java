@@ -282,6 +282,7 @@ public class TabWordServiceImpl implements TabWordService {
 			Integer wordId = userWordMapper.getWordIdByShowTime(userId);
 			if(wordId == null){
 				resultDTO.setMessage("所有待复习的单词已全部复习完成");
+				resultDTO.setStatus(Consts.SUCCESS);
 				return;
 			}
 			TabWord tabWord = tabWordMapper.selectByPrimaryKey(wordId);
@@ -332,9 +333,9 @@ public class TabWordServiceImpl implements TabWordService {
 	@Override
 	public void listTabWordForPager(ResultsDTO<TabWord> resultsDTO, SearchListDTO searchListDTO) {
 		int total = tabWordMapper.countBySearchListDTO(searchListDTO);
-		Pager<TabWord> pager = new Pager<TabWord>(searchListDTO.getCurrentPage(),searchListDTO.getPageSize(),total);
+		Pager<TabWord> pager = new Pager<TabWord>(searchListDTO.getPage(),searchListDTO.getRows(),total);
 		searchListDTO.setStart(pager.getStartNum());
-		searchListDTO.setLimit(pager.getPageSize());
+		searchListDTO.setRows(pager.getPageSize());
 		List<TabWord> wordList = tabWordMapper.listBySearchListDTO(searchListDTO);
 		resultsDTO.setTotal(total);
 		resultsDTO.setData(wordList);

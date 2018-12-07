@@ -45,7 +45,7 @@ public class SearchController extends BaseController {
 			return resultDTO;
 		}
 		tabWordService.getWord(searchDTO.getWord(),resultDTO);
-		if(resultDTO.getData() != null){
+		if(resultDTO.getStatus().equals(Consts.SUCCESS)){
 			producer.sendMessage(Consts.USER_WORD_QUEUE,StringUtils.getGson().toJson(new UserWord(getUserId(),resultDTO.getData().getId())));
 			return resultDTO;
 		}

@@ -1,5 +1,5 @@
 spring:
-  profiles: dev
+  profiles: test
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
@@ -20,8 +20,9 @@ spring:
       maxOpenPreparedStatements: 20
       filters: stat,wall,slf4j
       maxPoolPreparedStatementPerConnectionSize: -1
-    url: jdbc:mysql://localhost:3306/english?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull
-    initialize: false
+    url: jdbc:mysql://localhost:3306/english_test?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull
+    schema: classpath:/schema.sql
+    initialization-mode: always
 server:
   port: 8082
 
@@ -32,7 +33,7 @@ SERVER_IV: abcd123e456abdc9
 SERVER_CRYPT_KEY: 8ig*lpk$=Fang5@P
 
 file:
-  audioPath: D:\\MyFile\\English\\
+  audioPath: D:\\MyFile\\EnglishTest\\
 
 logging:
   level:

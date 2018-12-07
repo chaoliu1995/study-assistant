@@ -7,6 +7,8 @@ package com.chaoliu1995.english.util;
  */
 public class ConstsTest {
 
-    public static final Integer userId = 1;
+    public static final Integer USER_ID = 1;
 
+    public static final Integer BOOK_ID = 1;
+    public static final Integer WORD_ID = 31;
 }

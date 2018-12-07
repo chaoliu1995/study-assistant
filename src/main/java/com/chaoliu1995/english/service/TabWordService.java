@@ -22,7 +22,7 @@ public interface TabWordService {
 	void getWaitReviewWord(Integer userId, Integer bookId, ResultDTO<WaitReviewDTO> resultDTO);
 
 	/**
-	 * 记忆一个单词，memoryTotal 增加
+	 * 记忆一个单词，showTime 增加
 	 * @param wordMemoryDTO
 	 */
 	void memory(WordMemoryDTO wordMemoryDTO);
@@ -38,7 +38,7 @@ public interface TabWordService {
 	 * 搜索单词
 	 * @param word
 	 * @param resultDTO
-	 * @return
+	 * @param userId
 	 */
 	void search(String word,ResultDTO<TabWord> resultDTO,Integer userId);
 

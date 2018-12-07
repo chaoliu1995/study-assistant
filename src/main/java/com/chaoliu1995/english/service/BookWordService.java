@@ -15,7 +15,7 @@ public interface BookWordService {
      * @param name
      * @param resultDTO
      */
-    void add(String name, Integer userId, ResultDTO<Book> resultDTO);
+    void addBook(String name, Integer userId, ResultDTO<Book> resultDTO);
 
     /**
      * 添加书籍和单词的关联

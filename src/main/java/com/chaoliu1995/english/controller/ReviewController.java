@@ -55,7 +55,7 @@ public class ReviewController extends BaseController {
 			result.setMessage(Consts.PARAMETER_IS_NULL);
             return result;
         }
-        wordMemoryDTO.setNextShowTime(System.currentTimeMillis() / 1000 + (86400 * wordMemoryDTO.getMemoryStatus()));
+        wordMemoryDTO.setNextShowTime(System.currentTimeMillis() / Consts.ONE_THOUSAND + (86400 * wordMemoryDTO.getMemoryStatus()));
 		wordMemoryDTO.setUserId(getUserId());
         tabWordService.memory(wordMemoryDTO);
 		result.setStatus(Consts.SUCCESS);

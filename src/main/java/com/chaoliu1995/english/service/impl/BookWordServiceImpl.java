@@ -33,7 +33,7 @@ public class BookWordServiceImpl implements BookWordService {
     private TabWordMapper tabWordMapper;
 
     @Override
-    public void add(String name, Integer userId, ResultDTO<Book> resultDTO) {
+    public void addBook(String name, Integer userId, ResultDTO<Book> resultDTO) {
         Book book = bookMapper.getByNameAndUserId(name,userId);
         if(book != null){
             resultDTO.setMessage("书籍名称已存在");
