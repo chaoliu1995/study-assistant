@@ -35,4 +35,6 @@ public class Consts {
 	public static final Byte BOOK_STATUS_DEFAULT = ONE;
 
 	public static final Integer ONE_THOUSAND = 1000;
+
+	public static final String TIMEOUT = "timeout";
 }

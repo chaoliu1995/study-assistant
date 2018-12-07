@@ -1,7 +1,6 @@
 package com.chaoliu1995.english.dao;
 
 import com.chaoliu1995.english.dto.SearchListDTO;
-import com.chaoliu1995.english.dto.WordMemoryDTO;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;

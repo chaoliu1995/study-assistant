@@ -1,12 +1,7 @@
 package com.chaoliu1995.english.dto;
 
-import com.chaoliu1995.english.util.Consts;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.io.Serializable;
 
 /**
  * @Author: ChaoLiu

@@ -2,7 +2,6 @@ package com.chaoliu1995.english.dto;
 
 import com.chaoliu1995.english.util.Consts;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 

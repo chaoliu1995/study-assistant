@@ -35,7 +35,7 @@ public class BookWordController extends BaseController {
             resultDTO.setMessage("书籍名称不可以为空");
             return resultDTO;
         }
-        bookWordService.addBook(name,getUserId(),resultDTO);
+        bookWordService.addBook(name,getUser().getId(),resultDTO);
         return resultDTO;
     }
 
@@ -43,7 +43,7 @@ public class BookWordController extends BaseController {
     @RequestMapping(value = "/word/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult addWord(@RequestBody InsertBookWordDTO insertBookWordDTO){
         BaseResult result = new BaseResult();
-        bookWordService.addWord(insertBookWordDTO,getUserId(),result);
+        bookWordService.addWord(insertBookWordDTO,getUser().getId(),result);
         return result;
     }
 
@@ -51,7 +51,7 @@ public class BookWordController extends BaseController {
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultsDTO<Book> listBook(@RequestBody ListBookDTO listDTO){
         ResultsDTO<Book> resultsDTO = new ResultsDTO<>();
-        listDTO.setUserId(getUserId());
+        listDTO.setUserId(getUser().getId());
         bookWordService.listBook(listDTO,resultsDTO);
         return resultsDTO;
     }

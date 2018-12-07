@@ -46,10 +46,10 @@ public class SearchController extends BaseController {
 		}
 		tabWordService.getWord(searchDTO.getWord(),resultDTO);
 		if(resultDTO.getStatus().equals(Consts.SUCCESS)){
-			producer.sendMessage(Consts.USER_WORD_QUEUE,StringUtils.getGson().toJson(new UserWord(getUserId(),resultDTO.getData().getId())));
+			producer.sendMessage(Consts.USER_WORD_QUEUE,StringUtils.getGson().toJson(new UserWord(getUser().getId(),resultDTO.getData().getId())));
 			return resultDTO;
 		}
-        tabWordService.search(searchDTO.getWord(),resultDTO,getUserId());
+        tabWordService.search(searchDTO.getWord(),resultDTO,getUser().getId());
 		return resultDTO;
 	}
 
@@ -65,6 +65,7 @@ public class SearchController extends BaseController {
 	    if(searchListDTO == null){
 	        searchListDTO = new SearchListDTO();
         }
+        searchListDTO.setUserId(getUser().getId());
         tabWordService.listTabWordForPager(resultsDTO,searchListDTO);
         return resultsDTO;
     }

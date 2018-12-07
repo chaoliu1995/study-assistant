@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: test
+    active: dev
 server:
   tomcat:
     access-log-enabled: true

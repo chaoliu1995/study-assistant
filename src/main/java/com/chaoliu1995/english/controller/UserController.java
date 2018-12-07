@@ -38,7 +38,7 @@ public class UserController extends BaseController {
             result.setMessage("书籍id不能为空");
             return result;
         }
-        userService.updateReviewingBook(getUserId(),bookId,result);
+        userService.updateReviewingBook(getUser().getId(),bookId,result);
         return result;
     }
 
@@ -50,7 +50,7 @@ public class UserController extends BaseController {
             result.setMessage("书籍id不能为空");
             return result;
         }
-        userService.updateAddingBook(getUserId(),bookId,result);
+        userService.updateAddingBook(getUser().getId(),bookId,result);
         return result;
     }
 

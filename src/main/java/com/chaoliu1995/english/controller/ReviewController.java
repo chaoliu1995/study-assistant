@@ -34,7 +34,7 @@ public class ReviewController extends BaseController {
 	@RequestMapping(value="/getWord", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResultDTO<WaitReviewDTO> getWord(@RequestBody Integer bookId){
 		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<>();
-		tabWordService.getWaitReviewWord(getUserId(),bookId,resultDTO);
+		tabWordService.getWaitReviewWord(getUser().getId(),bookId,resultDTO);
 		return resultDTO;
 	}
 
@@ -56,7 +56,7 @@ public class ReviewController extends BaseController {
             return result;
         }
         wordMemoryDTO.setNextShowTime(System.currentTimeMillis() / Consts.ONE_THOUSAND + (86400 * wordMemoryDTO.getMemoryStatus()));
-		wordMemoryDTO.setUserId(getUserId());
+		wordMemoryDTO.setUserId(getUser().getId());
         tabWordService.memory(wordMemoryDTO);
 		result.setStatus(Consts.SUCCESS);
 		return result;

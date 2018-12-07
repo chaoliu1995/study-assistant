@@ -4,7 +4,6 @@ import com.chaoliu1995.english.base.BaseController;
 import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.dto.LoginDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
-import com.chaoliu1995.english.entity.User;
 import com.chaoliu1995.english.service.LoginService;
 import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.StringUtils;
@@ -13,6 +12,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authc.AccountException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -31,14 +32,13 @@ import java.io.IOException;
 */
 @Api(description = "登录相关接口", basePath = "/login")
 @Controller
-@RequestMapping("/login")
 public class LoginController extends BaseController {
 	
 	@Autowired
 	private LoginService loginService;
 
     @ApiOperation(value="登录信息提交", notes="")
-	@RequestMapping(value="/commit", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value="/login", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
 	public BaseResult login(@RequestBody LoginDTO loginDTO){
         BaseResult result = new BaseResult();
@@ -58,15 +58,18 @@ public class LoginController extends BaseController {
             session.setAttribute(Consts.PREVIOU_VERITY_CODE, session.getAttribute(Consts.VERITY_CODE));
             return result;
         }
-		loginService.login(loginDTO,result);
-        if(result.getStatus().equals(Consts.SUCCESS)){
-            User user = new User();
-            user.setUsername(loginDTO.getUsername());
-            session.setAttribute(Consts.SESSION_USER, user);
-            session.setMaxInactiveInterval(60*60*10);
+        UsernamePasswordToken upToken = new UsernamePasswordToken(loginDTO.getUsername(),loginDTO.getPassword());
+        upToken.setRememberMe(loginDTO.getRememberMe());
+        try {
+            subject.login(upToken);
+        }catch (AccountException e){
+            e.printStackTrace();
+            result.setMessage(e.getMessage());
+            return result;
         }
-		return result;
-
+        subject.isPermitted(loginDTO.getUsername());
+        result.setStatus(Consts.SUCCESS);
+        return result;
 	}
 
     @ApiOperation(value="登录验证码", notes="")
@@ -74,7 +77,7 @@ public class LoginController extends BaseController {
             @ApiImplicitParam(name = "width", value = "宽度", required = false, dataType = "integer"),
             @ApiImplicitParam(name = "height", value = "高度", required = false, dataType = "integer")
     })
-    @RequestMapping(value = "/verifyCode", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @RequestMapping(value = "/login/verifyCode", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public void verifyCode(Integer width,Integer height) throws IOException {
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
@@ -93,23 +96,8 @@ public class LoginController extends BaseController {
         VerifyCodeUtils.outputImage(width,height,response.getOutputStream(),verifyCode);
     }
 
-    @ApiOperation(value="退出登录", notes="")
-	@RequestMapping(value = "/out", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-	public BaseResult loginOut(){
-        BaseResult result = new BaseResult();
-		if(session != null){
-			session.invalidate();
-		}else{
-            result.setMessage("当前用户未登录");
-			return result;
-		}
-        result.setStatus(Consts.SUCCESS);
-		return result;
-	}
-
     @ApiOperation(value="查询登录状态", notes="")
-	@RequestMapping(value = "/status", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@RequestMapping(value = "/login/status", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
 	public ResultDTO<Boolean> status(){
         ResultDTO resultDTO = new ResultDTO();
@@ -121,6 +109,16 @@ public class LoginController extends BaseController {
         resultDTO.setData(new Boolean(true));
         return resultDTO;
 	}
+
+    @ApiOperation(value="退出登录", notes="")
+    @RequestMapping(value = "/login/out", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public BaseResult loginOut(){
+        BaseResult result = new BaseResult();
+        subject.logout();
+        result.setStatus(Consts.SUCCESS);
+        return result;
+    }
 	
 	/**
 	 * 校验用户信息是否完整

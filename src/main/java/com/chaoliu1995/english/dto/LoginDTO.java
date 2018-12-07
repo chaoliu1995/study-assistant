@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 /**
@@ -25,4 +26,7 @@ public class LoginDTO implements Serializable {
     private String password;
     @ApiModelProperty(name = "verifyCode", value = "验证码", required = true, dataType = "string")
     private String verifyCode;
+    @NotNull(message = "remember 不可以为空")
+    @ApiModelProperty(name = "rememberMe", value = "是否记住登录状态", required = true, dataType = "boolean")
+    private Boolean rememberMe;
 }
