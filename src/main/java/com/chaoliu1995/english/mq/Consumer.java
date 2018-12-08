@@ -25,7 +25,6 @@ public class Consumer {
 
     @JmsListener(destination = Consts.USER_WORD_QUEUE)
     public void receiveQueue(String text) {
-        logger.debug("接受到消息："+text);
         UserWord userWord = StringUtils.getGson().fromJson(text,UserWord.class);
         if(userWord == null){
             logger.error("解析UserWord出现问题");

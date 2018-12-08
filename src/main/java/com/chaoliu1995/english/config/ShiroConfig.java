@@ -89,7 +89,7 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilter(DefaultWebSecurityManager securityManager){
         ShiroFilterFactoryBean shiroFilter = new ShiroFilterFactoryBean();
         shiroFilter.setSecurityManager(securityManager);
-        shiroFilter.setLoginUrl("/login");
+        shiroFilter.setLoginUrl("/");
         Map<String ,String> filterMap = new HashMap<String ,String>();
         filterMap.put("/login/**","anon");
         filterMap.put("/login","anon");

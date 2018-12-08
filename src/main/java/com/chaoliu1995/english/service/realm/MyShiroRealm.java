@@ -23,7 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class MyShiroRealm extends AuthorizingRealm {
 
-    private static final Logger logger = LoggerFactory.getLogger(MyShiroRealm.class);
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private UserMapper userMapper;
@@ -76,5 +76,4 @@ public class MyShiroRealm extends AuthorizingRealm {
             }
         }
     }
-
 }
