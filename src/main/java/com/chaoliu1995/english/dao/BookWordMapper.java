@@ -27,4 +27,9 @@ public interface BookWordMapper extends Mapper<BookWord> {
      */
     int countWaitReviewByBookIds(@Param("bookIds") String bookIds, @Param("userId") Integer userId);
 
+    /**
+     * 根据 bookId 删除所有单词关联
+     * @param bookId
+     */
+    void deleteByBookId(@Param("bookId") Integer bookId);
 }

@@ -13,5 +13,7 @@
         (SELECT word_id,show_time FROM user_word WHERE user_id = #{userId}) u ON b.word_id = u.word_id
         WHERE u.show_time &lt; UNIX_TIMESTAMP()
     </select>
-
+    <delete id="deleteByBookId">
+        DELETE FROM book_word WHERE book_id = #{bookId}
+    </delete>
 </mapper>

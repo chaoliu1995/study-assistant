@@ -33,27 +33,27 @@ public class BookWordServiceImpl implements BookWordService {
     private TabWordMapper tabWordMapper;
 
     @Override
-    public void addBook(String name, Integer userId, ResultDTO<Book> resultDTO) {
-        Book book = bookMapper.getByNameAndUserId(name,userId);
+    public void addBook(AddBookDTO addBookDTO, ResultDTO<Book> resultDTO) {
+        Book book = bookMapper.getByNameAndUserId(addBookDTO.getName(),addBookDTO.getUserId());
         if(book != null){
             resultDTO.setMessage("书籍名称已存在");
             return;
         }
         book = new Book();
-        book.setName(name);
-        book.setUserId(userId);
+        book.setName(addBookDTO.getName());
+        book.setUserId(addBookDTO.getUserId());
         bookMapper.insert(book);
         resultDTO.setStatus(Consts.SUCCESS);
     }
 
     @Override
-    public void addWord(InsertBookWordDTO insertBookWordDTO, Integer userId, BaseResult result) {
+    public void addWord(InsertBookWordDTO insertBookWordDTO, BaseResult result) {
         Book book = bookMapper.selectByPrimaryKey(insertBookWordDTO.getBookId());
         if(book == null){
             result.setMessage("书籍不存在");
             return;
         }
-        if((book.getUserId() - userId) != 0){
+        if((book.getUserId() - insertBookWordDTO.getUserId()) != 0){
             result.setMessage("当前用户不是此书籍的创建者，禁止添加单词");
             return;
         }
@@ -90,5 +90,18 @@ public class BookWordServiceImpl implements BookWordService {
     @Override
     public Book getBookById(Integer bookId) {
         return bookMapper.selectByPrimaryKey(bookId);
+    }
+
+
+    @Override
+    public void deleteBook(DeleteBookDTO deleteBookDTO, BaseResult result) {
+        Book book = bookMapper.selectByPrimaryKey(deleteBookDTO.getBookId());
+        if(book.getUserId() - deleteBookDTO.getUserId() != 0){
+            result.setMessage("当前登录用户不是此书的创建者，禁止删除");
+            return;
+        }
+        bookMapper.deleteByPrimaryKey(deleteBookDTO.getBookId());
+        bookWordMapper.deleteByBookId(deleteBookDTO.getBookId());
+        result.setStatus(Consts.SUCCESS);
     }
 }

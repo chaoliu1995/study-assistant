@@ -9,16 +9,13 @@ import javax.validation.constraints.NotNull;
 /**
  * @Author: ChaoLiu
  * @Description:
- * @Date: 2018/12/5 14:51
+ * @Date: 2018/12/10 17:42
  */
 @Data
-@ApiModel(value = "InsertBookWordDTO",description = "添加书籍和单词的关联DTO")
-public class InsertBookWordDTO {
+@ApiModel(value = "DeleteBookDTO",description = "删除书籍DTO")
+public class DeleteBookDTO {
     @NotNull(message = "书籍id不能为空")
     @ApiModelProperty(name = "bookId", value = "书籍id", required = true, dataType = "integer")
     private Integer bookId;
-    @NotNull(message = "单词id不能为空")
-    @ApiModelProperty(name = "wordId", value = "单词id", required = true, dataType = "integer")
-    private Integer wordId;
     private Integer userId;
 }

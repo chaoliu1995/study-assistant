@@ -21,9 +21,11 @@ public class BookWordServiceTest extends EnglishApplicationTest {
 
     @Test
     public void testAddBook(){
-        String name = "初三";
+        AddBookDTO addBookDTO = new AddBookDTO();
+        addBookDTO.setName("初三");
+        addBookDTO.setUserId(ConstsTest.USER_ID);
         ResultDTO<Book> resultDTO = new ResultDTO<>();
-        bookWordService.addBook(name,ConstsTest.USER_ID,resultDTO);
+        bookWordService.addBook(addBookDTO,resultDTO);
         Assert.assertTrue(resultDTO.getStatus().equals(Consts.SUCCESS));
     }
 
@@ -33,7 +35,8 @@ public class BookWordServiceTest extends EnglishApplicationTest {
         BaseResult result = new ResultDTO<>();
         insertBookWordDTO.setBookId(2);
         insertBookWordDTO.setWordId(ConstsTest.WORD_ID);
-        bookWordService.addWord(insertBookWordDTO,ConstsTest.USER_ID,result);
+        insertBookWordDTO.setUserId(ConstsTest.USER_ID);
+        bookWordService.addWord(insertBookWordDTO,result);
         Assert.assertTrue(result.getStatus().equals(Consts.SUCCESS));
     }
 

@@ -12,18 +12,24 @@ public interface BookWordService {
 
     /**
      * 添加书籍
-     * @param name
+     * @param addBookDTO
      * @param resultDTO
      */
-    void addBook(String name, Integer userId, ResultDTO<Book> resultDTO);
+    void addBook(AddBookDTO addBookDTO, ResultDTO<Book> resultDTO);
+
+    /**
+     * 删除书籍
+     * @param deleteBookDTO
+     * @param result
+     */
+    void deleteBook(DeleteBookDTO deleteBookDTO,BaseResult result);
 
     /**
      * 添加书籍和单词的关联
      * @param insertBookWordDTO
-     * @param userId
      * @param result
      */
-    void addWord(InsertBookWordDTO insertBookWordDTO, Integer userId, BaseResult result);
+    void addWord(InsertBookWordDTO insertBookWordDTO, BaseResult result);
 
     /**
      * 分页获取书籍数据
