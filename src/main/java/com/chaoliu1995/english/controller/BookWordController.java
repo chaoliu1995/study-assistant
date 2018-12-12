@@ -5,7 +5,6 @@ import com.chaoliu1995.english.dto.*;
 import com.chaoliu1995.english.entity.Book;
 import com.chaoliu1995.english.service.BookWordService;
 import com.chaoliu1995.english.util.Consts;
-import com.chaoliu1995.english.util.StringUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

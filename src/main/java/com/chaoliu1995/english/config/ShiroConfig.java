@@ -61,6 +61,7 @@ public class ShiroConfig {
         sessionManager.setSessionIdCookieEnabled(true);
         sessionManager.setSessionIdCookie(sessionIdCookie);
         sessionManager.setGlobalSessionTimeout(21600000);
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
         return sessionManager;
     }
 

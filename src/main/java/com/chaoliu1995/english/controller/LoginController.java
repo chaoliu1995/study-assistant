@@ -1,6 +1,7 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
+import com.chaoliu1995.english.dao.WechatMiniProgramLoginDTO;
 import com.chaoliu1995.english.dto.BaseResult;
 import com.chaoliu1995.english.dto.LoginDTO;
 import com.chaoliu1995.english.dto.ResultDTO;
@@ -116,4 +117,25 @@ public class LoginController extends BaseController {
         return result;
     }
 
+    @ApiOperation(value="微信小程序登录", notes="")
+    @RequestMapping(value = "/login/wechat/miniProgram", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    public ResultDTO<Boolean> miniProgramLogin(@RequestBody @Valid WechatMiniProgramLoginDTO loginDTO, BindingResult bindingResult){
+        ResultDTO<Boolean> resultDTO = new ResultDTO<>();
+        if (bindingResult.hasErrors()){
+            resultDTO.setMessage(bindingResult.getAllErrors().get(0).getDefaultMessage());
+            return resultDTO;
+        }
+        UsernamePasswordToken upToken = new UsernamePasswordToken(loginDTO.getJsCode(),Consts.MINI_PROGRAM);
+        try{
+            subject.login(upToken);
+        }catch (AccountException e){
+            e.printStackTrace();
+            resultDTO.setMessage(e.getMessage());
+            return resultDTO;
+        }
+        subject.isPermitted(loginDTO.getJsCode());
+        resultDTO.setStatus(Consts.SUCCESS);
+        return resultDTO;
+    }
 }

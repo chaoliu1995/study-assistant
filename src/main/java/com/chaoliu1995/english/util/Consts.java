@@ -40,4 +40,10 @@ public class Consts {
 
 	public static final String REVIEWING = "reviewing";
 	public static final String ADDING = "adding";
+
+	//微信小程序
+	public static final String MINI_PROGRAM = "MiniProgram";
+	public static final String WECHAT_MINI_PROGRAM_LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session";
+
+	public static final String QUESTION_MARK = "?";
 }
