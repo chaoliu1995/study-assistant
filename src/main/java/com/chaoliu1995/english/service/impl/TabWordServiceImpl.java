@@ -362,6 +362,13 @@ public class TabWordServiceImpl implements TabWordService {
 			resultDTO.setMessage(shanBay.getMsg());
 			return;
 		}
+		//扇贝接口在查询 englishs 这样的单词时，会返回 english，这里做一下处理，防止二次保存
+		List<TabWord> dbWords = tabWordMapper.select(new TabWord(shanBay.getData().getContent()));
+		if(dbWords != null && dbWords.size() > 0){
+			resultDTO.setData(dbWords.get(0));
+			resultDTO.setStatus(Consts.SUCCESS);
+			return;
+		}
 		TabWord tabWord = saveWord(shanBay);
 		if(tabWord == null || tabWord.getId() == null){
 			resultDTO.setMessage("保存单词出现异常");

@@ -12,7 +12,7 @@ import lombok.Data;
 @Data
 @ApiModel(value = "UpdateCurrentBookDTO",description = "修改当前在复习的书或在添加单词的书")
 public class UpdateCurrentBookDTO {
-    @ApiModelProperty(name = "bookId", value = "书籍id", required = true, dataType = "integer")
+    @ApiModelProperty(name = "bookId", value = "书籍id", required = false, dataType = "integer")
     private Integer bookId;
     private Integer userId;
 }

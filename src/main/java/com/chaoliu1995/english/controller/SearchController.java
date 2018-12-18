@@ -15,10 +15,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @Api(description = "单词查询相关接口", basePath = "/word")
 @RestController
@@ -38,10 +41,10 @@ public class SearchController extends BaseController {
      */
     @ApiOperation(value="查询单词", notes="")
 	@RequestMapping(value = "/search", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResultDTO<TabWord> search(@RequestBody SearchDTO searchDTO) {
-		ResultDTO<TabWord> resultDTO = new ResultDTO<TabWord>();
-		if(searchDTO != null && StringUtils.isEmpty(searchDTO.getWord())){
-			resultDTO.setMessage(Consts.PARAMETER_IS_NULL);
+	public ResultDTO<TabWord> search(@RequestBody @Valid SearchDTO searchDTO, BindingResult bindingResult) {
+		ResultDTO<TabWord> resultDTO = new ResultDTO<>();
+		if (bindingResult.hasErrors()){
+			resultDTO.setMessage(bindingResult.getAllErrors().get(0).getDefaultMessage());
 			return resultDTO;
 		}
 		tabWordService.getWord(searchDTO.getWord(),resultDTO);

@@ -1,4 +1,4 @@
-package com.chaoliu1995.english.dao;
+package com.chaoliu1995.english.dto;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

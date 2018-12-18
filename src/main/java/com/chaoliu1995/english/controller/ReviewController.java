@@ -1,21 +1,21 @@
 package com.chaoliu1995.english.controller;
 
 import com.chaoliu1995.english.base.BaseController;
-import com.chaoliu1995.english.dao.ReviewWordDTO;
-import com.chaoliu1995.english.dto.BaseResult;
-import com.chaoliu1995.english.dto.ResultDTO;
-import com.chaoliu1995.english.dto.WaitReviewDTO;
-import com.chaoliu1995.english.dto.WordMemoryDTO;
+import com.chaoliu1995.english.dto.*;
 import com.chaoliu1995.english.service.TabWordService;
 import com.chaoliu1995.english.util.Consts;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.TimeZone;
 
 /** 
 * @Author: LiuChao
@@ -36,6 +36,7 @@ public class ReviewController extends BaseController {
 	public ResultDTO<WaitReviewDTO> getWord(@RequestBody ReviewWordDTO reviewWordDTO){
 		ResultDTO<WaitReviewDTO> resultDTO = new ResultDTO<>();
 		reviewWordDTO.setUserId(getUser().getId());
+		reviewWordDTO.setBookId(getUser().getReviewingBookId());
 		tabWordService.getWaitReviewWord(reviewWordDTO,resultDTO);
 		return resultDTO;
 	}
@@ -47,20 +48,25 @@ public class ReviewController extends BaseController {
      */
     @ApiOperation(value="判断单词的熟悉程度，以决定其下次出现的时间", notes="")
 	@RequestMapping(value = "/memory", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public BaseResult memory(@RequestBody WordMemoryDTO wordMemoryDTO){
+	public BaseResult memory(@RequestBody @Valid WordMemoryDTO wordMemoryDTO, BindingResult bindingResult){
 		BaseResult result = new BaseResult();
-		if(wordMemoryDTO == null || wordMemoryDTO.getWordId() == null || wordMemoryDTO.getMemoryStatus() == null){
-			result.setMessage(Consts.PARAMETER_IS_NULL);
+		if (bindingResult.hasErrors()){
+			result.setMessage(bindingResult.getAllErrors().get(0).getDefaultMessage());
 			return result;
 		}
-        if(wordMemoryDTO.getMemoryStatus() > 365 || wordMemoryDTO.getMemoryStatus() < 1){
-			result.setMessage(Consts.PARAMETER_IS_NULL);
-            return result;
-        }
-        wordMemoryDTO.setNextShowTime(System.currentTimeMillis() / Consts.ONE_THOUSAND + (86400 * wordMemoryDTO.getMemoryStatus()));
+        wordMemoryDTO.setNextShowTime(computeTimeNillis(wordMemoryDTO.getMemoryStatus()));
 		wordMemoryDTO.setUserId(getUser().getId());
         tabWordService.memory(wordMemoryDTO);
 		result.setStatus(Consts.SUCCESS);
 		return result;
+	}
+
+	/**
+	 * 计算下次显示时间
+	 * @param num
+	 * @return
+	 */
+	private long computeTimeNillis(int num){
+		return System.currentTimeMillis() / Consts.ONE_THOUSAND / 86400 * 86400 - TimeZone.getDefault().getRawOffset() + (86400 * num);
 	}
 }

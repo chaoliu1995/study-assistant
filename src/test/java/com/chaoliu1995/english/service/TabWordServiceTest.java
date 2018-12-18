@@ -1,8 +1,6 @@
 package com.chaoliu1995.english.service;
 
 import com.chaoliu1995.english.EnglishApplicationTest;
-import com.chaoliu1995.english.dao.ReviewWordDTO;
-import com.chaoliu1995.english.dao.TabWordMapper;
 import com.chaoliu1995.english.dao.UserWordMapper;
 import com.chaoliu1995.english.dto.*;
 import com.chaoliu1995.english.entity.UserWord;
@@ -11,10 +9,7 @@ import com.chaoliu1995.english.util.Consts;
 import com.chaoliu1995.english.util.ConstsTest;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * @Author: ChaoLiu

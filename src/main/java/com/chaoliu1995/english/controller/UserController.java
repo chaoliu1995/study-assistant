@@ -31,14 +31,10 @@ public class UserController extends BaseController {
     @Autowired
     private BookWordService bookWordService;
 
-    @ApiOperation(value="修改正在复习的书籍", notes="")
+    @ApiOperation(value="修改正在复习的单词本", notes="")
     @RequestMapping(value="/reviewingBook/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult updateReviewingBook(@RequestBody UpdateCurrentBookDTO updateDTO){
         BaseResult result = new BaseResult();
-        if(updateDTO.getBookId() == null){
-            result.setMessage("书籍id不能为空");
-            return result;
-        }
         updateDTO.setUserId(getUser().getId());
         userService.updateCurrentBook(updateDTO,Consts.REVIEWING,result);
         if (result.getStatus().equals(Consts.SUCCESS)){
@@ -47,14 +43,10 @@ public class UserController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="修改正在添加单词的书籍", notes="")
+    @ApiOperation(value="修改正在添加单词的单词本", notes="")
     @RequestMapping(value="/addingBook/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult updateAddingBook(@RequestBody UpdateCurrentBookDTO updateDTO){
         BaseResult result = new BaseResult();
-        if(updateDTO.getBookId() == null){
-            result.setMessage("书籍id不能为空");
-            return result;
-        }
         updateDTO.setUserId(getUser().getId());
         userService.updateCurrentBook(updateDTO,Consts.ADDING,result);
         if (result.getStatus().equals(Consts.SUCCESS)){
@@ -63,7 +55,7 @@ public class UserController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="获取当前用户正在复习的书籍", notes="")
+    @ApiOperation(value="获取当前用户正在复习的单词本", notes="")
     @RequestMapping(value="/reviewingBook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultDTO<Book> getReviewingBook(){
         ResultDTO<Book> resultDTO = new ResultDTO<>();
@@ -78,7 +70,7 @@ public class UserController extends BaseController {
         return resultDTO;
     }
 
-    @ApiOperation(value="获取当前用户正在添加单词的书籍", notes="")
+    @ApiOperation(value="获取当前用户正在添加单词的单词本", notes="")
     @RequestMapping(value="/addingBook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultDTO<Book> getAddingBook(){
         ResultDTO<Book> resultDTO = new ResultDTO<>();

@@ -119,11 +119,11 @@ public class MyShiroRealm extends AuthorizingRealm {
                 .append("&js_code=").append(jsCode).append("&grant_type=authorization_code");
         String jsonStr = HttpUtils.get(urlBuilder.toString());
         MiniProgramLoginResult loginResult = StringUtils.getGson().fromJson(jsonStr,MiniProgramLoginResult.class);
-        if (loginResult.getErrcode() != 0){
+        if (loginResult.getErrcode() != null){
             resultDTO.setMessage(loginResult.getErrmsg());
             return;
         }
-        WechatUser wechatUser = wechatUserMapper.getByUnionId(loginResult.getUnionid());
+        WechatUser wechatUser = wechatUserMapper.getByUnionId(loginResult.getOpenid());
         User user;
         if(wechatUser == null){
             user = new User();
@@ -132,13 +132,14 @@ public class MyShiroRealm extends AuthorizingRealm {
             userMapper.insert(user);
             wechatUser = new WechatUser();
             wechatUser.setOpenId(loginResult.getOpenid());
-            wechatUser.setUnionId(loginResult.getUnionid());
+            wechatUser.setUnionId(loginResult.getOpenid());
             wechatUser.setUserId(user.getId());
             wechatUser.setCreateTime(new Date());
             wechatUserMapper.insert(wechatUser);
         }else{
             user = userMapper.selectByPrimaryKey(wechatUser.getUserId());
         }
+        this.setSession(Consts.SESSION_USER, user);
         resultDTO.setStatus(Consts.SUCCESS);
         resultDTO.setData(user);
     }

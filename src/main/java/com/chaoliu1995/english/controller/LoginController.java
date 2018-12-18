@@ -55,6 +55,10 @@ public class LoginController extends BaseController {
             session.setAttribute(Consts.PREVIOU_VERITY_CODE, session.getAttribute(Consts.VERITY_CODE));
             return result;
         }
+        if(session.getAttribute(Consts.SESSION_USER) != null){
+            result.setStatus(Consts.SUCCESS);
+            return result;
+        }
         UsernamePasswordToken upToken = new UsernamePasswordToken(loginDTO.getUsername(),loginDTO.getPassword());
         upToken.setRememberMe(loginDTO.getRememberMe());
         try {
@@ -120,22 +124,26 @@ public class LoginController extends BaseController {
     @ApiOperation(value="微信小程序登录", notes="")
     @RequestMapping(value = "/login/wechat/miniProgram", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public ResultDTO<Boolean> miniProgramLogin(@RequestBody @Valid WechatMiniProgramLoginDTO loginDTO, BindingResult bindingResult){
-        ResultDTO<Boolean> resultDTO = new ResultDTO<>();
+    public BaseResult miniProgramLogin(@RequestBody @Valid WechatMiniProgramLoginDTO loginDTO, BindingResult bindingResult){
+        BaseResult result = new BaseResult();
         if (bindingResult.hasErrors()){
-            resultDTO.setMessage(bindingResult.getAllErrors().get(0).getDefaultMessage());
-            return resultDTO;
+            result.setMessage(bindingResult.getAllErrors().get(0).getDefaultMessage());
+            return result;
+        }
+        if(session.getAttribute(Consts.SESSION_USER) != null){
+            result.setStatus(Consts.SUCCESS);
+            return result;
         }
         UsernamePasswordToken upToken = new UsernamePasswordToken(loginDTO.getJsCode(),Consts.MINI_PROGRAM);
         try{
             subject.login(upToken);
         }catch (AccountException e){
             e.printStackTrace();
-            resultDTO.setMessage(e.getMessage());
-            return resultDTO;
+            result.setMessage(e.getMessage());
+            return result;
         }
         subject.isPermitted(loginDTO.getJsCode());
-        resultDTO.setStatus(Consts.SUCCESS);
-        return resultDTO;
+        result.setStatus(Consts.SUCCESS);
+        return result;
     }
 }

@@ -26,10 +26,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateCurrentBook(UpdateCurrentBookDTO updateDTO, String type, BaseResult result) {
-        Book book = bookMapper.selectByPrimaryKey(updateDTO.getBookId());
-        if(book == null){
-            result.setMessage("书籍不存在");
-            return;
+        if(updateDTO.getBookId() != null){
+            Book book = bookMapper.selectByPrimaryKey(updateDTO.getBookId());
+            if(book == null){
+                result.setMessage("书籍不存在");
+                return;
+            }
         }
         if(type.equals(Consts.REVIEWING)){
             userMapper.updateReviewingBookByPrimaryKey(updateDTO.getUserId(),updateDTO.getBookId());

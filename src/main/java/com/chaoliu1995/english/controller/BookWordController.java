@@ -22,7 +22,7 @@ import javax.validation.Valid;
  * @Description:
  * @Date: 2018/12/5 14:11
  */
-@Api(description = "单词书相关接口", basePath = "/book")
+@Api(description = "单词本相关接口", basePath = "/book")
 @RestController
 @RequestMapping("/book")
 public class BookWordController extends BaseController {
@@ -30,7 +30,7 @@ public class BookWordController extends BaseController {
     @Autowired
     private BookWordService bookWordService;
 
-    @ApiOperation(value="添加单词书", notes="")
+    @ApiOperation(value="添加单词本", notes="")
     @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultDTO<Book> add(@RequestBody @Valid AddBookDTO addBookDTO, BindingResult bindingResult){
         ResultDTO resultDTO = new ResultDTO();
@@ -43,7 +43,7 @@ public class BookWordController extends BaseController {
         return resultDTO;
     }
 
-    @ApiOperation(value="删除单词书", notes="")
+    @ApiOperation(value="删除单词本", notes="")
     @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult delete(@RequestBody @Valid DeleteBookDTO deleteBookDTO, BindingResult bindingResult){
         BaseResult result = new BaseResult();
@@ -64,7 +64,7 @@ public class BookWordController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="给书中添加单词", notes="")
+    @ApiOperation(value="给单词本中添加单词", notes="")
     @RequestMapping(value = "/word/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public BaseResult addWord(@RequestBody @Valid InsertBookWordDTO insertBookWordDTO, BindingResult bindingResult){
         BaseResult result = new BaseResult();
@@ -77,7 +77,7 @@ public class BookWordController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="分页获取书籍列表", notes="")
+    @ApiOperation(value="分页获取单词本列表", notes="")
     @RequestMapping(value = "/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResultsDTO<Book> listBook(@RequestBody ListBookDTO listDTO){
         ResultsDTO<Book> resultsDTO = new ResultsDTO<>();

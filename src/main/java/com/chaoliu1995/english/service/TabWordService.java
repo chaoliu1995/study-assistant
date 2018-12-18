@@ -1,6 +1,5 @@
 package com.chaoliu1995.english.service;
 
-import com.chaoliu1995.english.dao.ReviewWordDTO;
 import com.chaoliu1995.english.dto.*;
 import com.chaoliu1995.english.entity.shanbay.TabWord;
 import com.chaoliu1995.english.model.ShanBayResult;
