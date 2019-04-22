@@ -54,7 +54,7 @@ public class ReviewController extends BaseController {
 			result.setMessage(bindingResult.getAllErrors().get(0).getDefaultMessage());
 			return result;
 		}
-        wordMemoryDTO.setNextShowTime(computeTimeNillis(wordMemoryDTO.getMemoryStatus()));
+        wordMemoryDTO.setNextShowTime(computeTimeMillis(wordMemoryDTO.getMemoryStatus()));
 		wordMemoryDTO.setUserId(getUser().getId());
         tabWordService.memory(wordMemoryDTO);
 		result.setStatus(Consts.SUCCESS);
@@ -66,7 +66,7 @@ public class ReviewController extends BaseController {
 	 * @param num
 	 * @return
 	 */
-	private long computeTimeNillis(int num){
+	private long computeTimeMillis(int num){
 		return System.currentTimeMillis() / Consts.ONE_THOUSAND / 86400 * 86400 - TimeZone.getDefault().getRawOffset() + (86400 * num);
 	}
 }
