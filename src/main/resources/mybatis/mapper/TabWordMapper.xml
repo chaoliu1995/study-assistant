@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chaoliu1995.english.dao.TabWordMapper">
+<mapper namespace="com.chaoliu1995.assistant.mapper.TabWordMapper">
 	<resultMap id="BaseResultMap" type="TabWord">
 		<id column="id" jdbcType="INTEGER" property="id" />
 		<result column="uk_audio" jdbcType="VARCHAR" property="ukAudio" />
@@ -25,22 +25,22 @@
 	
 	<sql id="ListWordSQL">
 		<where>
-			u.user_id = #{searchListDTO.userId}
-			<if test="searchListDTO.word != null and searchListDTO.word != ''">
-				AND content like CONCAT('%',#{searchListDTO.word},'%')
+			u.user_id = #{listDTO.userId}
+			<if test="listDTO.keyword != null and listDTO.keyword != ''">
+				AND content like CONCAT('%',#{listDTO.keyword},'%')
 			</if>
 		</where>
 	</sql>
 	
-	<select id="listBySearchListDTO" resultMap="BaseResultMap">
+	<select id="listByCommonListDTO" resultMap="BaseResultMap">
 		SELECT w.id, uk_audio, us_audio, audio_name, content_type,
 		cn_definition,en_definition, content_id,has_audio, content,
 		uk_pronunciation, us_pronunciation
 		FROM word w RIGHT JOIN user_word u ON w.id = u.word_id
 		<include refid="ListWordSQL"></include>
-		limit #{searchListDTO.start},#{searchListDTO.rows}
+		limit #{listDTO.start},#{listDTO.rows}
 	</select>
-	<select id="countBySearchListDTO" resultType="Integer">
+	<select id="countByCommonListDTO" resultType="Integer">
 		SELECT COUNT(w.id) FROM word w RIGHT JOIN user_word u ON w.id = u.word_id
 		<include refid="ListWordSQL"></include>
 	</select>

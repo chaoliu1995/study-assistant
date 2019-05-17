@@ -5,4 +5,7 @@
 		<setting name="jdbcTypeForNull" value="NULL" />
         <setting name="logImpl" value="SLF4J" />
 	</settings>
+	<typeAliases>
+		<package name="com.chaoliu1995.assistant.dto" />
+	</typeAliases>
 </configuration>

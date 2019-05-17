@@ -19,7 +19,7 @@ http:
 mybatis:
   config-location: classpath:mybatis/mybatis-config.xml
   mapperLocations: classpath:mybatis/mapper/*.xml
-  type-aliases-package: com.chaoliu1995.english.entity,tk.mybatis.springboot.model
+  type-aliases-package: com.chaoliu1995.assistant.entity,tk.mybatis.springboot.model
 mapper:
   mappers: tk.mybatis.mapper.common.Mapper
   notEmpty: true

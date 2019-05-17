@@ -1,0 +1,37 @@
+spring:
+  profiles: example
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password: 123456
+    druid:
+      maxActive: 20
+      initialSize: 5
+      maxWait: 60000
+      minIdle: 5
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      validationQuery: SELECT 1 FROM DUAL
+      poolPreparedStatements: true
+      maxOpenPreparedStatements: 20
+      filters: stat,wall,slf4j
+      maxPoolPreparedStatementPerConnectionSize: -1
+    url: jdbc:mysql://localhost:3306/assistant?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull
+logging:
+  level:
+    org.springframework: INFO
+  file: life-assistant.log
+  path: /
+server:
+  port: 8085
+
+CLIENT_IVV: 1102030405060708
+CLIENT_SKEY: 1234567891234567
+SERVER_IV: 5555aaaa3333qqqq
+SERVER_CRYPT_KEY: 5xx5a22a3mm3q77q
+appId:
+appSecret:

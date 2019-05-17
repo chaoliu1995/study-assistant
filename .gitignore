@@ -1,8 +1,33 @@
-target/
-.project
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
 .classpath
-.settings/
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
 .idea
-English.iml
-english.log
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/build/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+mvnw
+.mvn
+mvnw.cmd
+study-assistant.log
+src/main/resources/application-dev.yml
 src/main/resources/application-prod.yml
+src/main/resources/application-test.yml

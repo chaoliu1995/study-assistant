@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chaoliu1995.assistant.mapper.CommonSetMapper">
+    <sql id="commonListSQL" >
+        <where>
+            type_key=#{typeKey} AND user_id = #{listDTO.userId}
+            <if test="listDTO.keyword != null and listDTO.keyword != ''">
+                AND name LIKE concat('%',#{listDTO.keyword},'%')
+            </if>
+        </where>
+    </sql>
+    <select id="listByCommonListDTO" resultType="CommonSet">
+        SELECT id,name,create_time AS createTime FROM common_set
+        <include refid="commonListSQL"></include>
+        LIMIT #{listDTO.start},#{listDTO.rows}
+    </select>
+    <select id="countByCommonListDTO" resultType="integer">
+        SELECT COUNT(1) FROM common_set
+        <include refid="commonListSQL"></include>
+    </select>
+</mapper>

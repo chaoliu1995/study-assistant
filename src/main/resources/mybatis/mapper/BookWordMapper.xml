@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chaoliu1995.english.dao.BookWordMapper">
+<mapper namespace="com.chaoliu1995.assistant.mapper.BookWordMapper">
 
     <select id="randomGetWaitReviewWordIdByBookIds" resultType="Integer">
         SELECT u.word_id FROM (SELECT DISTINCT word_id FROM book_word WHERE book_id in (${bookIds})) b INNER JOIN
@@ -10,9 +10,22 @@
 
     <select id="countWaitReviewByBookIds" resultType="Integer">
         SELECT COUNT(1) FROM (SELECT DISTINCT word_id FROM book_word WHERE book_id in (${bookIds})) b INNER JOIN
-        (SELECT word_id,show_time FROM user_word WHERE user_id = #{userId}) u ON b.word_id = u.word_id
+                                 (SELECT word_id,show_time FROM user_word WHERE user_id = #{userId}) u ON b.word_id = u.word_id
         WHERE u.show_time &lt; UNIX_TIMESTAMP()
     </select>
+
+    <select id="randomGetWaitReviewWordIdByBookId" resultType="Integer">
+        SELECT u.word_id FROM (SELECT DISTINCT word_id FROM book_word WHERE book_id = #{wordBook.id}) b INNER JOIN
+        (SELECT word_id,show_time FROM user_word WHERE user_id = #{wordBook.userId}) u ON b.word_id = u.word_id
+        WHERE u.show_time &lt; UNIX_TIMESTAMP() ORDER BY RAND() limit 0,1
+    </select>
+
+    <select id="countWaitReviewByBookId" resultType="Integer">
+        SELECT COUNT(1) FROM (SELECT DISTINCT word_id FROM book_word WHERE book_id = ${wordBook.id}) b INNER JOIN
+        (SELECT word_id,show_time FROM user_word WHERE user_id = #{wordBook.userId}) u ON b.word_id = u.word_id
+        WHERE u.show_time &lt; UNIX_TIMESTAMP()
+    </select>
+
     <delete id="deleteByBookId">
         DELETE FROM book_word WHERE book_id = #{bookId}
     </delete>

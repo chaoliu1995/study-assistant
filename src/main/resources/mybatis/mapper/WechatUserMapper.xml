@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.chaoliu1995.english.dao.WechatUserMapper">
+<mapper namespace="com.chaoliu1995.assistant.mapper.WechatUserMapper">
     <sql id="Base_Column_List">
         id,open_id AS openId,union_id AS unionId,user_id AS userId,create_time AS createTime
     </sql>
     <select id="getByUnionId" resultType="WechatUser">
         SELECT <include refid="Base_Column_List"></include>
         FROM wechat_user WHERE union_id = #{unionId}
+    </select>
+    <select id="getByOpenId" resultType="WechatUser">
+        SELECT <include refid="Base_Column_List"></include>
+        FROM wechat_user WHERE open_id = #{openId}
     </select>
 </mapper>

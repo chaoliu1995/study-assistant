@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.chaoliu1995.assistant.mapper.MemoryCardMapper">
+    <sql id="listSQL">
+        <where>
+            card_bag_id = #{listDTO.cardBagId}
+            <if test="listDTO.keyword != null and listDTO.keyword != ''">
+                AND question LIKE CONCAT('%',#{listDTO.keyword},'%')
+            </if>
+        </where>
+    </sql>
+    <select id="countByListDTO" resultType="Integer">
+        SELECT COUNT(1) FROM memory_card
+        <include refid="listSQL"></include>
+    </select>
+    <select id="listByListDTO" resultType="ListMemoryCardResultDTO">
+        SELECT id,question,create_time AS createTime FROM memory_card <include refid="listSQL"></include>
+        LIMIT #{listDTO.start},#{listDTO.rows}
+    </select>
+
+    <select id="randomCardByCurrentTime" resultType="MemoryCard">
+        SELECT id,question,answer,show_time AS showTime,create_time AS createTime FROM memory_card
+        WHERE card_bag_id = #{randomCardDTO.cardBagId} AND show_time &lt; UNIX_TIMESTAMP() ORDER BY RAND() LIMIT 0,1
+    </select>
+    <select id="randomCard" resultType="MemoryCard">
+        SELECT id,question,answer,show_time AS showTime,create_time AS createTime FROM memory_card
+        WHERE card_bag_id = #{randomCardDTO.cardBagId} ORDER BY RAND() LIMIT 0,1
+    </select>
+
+    <update id="updateShowTime">
+        UPDATE memory_card SET show_time = DATE_ADD(NOW(),INTERVAL #{randomCardDTO.interval} ${randomCardDTO.intervalType}),
+        memory_status = #{randomCardDTO.status} WHERE id = #{randomCardDTO.memoryCardId}
+    </update>
+</mapper>

@@ -5,13 +5,13 @@
  Source Server Type    : MySQL
  Source Server Version : 50722
  Source Host           : localhost:3306
- Source Schema         : english
+ Source Schema         : assistant
 
  Target Server Type    : MySQL
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 06/12/2018 19:10:41
+ Date: 29/11/2018 16:58:35
 */
 
 SET NAMES utf8mb4;
@@ -24,205 +24,147 @@ DROP TABLE IF EXISTS `book`;
 CREATE TABLE `book`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `user_id` int(11) NOT NULL COMMENT '创建者的id',
-  `child_ids` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `en_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `isbn` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `translator` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `image_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `douban_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `publish_time` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `create_time` datetime(0) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `name_user_id_unique`(`name`, `user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+  UNIQUE INDEX `isbn_unique`(`isbn`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for book_word
+-- Table structure for checklist
 -- ----------------------------
-DROP TABLE IF EXISTS `book_word`;
-CREATE TABLE `book_word`  (
+DROP TABLE IF EXISTS `checklist`;
+CREATE TABLE `checklist`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `book_id` int(11) NOT NULL,
-  `word_id` int(11) NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `status` tinyint(4) NOT NULL COMMENT '状态',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `create_time` datetime(0) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for checklist_element
+-- ----------------------------
+DROP TABLE IF EXISTS `checklist_element`;
+CREATE TABLE `checklist_element`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `content` varchar(150) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '内容',
+  `checked` tinyint(1) NOT NULL COMMENT '状态',
+  `list_id` int(11) NOT NULL COMMENT '清单id',
+  `parent_id` int(11) NOT NULL COMMENT '父id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for movie
+-- ----------------------------
+DROP TABLE IF EXISTS `movie`;
+CREATE TABLE `movie`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `director` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '导演',
+  `create_time` datetime(0) DEFAULT NULL,
+  `issue_time` datetime(0) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for music
+-- ----------------------------
+DROP TABLE IF EXISTS `music`;
+CREATE TABLE `music`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `issue_time` datetime(0) DEFAULT NULL,
+  `create_time` datetime(0) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for note
+-- ----------------------------
+DROP TABLE IF EXISTS `note`;
+CREATE TABLE `note`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '标题',
+  `content` varchar(10000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '内容',
+  `status` tinyint(4) NOT NULL COMMENT '状态',
+  `user_id` int(11) NOT NULL COMMENT '用户id',
+  `create_time` datetime(0) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for sys_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_permission`;
+CREATE TABLE `sys_permission`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `parent_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for sys_role
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for sys_user
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `type` tinyint(2) NOT NULL COMMENT '账号类型',
+  `status` tinyint(2) NOT NULL COMMENT '状态',
+  `create_time` datetime(0) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for sys_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_role`;
+CREATE TABLE `sys_user_role`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for tag
+-- ----------------------------
+DROP TABLE IF EXISTS `tag`;
+CREATE TABLE `tag`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `movie_count` int(10) UNSIGNED NOT NULL,
+  `book_count` int(10) UNSIGNED NOT NULL,
+  `website_count` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `book_word_unique`(`book_id`, `word_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for cn_definition
--- ----------------------------
-DROP TABLE IF EXISTS `cn_definition`;
-CREATE TABLE `cn_definition`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `pos` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '词类',
-  `defn` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '释义',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 187 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_definition
--- ----------------------------
-DROP TABLE IF EXISTS `en_definition`;
-CREATE TABLE `en_definition`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `pos` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '词类',
-  `defn` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '释义',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 187 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_adj
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_adj`;
-CREATE TABLE `en_defn_adj`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `adj` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '形容词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 193 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_adv
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_adv`;
-CREATE TABLE `en_defn_adv`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `adv` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '副词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 50 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_art
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_art`;
-CREATE TABLE `en_defn_art`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `art` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '冠词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_conj
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_conj`;
-CREATE TABLE `en_defn_conj`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `conj` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '连词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_interj
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_interj`;
-CREATE TABLE `en_defn_interj`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `interj` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '感叹词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_n
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_n`;
-CREATE TABLE `en_defn_n`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `n` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '名词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 354 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_num
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_num`;
-CREATE TABLE `en_defn_num`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `num` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '数词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_prep
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_prep`;
-CREATE TABLE `en_defn_prep`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `prep` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '介词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_pron
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_pron`;
-CREATE TABLE `en_defn_pron`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `pron` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '代词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for en_defn_v
--- ----------------------------
-DROP TABLE IF EXISTS `en_defn_v`;
-CREATE TABLE `en_defn_v`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `v` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '动词解释',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 185 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for pronunciations
--- ----------------------------
-DROP TABLE IF EXISTS `pronunciations`;
-CREATE TABLE `pronunciations`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(255) DEFAULT NULL COMMENT '单词表id',
-  `us` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT '' COMMENT '美语音标',
-  `uk` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '英语音标',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 187 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for uk_audio_addresses
--- ----------------------------
-DROP TABLE IF EXISTS `uk_audio_addresses`;
-CREATE TABLE `uk_audio_addresses`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '发音文件地址',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 373 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for us_audio_addresses
--- ----------------------------
-DROP TABLE IF EXISTS `us_audio_addresses`;
-CREATE TABLE `us_audio_addresses`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `word_id` int(11) DEFAULT NULL COMMENT '单词id',
-  `url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '发音地址url',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 373 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for user
--- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user`  (
-  `id` int(5) NOT NULL AUTO_INCREMENT,
-  `username` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `reviewing_book_id` int(11) DEFAULT NULL,
-  `adding_book_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `username_unique`(`username`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  UNIQUE INDEX `name_userid_unique`(`name`, `user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user_book
@@ -233,43 +175,51 @@ CREATE TABLE `user_book`  (
   `user_id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL,
   `status` tinyint(2) NOT NULL,
+  `create_time` datetime(0) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `user_book_unique`(`user_id`, `book_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Table structure for user_word
--- ----------------------------
-DROP TABLE IF EXISTS `user_word`;
-CREATE TABLE `user_word`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `word_id` int(11) NOT NULL,
-  `search_count` int(10) NOT NULL COMMENT '查询次数',
-  `show_time` bigint(15) DEFAULT NULL COMMENT '下次显示时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `user_word_unique`(`user_id`, `word_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for word
+-- Table structure for user_movie
 -- ----------------------------
-DROP TABLE IF EXISTS `word`;
-CREATE TABLE `word`  (
+DROP TABLE IF EXISTS `user_movie`;
+CREATE TABLE `user_movie`  (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `uk_audio` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '发音url',
-  `us_audio` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '发音的地址',
-  `audio_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '发音文件的名称',
-  `content_type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `cn_definition` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '中文释义',
-  `en_definition` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '英文释义',
-  `content_id` int(11) DEFAULT NULL,
-  `has_audio` int(1) DEFAULT NULL COMMENT '是否有语音 0 无 1 有',
-  `content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '单词内容',
-  `us_pronunciation` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '音标',
-  `uk_pronunciation` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
+  `user_id` int(11) NOT NULL,
+  `movie_id` int(11) NOT NULL,
+  `status` tinyint(2) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `content_unique` (`content`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 187 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+  UNIQUE INDEX `user_movie_unique`(`user_id`, `movie_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for website
+-- ----------------------------
+DROP TABLE IF EXISTS `website`;
+CREATE TABLE `website`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `tags` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` int(10) NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `create_time` datetime(0) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for wechat_user
+-- ----------------------------
+DROP TABLE IF EXISTS `wechat_user`;
+CREATE TABLE `wechat_user`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `open_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `union_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `create_time` datetime(0) NOT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `unionid_key`(`union_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
