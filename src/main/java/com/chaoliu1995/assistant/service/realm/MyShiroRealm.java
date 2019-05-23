@@ -24,7 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -44,7 +43,7 @@ public class MyShiroRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) throws AuthenticationException {
-        User User = (com.chaoliu1995.assistant.entity.User) SecurityUtils.getSubject().getSession().getAttribute(Consts.SESSION_USER);
+        User user = (com.chaoliu1995.assistant.entity.User) SecurityUtils.getSubject().getSession().getAttribute(Consts.SESSION_USER);
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         return authorizationInfo;
     }
@@ -74,11 +73,11 @@ public class MyShiroRealm extends AuthorizingRealm {
             SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(username, password, getName());
             return info;
         }
-        List<User> users = userMapper.listUserByLoginKey(username);
-        if (users == null || users.size() != 1) {
+        //账号密码登录
+        User user = userMapper.selectOne(new User(username));
+        if (user == null) {
             throw new AccountException("用户不存在!");
         }
-        User user = users.get(0);
         if (user.getStatus() - Consts.USER_STATUS_LOCK == 0){
             throw new AccountException("用户被锁定，禁止登录!");
         }
@@ -143,26 +142,26 @@ public class MyShiroRealm extends AuthorizingRealm {
         }else {
             wechatUser = wechatUserMapper.getByUnionId(loginResult.getUnionid());
         }
-        User User;
+        User user;
         if(wechatUser == null){
             Date date = new Date();
-            User = new User();
-            User.setEmail(UUID.randomUUID().toString());
-            User.setName(jsCode);
-            User.setPassword(UUID.randomUUID().toString());
-            User.setStatus(Consts.USER_STATUS_LOCK);
-            User.setCreateTime(date);
-            userMapper.insert(User);
+            user = new User();
+            user.setEmail(UUID.randomUUID().toString());
+            user.setName(jsCode);
+            user.setPassword(UUID.randomUUID().toString());
+            user.setStatus(Consts.USER_STATUS_LOCK);
+            user.setCreateTime(date);
+            userMapper.insert(user);
             wechatUser = new WechatUser();
             wechatUser.setOpenId(loginResult.getOpenid());
             wechatUser.setUnionId(loginResult.getUnionid());
-            wechatUser.setUserId(User.getId());
+            wechatUser.setUserId(user.getId());
             wechatUser.setCreateTime(date);
             wechatUserMapper.insert(wechatUser);
         }else{
-            User = userMapper.selectByPrimaryKey(wechatUser.getUserId());
+            user = userMapper.selectByPrimaryKey(wechatUser.getUserId());
         }
         resultDTO.setStatus(Consts.SUCCESS);
-        resultDTO.setData(User);
+        resultDTO.setData(user);
     }
 }

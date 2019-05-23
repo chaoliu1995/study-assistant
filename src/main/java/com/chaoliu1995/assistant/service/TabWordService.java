@@ -14,17 +14,11 @@ public interface TabWordService {
 	TabWord saveWord(ShanBayResult sbr);
 
 	/**
-	 * 随机获取一个指定用户，指定书籍的待复习的单词
-	 * @param commonIdDTO
+	 * 随机获取一个指定用户，指定单词本的待复习的单词
+	 * @param randomWordDTO
 	 * @param resultDTO
 	 */
-	void getWaitReviewWord(CommonIdDTO commonIdDTO, ResultDTO<WaitReviewDTO> resultDTO);
-
-	/**
-	 * 记忆一个单词，showTime 增加
-	 * @param wordMemoryDTO
-	 */
-	void memory(WordMemoryDTO wordMemoryDTO);
+	void randomWord(RandomWordDTO randomWordDTO, ResultDTO<WaitReviewDTO> resultDTO);
 
 	/**
 	 * 分页获取单词集合，根据 实体属性过滤
@@ -35,16 +29,15 @@ public interface TabWordService {
 
 	/**
 	 * 搜索单词
-	 * @param word
+	 * @param searchDTO
 	 * @param resultDTO
-	 * @param userId
 	 */
-	void search(String word, ResultDTO<TabWord> resultDTO, Integer userId);
+	void search(SearchDTO searchDTO, ResultDTO<TabWord> resultDTO);
 
 	/**
 	 * 查询单词
-	 * @param word
+	 * @param searchDTO
 	 * @param resultDTO
 	 */
-	void getWord(String word, ResultDTO<TabWord> resultDTO);
+	void getWord(SearchDTO searchDTO, ResultDTO<TabWord> resultDTO);
 }

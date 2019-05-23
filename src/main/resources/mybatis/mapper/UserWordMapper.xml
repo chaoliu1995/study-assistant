@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.chaoliu1995.assistant.mapper.UserWordMapper">
-
-    <update id="updateSearchCountByPrimaryKey">
-        UPDATE user_word SET search_count = search_count + 1 WHERE id = #{userWordId}
-    </update>
-
-    <select id="getWordIdByShowTime" resultType="Integer">
-        SELECT word_id FROM user_word WHERE user_id = #{userId} AND show_time &lt; UNIX_TIMESTAMP() ORDER BY RAND() limit 0,1
-    </select>
-
-    <select id="countForWaitReview" resultType="Integer">
-		SELECT COUNT(1) FROM user_word WHERE user_id = #{userId} AND show_time &lt; UNIX_TIMESTAMP()
+    <select id="countWaitReview" resultType="Integer">
+		SELECT COUNT(1) FROM user_word WHERE user_id = #{userId} AND show_time &lt; SYSDATE()
 	</select>
 
-    <update id="memory">
-		UPDATE user_word SET show_time = #{wordMemoryDTO.nextShowTime} WHERE user_id = #{wordMemoryDTO.userId} AND word_id = #{wordMemoryDTO.wordId}
-	</update>
+    <select id="randomWordIdByCurrentTime" resultType="Integer">
+        SELECT word_id FROM user_word WHERE user_id = #{userId} AND show_time &lt; SYSDATE() ORDER BY RAND() LIMIT 0,1
+    </select>
+    <select id="randomWordId" resultType="Integer">
+        SELECT word_id FROM user_word WHERE user_id = #{userId} ORDER BY RAND() LIMIT 0,1
+    </select>
+
+    <update id="updateShowTime">
+        UPDATE user_word SET show_time = DATE_ADD(NOW(),INTERVAL #{randomWordDTO.interval} ${randomWordDTO.intervalType}),
+        memory_status = #{randomWordDTO.status} WHERE user_id = #{randomWordDTO.userId} AND word_id = #{randomWordDTO.wordId}
+    </update>
 </mapper>

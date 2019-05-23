@@ -18,6 +18,10 @@ public class UserBook implements Serializable {
 
     private static final long serialVersionUID = Consts.SERIAL_VERSION_UID;
 
+    public UserBook(Integer bookId){
+        this.bookId = bookId;
+    }
+
     public UserBook(Integer userId, Integer bookId){
         this.userId = userId;
         this.bookId = bookId;

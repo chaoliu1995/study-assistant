@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
  * @Author: ChaoLiu
  * @Description:
@@ -34,17 +32,11 @@ public class LoginServiceImpl implements LoginService {
     public void login(LoginDTO loginDTO, BaseResult resultDTO) {
         logger.info("用户登录："+loginDTO.getUsername());
         try {
-            List<User> userList = userMapper.listUserByLoginKey(loginDTO.getUsername());
-            if(userList == null || userList.size() < 1){
+            User dbUser = userMapper.selectOne(new User(loginDTO.getUsername()));
+            if(dbUser == null){
                 resultDTO.setMessage("账号不存在");
                 return;
             }
-            if(userList.size() > 1){
-                logger.error("同一用户名下存在多条数据：" + loginDTO.getUsername());
-                resultDTO.setMessage("用户数据异常");
-                return;
-            }
-            User dbUser = userList.get(0);
             //客户端密文AES解密
             String decryptPwd = passwordUtils.decryptAES(loginDTO.getPassword(), passwordUtils.getCLIENT_SKEY(), passwordUtils.getCLIENT_IVV());
             //服务器密文AES解密

@@ -1,6 +1,6 @@
 package com.chaoliu1995.assistant.mapper;
 
-import com.chaoliu1995.assistant.dto.WordMemoryDTO;
+import com.chaoliu1995.assistant.dto.RandomWordDTO;
 import com.chaoliu1995.assistant.entity.UserWord;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -13,29 +13,29 @@ import tk.mybatis.mapper.common.Mapper;
  */
 @Component("userWordMapper")
 public interface UserWordMapper extends Mapper<UserWord> {
-
-    /**
-     * 根据主键修改 searchCount 自增 1
-     * @param userWordId
-     */
-    void updateSearchCountByPrimaryKey(@Param("userWordId") Integer userWordId);
-
-    /**
-     * 随机获取一个出现时间小于当前时间的单词
-     * @return
-     */
-    Integer getWordIdByShowTime(@Param("userId") Integer userId);
-
     /**
      * 查询待复习单词总数
      * @return
      */
-    int countForWaitReview(@Param("userId") Integer userId);
+    int countWaitReview(@Param("userId") Integer userId);
 
     /**
-     * 记忆一个单词
-     * @param wordMemoryDTO
+     * 根据用户id，和当前时间，随机获取一个单词
+     * @param userId
      * @return
      */
-    int memory(@Param("wordMemoryDTO") WordMemoryDTO wordMemoryDTO);
+    Integer randomWordIdByCurrentTime(@Param("userId") Integer userId);
+
+    /**
+     * 根据用户id，随机获取一个单词
+     * @param userId
+     * @return
+     */
+    Integer randomWordId(@Param("userId") Integer userId);
+
+    /**
+     * 更新单词的下次出现时间
+     * @param randomWordDTO
+     */
+    void updateShowTime(@Param("randomWordDTO") RandomWordDTO randomWordDTO);
 }

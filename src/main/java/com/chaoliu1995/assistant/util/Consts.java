@@ -26,6 +26,7 @@ public class Consts {
 	public static final String WECHAT_MINI_PROGRAM_LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session";
 	public static final String QUESTION_MARK = "?";
 
+	public static final int ZERO = 0;
 	public static final int ONE = 1;
 	public static final int TWO = 2;
 	public static final int USER_STATUS_LOCK = TWO;

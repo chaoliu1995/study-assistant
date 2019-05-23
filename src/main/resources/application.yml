@@ -1,10 +1,6 @@
 spring:
   profiles:
     active: dev
-  activemq:
-    in-memory: true
-    pool:
-      enabled: false
 server:
   tomcat:
     access-log-enabled: true

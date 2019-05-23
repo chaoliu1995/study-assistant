@@ -15,4 +15,5 @@ public class SearchDTO {
     @Pattern(regexp = "^[A-Za-z]+$",message = "请输入正确的英文单词")
     @Size(min = 1,max = 100,message = "你确定有超过100个字母的单词吗？")
     private String word;
+    private Integer userId;
 }

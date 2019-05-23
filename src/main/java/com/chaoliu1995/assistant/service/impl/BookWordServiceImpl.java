@@ -3,18 +3,18 @@ package com.chaoliu1995.assistant.service.impl;
 import com.chaoliu1995.assistant.dto.*;
 import com.chaoliu1995.assistant.entity.BookWord;
 import com.chaoliu1995.assistant.entity.CommonSet;
+import com.chaoliu1995.assistant.entity.UserBook;
+import com.chaoliu1995.assistant.entity.UserWord;
 import com.chaoliu1995.assistant.entity.shanbay.TabWord;
-import com.chaoliu1995.assistant.mapper.BookWordMapper;
-import com.chaoliu1995.assistant.mapper.CommonSetMapper;
-import com.chaoliu1995.assistant.mapper.TabWordMapper;
+import com.chaoliu1995.assistant.mapper.*;
 import com.chaoliu1995.assistant.service.BookWordService;
 import com.chaoliu1995.assistant.util.Consts;
-import com.chaoliu1995.assistant.util.EntityUtils;
 import com.chaoliu1995.assistant.util.Pager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,16 +35,25 @@ public class BookWordServiceImpl implements BookWordService {
     @Autowired
     private TabWordMapper tabWordMapper;
 
+    @Autowired
+    private UserBookMapper userBookMapper;
+
+    @Autowired
+    private UserWordMapper userWordMapper;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void addWordBook(CommonAddDTO commonAddDTO, BaseResult result) {
         List<CommonSet> list = commonSetMapper.select(new CommonSet(Consts.WORD_BOOK,commonAddDTO.getUserId(),commonAddDTO.getCommonName()));
-        if(list != null){
-            result.setMessage("书籍名称已存在");
+        if(list != null && list.size() > 0){
+            result.setMessage("单词本已存在");
             return;
         }
         CommonSet commonSet = new CommonSet(Consts.WORD_BOOK,commonAddDTO.getUserId(),commonAddDTO.getCommonName());
+        commonSet.setCreateTime(new Date());
         commonSetMapper.insert(commonSet);
+        UserBook userBook = new UserBook(commonAddDTO.getUserId(),commonSet.getId());
+        userBookMapper.insert(userBook);
         result.setStatus(Consts.SUCCESS);
     }
 
@@ -65,15 +74,19 @@ public class BookWordServiceImpl implements BookWordService {
             result.setMessage("单词不存在");
             return;
         }
-        BookWord bookWord = new BookWord();
-        bookWord.setBookId(commonSet.getId());
-        bookWord.setWordId(tabWord.getId());
+        BookWord bookWord = new BookWord(commonSet.getId(),tabWord.getId());
         BookWord tempBookWord = bookWordMapper.selectOne(bookWord);
         if(tempBookWord != null){
             result.setMessage("单词已存在");
             return;
         }
         bookWordMapper.insert(bookWord);
+        UserWord userWord = new UserWord(insertBookWordDTO.getUserId(),insertBookWordDTO.getWordId());
+        UserWord tempUserWord = userWordMapper.selectOne(userWord);
+        if(tempUserWord == null){
+            userWord.init();
+            userWordMapper.insert(userWord);
+        }
         result.setStatus(Consts.SUCCESS);
     }
 
@@ -96,16 +109,23 @@ public class BookWordServiceImpl implements BookWordService {
         return commonSetMapper.selectByPrimaryKey(wordBookId);
     }
 
-
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void deleteWordBook(CommonIdDTO commonIdDTO, BaseResult result) {
-        CommonSet commonSet = commonSetMapper.selectByPrimaryKey(commonIdDTO.getCommonId());
-        if(EntityUtils.identityConfirm(commonSet,commonIdDTO.getUserId(),result,"单词书")){
+        UserBook userBook = userBookMapper.selectOne(new UserBook(commonIdDTO.getUserId(),commonIdDTO.getCommonId()));
+        if(userBook == null){
+            result.setMessage("单词本不存在");
             return;
         }
-        commonSetMapper.deleteByPrimaryKey(commonSet.getId());
-        bookWordMapper.deleteByBookId(commonSet.getId());
+        CommonSet commonSet = commonSetMapper.selectByPrimaryKey(commonIdDTO.getCommonId());
+        if(commonSet.getUserId() - commonIdDTO.getUserId() == 0){
+            List<UserBook> userBooks = userBookMapper.select(new UserBook(commonIdDTO.getCommonId()));
+            if(userBooks.size() - Consts.ONE == 0){
+                commonSetMapper.deleteByPrimaryKey(commonSet.getId());
+                bookWordMapper.delete(new BookWord(commonIdDTO.getCommonId()));
+            }
+        }
+        userBookMapper.deleteByPrimaryKey(userBook);
         result.setStatus(Consts.SUCCESS);
     }
 }

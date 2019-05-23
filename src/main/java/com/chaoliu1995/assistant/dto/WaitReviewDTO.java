@@ -17,5 +17,8 @@ import java.io.Serializable;
 public class WaitReviewDTO implements Serializable {
     private static final long serialVersionUID = Consts.SERIAL_VERSION_UID;
     private TabWord word;
+    /**
+     * 待复习单词总数
+     */
     private Integer total;
 }

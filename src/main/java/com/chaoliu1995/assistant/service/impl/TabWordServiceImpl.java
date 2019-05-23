@@ -2,13 +2,11 @@ package com.chaoliu1995.assistant.service.impl;
 
 import com.chaoliu1995.assistant.config.Config;
 import com.chaoliu1995.assistant.dto.*;
-import com.chaoliu1995.assistant.entity.CommonSet;
 import com.chaoliu1995.assistant.entity.UserBook;
 import com.chaoliu1995.assistant.entity.UserWord;
 import com.chaoliu1995.assistant.entity.shanbay.*;
 import com.chaoliu1995.assistant.mapper.*;
 import com.chaoliu1995.assistant.model.*;
-import com.chaoliu1995.assistant.mq.Producer;
 import com.chaoliu1995.assistant.service.TabWordService;
 import com.chaoliu1995.assistant.util.*;
 import org.slf4j.Logger;
@@ -77,12 +75,6 @@ public class TabWordServiceImpl implements TabWordService {
     private Config projectConfig;
 
 	@Autowired
-	private CommonSetMapper commonSetMapper;
-
-	@Autowired
-	private Producer producer;
-
-	@Autowired
 	private UserWordMapper userWordMapper;
 
 	@Autowired
@@ -93,13 +85,56 @@ public class TabWordServiceImpl implements TabWordService {
 
 	@Override
 	@Transactional(rollbackFor = Exception.class)
+	public void search(SearchDTO searchDTO, ResultDTO<TabWord> resultDTO) {
+		ShanBayResult shanBay;
+		String result;
+		try {
+			result = HttpUtils.get(Consts.SHAN_BAY_SEARCH_URL+searchDTO.getWord(),Consts.CHARSET);
+			shanBay = StringUtils.getGson().fromJson(result,ShanBayResult.class);
+		} catch (Exception e) {
+			e.printStackTrace();
+			resultDTO.setMessage("请求扇贝API出现异常");
+			return;
+		}
+		if(shanBay == null){
+			resultDTO.setMessage("请求扇贝API出现异常");
+			return;
+		}
+		if(!shanBay.getMsg().equals("SUCCESS") || !shanBay.getStatus_code().equals("0")){
+			resultDTO.setMessage(shanBay.getMsg());
+			return;
+		}
+		//扇贝接口在查询 englishs 这样的单词时，会返回 english，这里做一下处理，防止二次保存
+		List<TabWord> dbWords = tabWordMapper.select(new TabWord(shanBay.getData().getContent()));
+		if(dbWords != null && dbWords.size() > 0){
+			resultDTO.setData(dbWords.get(0));
+			resultDTO.setStatus(Consts.SUCCESS);
+			return;
+		}
+		TabWord tabWord = this.saveWord(shanBay);
+		if(tabWord == null || tabWord.getId() == null){
+			resultDTO.setMessage("保存单词出现异常");
+			return;
+		}
+		UserWord userWord = new UserWord(searchDTO.getUserId(),tabWord.getId());
+		UserWord tempUserWord = userWordMapper.selectOne(userWord);
+		if(tempUserWord == null){
+			userWord.init();
+			userWordMapper.insert(userWord);
+		}
+		resultDTO.setData(tabWord);
+		resultDTO.setStatus(Consts.SUCCESS);
+	}
+
+	@Override
+	@Transactional(rollbackFor = Exception.class)
 	public TabWord saveWord(ShanBayResult sbr) {
 		Word word = sbr.getData();
 		logger.info("保存新的单词：" + word.getContent());
 		//保存单词发音文件
 		if(!StringUtils.isEmpty(word.getUk_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getAudio_name() + ".mp3",projectConfig.getFileAudioPath() + Consts.UK_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUk_audio(),word.getContent() + ".mp3",projectConfig.getFileAudioPath() + Consts.UK_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -108,7 +143,7 @@ public class TabWordServiceImpl implements TabWordService {
 		
 		if(!StringUtils.isEmpty(word.getUs_audio())){
 			try {
-				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getAudio_name() + ".mp3",projectConfig.getFileAudioPath() + Consts.US_AUDIO_PATH);
+				FileUtils.downLoadFromUrl(word.getUs_audio(),word.getContent() + ".mp3",projectConfig.getFileAudioPath() + Consts.US_AUDIO_PATH);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -276,62 +311,113 @@ public class TabWordServiceImpl implements TabWordService {
 	}
 
 	@Override
-	public void getWaitReviewWord(CommonIdDTO commonIdDTO, ResultDTO<WaitReviewDTO> resultDTO){
-        WaitReviewDTO waitReviewDTO = new WaitReviewDTO();
-        if(commonIdDTO.getCommonId() == null){
-			Integer wordId = userWordMapper.getWordIdByShowTime(commonIdDTO.getUserId());
+	@Transactional(rollbackFor = Exception.class)
+	public void randomWord(RandomWordDTO randomWordDTO, ResultDTO<WaitReviewDTO> resultDTO){
+		if(randomWordDTO.getWordId() != null){
+			UserWord userWord = userWordMapper.selectOne(new UserWord(randomWordDTO.getUserId(),randomWordDTO.getWordId()));
+			if(userWord == null){
+				resultDTO.setMessage("单词不存在");
+				return;
+			}
+			if(randomWordDTO.getStatus() - Consts.MEMORY_STATUS_10 > 0){
+				randomWordDTO.setIntervalType(Consts.DAY);
+				randomWordDTO.setInterval(365);
+				randomWordDTO.setStatus(Consts.MEMORY_STATUS_10);
+				userWordMapper.updateShowTime(randomWordDTO);
+			}else{
+				int memoryStatus = 0;
+				if(randomWordDTO.getStatus() - Consts.MEMORY_STATUS_10 == 0){
+					memoryStatus = userWord.getMemoryStatus();
+					randomWordDTO.setStatus(userWord.getMemoryStatus() + Consts.ONE);
+				}else if(randomWordDTO.getStatus() - Consts.MEMORY_STATUS_10 < 0){
+					memoryStatus = randomWordDTO.getStatus();
+					randomWordDTO.setStatus(randomWordDTO.getStatus() + Consts.ONE);
+				}
+				switch (memoryStatus){
+					case Consts.MEMORY_STATUS_1:
+						randomWordDTO.setIntervalType(Consts.MINUTE);
+						randomWordDTO.setInterval(5);
+						break;
+					case Consts.MEMORY_STATUS_2:
+						randomWordDTO.setIntervalType(Consts.MINUTE);
+						randomWordDTO.setInterval(30);
+						break;
+					case Consts.MEMORY_STATUS_3:
+						randomWordDTO.setIntervalType(Consts.HOUR);
+						randomWordDTO.setInterval(12);
+						break;
+					case Consts.MEMORY_STATUS_4:
+						randomWordDTO.setIntervalType(Consts.DAY);
+						randomWordDTO.setInterval(1);
+						break;
+					case Consts.MEMORY_STATUS_5:
+						randomWordDTO.setIntervalType(Consts.DAY);
+						randomWordDTO.setInterval(2);
+						break;
+					case Consts.MEMORY_STATUS_6:
+						randomWordDTO.setIntervalType(Consts.DAY);
+						randomWordDTO.setInterval(4);
+						break;
+					case Consts.MEMORY_STATUS_7:
+						randomWordDTO.setIntervalType(Consts.DAY);
+						randomWordDTO.setInterval(7);
+						break;
+					case Consts.MEMORY_STATUS_8:
+						randomWordDTO.setIntervalType(Consts.DAY);
+						randomWordDTO.setInterval(15);
+						break;
+					case Consts.MEMORY_STATUS_9:
+						randomWordDTO.setIntervalType(Consts.DAY);
+						randomWordDTO.setInterval(30);
+						break;
+				}
+				userWordMapper.updateShowTime(randomWordDTO);
+			}
+		}
+
+		WaitReviewDTO waitReviewDTO = new WaitReviewDTO();
+		if(randomWordDTO.getBookId() != null){
+			UserBook userBook = userBookMapper.selectOne(new UserBook(randomWordDTO.getUserId(),randomWordDTO.getBookId()));
+			if(userBook == null){
+				resultDTO.setMessage("单词本不存在");
+				return;
+			}
+			Integer wordId = bookWordMapper.randomWordIdByCurrentTime(randomWordDTO.getUserId(),randomWordDTO.getBookId());
 			if(wordId == null){
-				resultDTO.setMessage("所有待复习的单词已全部复习完成");
-				resultDTO.setStatus(Consts.SUCCESS);
+				wordId = bookWordMapper.randomWordId(randomWordDTO.getUserId(),randomWordDTO.getBookId());
+				waitReviewDTO.setTotal(Consts.ZERO);
+			}else{
+				int total = bookWordMapper.countWaitReview(randomWordDTO.getUserId(),randomWordDTO.getBookId());
+				waitReviewDTO.setTotal(total);
+			}
+			if(wordId == null){
+				resultDTO.setMessage("单词本中还没有单词");
 				return;
 			}
 			TabWord tabWord = tabWordMapper.selectByPrimaryKey(wordId);
 			waitReviewDTO.setWord(tabWord);
-			int total = userWordMapper.countForWaitReview(commonIdDTO.getUserId());
-			waitReviewDTO.setTotal(total);
 			resultDTO.setData(waitReviewDTO);
 			resultDTO.setStatus(Consts.SUCCESS);
 			return;
 		}
 
-		CommonSet commonSet = commonSetMapper.selectByPrimaryKey(commonIdDTO.getCommonId());
-		if(commonSet == null){
-			resultDTO.setMessage("单词书不存在");
-			return;
-		}
-		UserBook userBook = new UserBook(commonIdDTO.getUserId(),commonIdDTO.getCommonId());
-		userBook = userBookMapper.selectOne(userBook);
-		if(userBook == null){
-			resultDTO.setMessage("当前登录用户和此单词书没有关联，禁止操作");
-			return;
-		}
-		/*String bookIds;
-		if(StringUtils.isEmpty(book.getChildIds())){
-			bookIds = book.getId().toString();
-		}else{
-			bookIds = book.getChildIds().substring(1) + book.getId();
-		}
-		Integer wordId = bookWordMapper.randomGetWaitReviewWordIdByBookIds(bookIds,reviewWordDTO.getUserId());
-		 */
-		Integer wordId = bookWordMapper.randomGetWaitReviewWordIdByBookId(commonSet);
+		Integer wordId = userWordMapper.randomWordIdByCurrentTime(randomWordDTO.getUserId());
 		if(wordId == null){
-			resultDTO.setMessage("所有待复习的单词已全部复习完成");
+			wordId = userWordMapper.randomWordId(randomWordDTO.getUserId());
+			waitReviewDTO.setTotal(Consts.ZERO);
+		}else{
+			int total = userWordMapper.countWaitReview(randomWordDTO.getUserId());
+			waitReviewDTO.setTotal(total);
+		}
+		if(wordId == null){
+			resultDTO.setMessage("您还未查询或添加过任何一个单词");
 			return;
 		}
 		TabWord tabWord = tabWordMapper.selectByPrimaryKey(wordId);
 		waitReviewDTO.setWord(tabWord);
-		//int total = bookWordMapper.countWaitReviewByBookIds(bookIds,reviewWordDTO.getUserId());
-		int total = bookWordMapper.countWaitReviewByBookId(commonSet);
-		waitReviewDTO.setTotal(total);
 		resultDTO.setData(waitReviewDTO);
 		resultDTO.setStatus(Consts.SUCCESS);
-	}
-
-
-	@Override
-	@Transactional(rollbackFor = Exception.class)
-	public void memory(WordMemoryDTO wordMemoryDTO) {
-		userWordMapper.memory(wordMemoryDTO);
+		return;
 	}
 
 	@Override
@@ -346,51 +432,20 @@ public class TabWordServiceImpl implements TabWordService {
 		resultsDTO.setStatus(Consts.SUCCESS);
 	}
 
-
 	@Override
-	public void search(String word, ResultDTO<TabWord> resultDTO,Integer userId) {
-		ShanBayResult shanBay;
-		String result;
-		try {
-			result = HttpUtils.get(Consts.SHAN_BAY_SEARCH_URL+word,Consts.CHARSET);
-			shanBay = StringUtils.getGson().fromJson(result,ShanBayResult.class);
-		} catch (Exception e) {
-			e.printStackTrace();
-			resultDTO.setMessage("请求扇贝API出现异常");
-			return;
-		}
-		if(shanBay == null){
-			resultDTO.setMessage("请求扇贝API出现异常");
-			return;
-		}
-		if(!shanBay.getMsg().equals("SUCCESS") || !shanBay.getStatus_code().equals("0")){
-			resultDTO.setMessage(shanBay.getMsg());
-			return;
-		}
-		//扇贝接口在查询 englishs 这样的单词时，会返回 english，这里做一下处理，防止二次保存
-		List<TabWord> dbWords = tabWordMapper.select(new TabWord(shanBay.getData().getContent()));
-		if(dbWords != null && dbWords.size() > 0){
-			resultDTO.setData(dbWords.get(0));
-			resultDTO.setStatus(Consts.SUCCESS);
-			return;
-		}
-		TabWord tabWord = saveWord(shanBay);
-		if(tabWord == null || tabWord.getId() == null){
-			resultDTO.setMessage("保存单词出现异常");
-			return;
-		}
-		producer.sendMessage(Consts.USER_WORD_QUEUE,StringUtils.getGson().toJson(new UserWord(userId,tabWord.getId())));
-		resultDTO.setData(tabWord);
-		resultDTO.setStatus(Consts.SUCCESS);
-	}
-
-	@Override
-	public void getWord(String word, ResultDTO<TabWord> resultDTO) {
-		List<TabWord> tabWordList = tabWordMapper.select(new TabWord(word));
+	@Transactional(rollbackFor = Exception.class)
+	public void getWord(SearchDTO searchDTO, ResultDTO<TabWord> resultDTO) {
+		List<TabWord> tabWordList = tabWordMapper.select(new TabWord(searchDTO.getWord()));
 		if(tabWordList == null || tabWordList.size() < 1){
 			return;
 		}
 		resultDTO.setData(tabWordList.get(0));
+		UserWord userWord = new UserWord(searchDTO.getUserId(),tabWordList.get(0).getId());
+		UserWord tempUserWord = userWordMapper.selectOne(userWord);
+		if(tempUserWord == null){
+			userWord.init();
+			userWordMapper.insert(userWord);
+		}
 		resultDTO.setStatus(Consts.SUCCESS);
 	}
 }

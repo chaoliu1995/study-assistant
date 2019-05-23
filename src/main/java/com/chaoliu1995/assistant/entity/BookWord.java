@@ -22,4 +22,13 @@ public class BookWord implements java.io.Serializable {
     private Integer id;
     private Integer bookId;
     private Integer wordId;
+
+    public BookWord(Integer bookId){
+        this.bookId = bookId;
+    }
+
+    public BookWord(Integer bookId,Integer wordId){
+        this.bookId = bookId;
+        this.wordId = wordId;
+    }
 }

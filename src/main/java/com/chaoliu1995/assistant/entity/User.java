@@ -2,7 +2,6 @@ package com.chaoliu1995.assistant.entity;
 
 import com.chaoliu1995.assistant.util.Consts;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,10 +16,15 @@ import java.util.Date;
  * @CreateDate: 2017年10月21日 下午7:43:00
  */
 @Data
-@NoArgsConstructor
 public class User implements Serializable {
 
     private static final long serialVersionUID = Consts.SERIAL_VERSION_UID;
+
+    public User(){}
+
+    public User(String email){
+        this.email = email;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
