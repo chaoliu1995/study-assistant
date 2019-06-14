@@ -20,11 +20,8 @@ spring:
       maxOpenPreparedStatements: 20
       filters: stat,wall,slf4j
       maxPoolPreparedStatementPerConnectionSize: -1
-    url: jdbc:mysql://localhost:3306/assistant?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/assistant?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull
 logging:
-  level:
-    org.springframework: INFO
-  file: life-assistant.log
   path: /
 server:
   port: 8085

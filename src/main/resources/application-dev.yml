@@ -20,14 +20,9 @@ spring:
       maxOpenPreparedStatements: 20
       filters: stat,wall,slf4j
       maxPoolPreparedStatementPerConnectionSize: -1
-    url: jdbc:mysql://localhost:3306/study?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull
+    url: jdbc:mysql://localhost:3306/study?useSSL=false&amp;useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;zeroDateTimeBehavior=convertToNull
 logging:
-  level:
-    org.springframework: INFO
-    org.chaoliu1995.assistant.mapper: DEBUG
-    org.chaoliu1995.assistant: INFO
-  file: study-assistant.log
-  path: /
+  path: D:\\logs\\
 server:
   port: 8085
 

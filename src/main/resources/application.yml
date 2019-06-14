@@ -19,3 +19,5 @@ mybatis:
 mapper:
   mappers: tk.mybatis.mapper.common.Mapper
   notEmpty: true
+logging:
+  config: classpath:logback-spring.xml
