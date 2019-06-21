@@ -10,9 +10,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
  * @Description:
  * @Date: 2019/4/15 16:03
  */
-@Api( description = "记忆卡片", basePath = "/memoryCard")
+@Api( tags = "记忆卡片", produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
 @RequestMapping("/memoryCard")
 public class MemoryCardController extends BaseController {
@@ -31,7 +31,7 @@ public class MemoryCardController extends BaseController {
     private MemoryCardService memoryCardService;
 
     @ApiOperation(value="添加卡片")
-    @RequestMapping(value = "/add", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/add")
     public BaseResult add(@RequestBody @Valid AddMemoryCardDTO addMemoryCardDTO, BindingResult bindingResult){
         BaseResult result = new BaseResult();
         if (bindingResult.hasErrors()){
@@ -44,7 +44,7 @@ public class MemoryCardController extends BaseController {
     }
 
     @ApiOperation(value="删除卡片")
-    @RequestMapping(value = "/delete", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/delete")
     public BaseResult delete(@RequestBody CommonIdDTO commonIdDTO){
         BaseResult result = new BaseResult();
         if(commonIdDTO.getCommonId() == null){
@@ -57,7 +57,7 @@ public class MemoryCardController extends BaseController {
     }
 
     @ApiOperation(value="分页获取数据")
-    @RequestMapping(value = "/list", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/list")
     public ResultsDTO<ListMemoryCardResultDTO> listByTags(@RequestBody @Valid ListMemoryCardDTO listDTO, BindingResult bindingResult){
         ResultsDTO<ListMemoryCardResultDTO> resultsDTO = new ResultsDTO<>();
         if (bindingResult.hasErrors()){
@@ -70,7 +70,7 @@ public class MemoryCardController extends BaseController {
     }
 
     @ApiOperation(value="添加卡包")
-    @RequestMapping(value = "/cardBag/add", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/cardBag/add")
     public BaseResult addCardBag(@RequestBody CommonAddDTO commonAddDTO){
         BaseResult result = new BaseResult();
         if(StringUtils.isEmpty(commonAddDTO.getCommonName())){
@@ -83,7 +83,7 @@ public class MemoryCardController extends BaseController {
     }
 
     @ApiOperation(value="删除卡包")
-    @RequestMapping(value = "/cardBag/delete", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/cardBag/delete")
     public BaseResult deleteCardBag(@RequestBody CommonIdDTO commonIdDTO){
         BaseResult result = new BaseResult();
         if(commonIdDTO.getCommonId() == null){
@@ -96,7 +96,7 @@ public class MemoryCardController extends BaseController {
     }
 
     @ApiOperation(value="分页获取卡包")
-    @RequestMapping(value = "/cardBag/list", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/cardBag/list")
     public ResultsDTO<CommonSet> listCardBag(@RequestBody @Valid CommonListDTO listDTO, BindingResult bindingResult){
         ResultsDTO<CommonSet> resultsDTO = new ResultsDTO<>();
         if (bindingResult.hasErrors()){
@@ -109,7 +109,7 @@ public class MemoryCardController extends BaseController {
     }
 
     @ApiOperation(value="随机抽取一张卡片")
-    @RequestMapping(value = "/random", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/random")
     public ResultDTO<MemoryCard> randomCard(@RequestBody RandomCardDTO randomCardDTO){
         ResultDTO<MemoryCard> resultDTO = new ResultDTO<>();
         if(randomCardDTO.getCardBagId() == null){
@@ -122,7 +122,7 @@ public class MemoryCardController extends BaseController {
     }
 
     @ApiOperation(value="根据id返回卡片全部信息")
-    @RequestMapping(value = "/get", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/get")
     public ResultDTO<MemoryCard> get(@RequestBody CommonIdDTO commonIdDTO){
         ResultDTO<MemoryCard> resultDTO = new ResultDTO<>();
         if(commonIdDTO.getCommonId() == null){
@@ -135,7 +135,7 @@ public class MemoryCardController extends BaseController {
     }
 
     @ApiOperation(value="修改卡片数据")
-    @RequestMapping(value = "/update", method= RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/update")
     public BaseResult update(@RequestBody @Valid UpdateMemoryCardDTO updateMemoryCardDTO, BindingResult bindingResult){
         BaseResult result = new BaseResult();
         if (bindingResult.hasErrors()){

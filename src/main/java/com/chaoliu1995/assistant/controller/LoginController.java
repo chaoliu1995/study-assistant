@@ -6,6 +6,7 @@ import com.chaoliu1995.assistant.util.Consts;
 import com.chaoliu1995.assistant.util.StringUtils;
 import com.chaoliu1995.assistant.util.VerifyCodeUtils;
 import io.nayuki.qrcodegen.QrCode;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
@@ -17,9 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.imageio.ImageIO;
@@ -33,6 +34,7 @@ import java.util.UUID;
  * @Description:
  * @Date: 2018/10/29 17:53
  */
+@Api(tags = "登录", produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Controller
 public class LoginController extends BaseController {
 
@@ -42,7 +44,7 @@ public class LoginController extends BaseController {
     private MemoryStorage memoryStorage;
 
     @ApiOperation(value="登录")
-    @RequestMapping(value="/login", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/login")
     @ResponseBody
     public BaseResult login(@RequestBody @Valid LoginDTO loginDTO, BindingResult bindingResult){
         BaseResult baseResult = new BaseResult();
@@ -81,7 +83,7 @@ public class LoginController extends BaseController {
             @ApiImplicitParam(name = "width", value = "宽度", required = false, dataType = "integer"),
             @ApiImplicitParam(name = "height", value = "高度", required = false, dataType = "integer")
     })
-    @RequestMapping(value = "/login/verifyCode", method = RequestMethod.GET, produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/login/verifyCode", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public void verifyCode(Integer width,Integer height) throws IOException {
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
@@ -101,7 +103,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="查询登录状态")
-    @RequestMapping(value = "/login/status", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/login/status")
     @ResponseBody
     public ResultDTO<Boolean> status(){
         ResultDTO<Boolean> resultDTO = new ResultDTO<>();
@@ -115,7 +117,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="退出登录")
-    @RequestMapping(value = "/login/out", method=RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/login/out")
     @ResponseBody
     public BaseResult loginOut(){
         BaseResult result = new BaseResult();
@@ -127,7 +129,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="微信小程序登录")
-    @RequestMapping(value = "/login/wechat/miniProgram", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/login/wechat/miniProgram")
     @ResponseBody
     public ResultDTO<Boolean> miniProgramLogin(@RequestBody WeChatMiniProgramLoginDTO loginDTO){
         ResultDTO<Boolean> resultDTO = new ResultDTO<>();
@@ -150,7 +152,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="获取登录二维码")
-    @RequestMapping(value = "/login/qrCode", method = RequestMethod.GET)
+    @GetMapping(value = "/login/qrCode")
     @ResponseBody
     public void qrCode() throws IOException{
         if(session.getAttribute(Consts.SESSION_USER) != null){
@@ -169,7 +171,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="扫码登录")
-    @RequestMapping(value = "/login/scanCode", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/login/scanCode")
     @ResponseBody
     public BaseResult scanCode(@RequestBody ScanCodeLoginDTO loginDTO){
         BaseResult result = new BaseResult();
@@ -192,7 +194,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="检测是否已扫码登录")
-    @RequestMapping(value = "/login/scanCode/doLogin", method = RequestMethod.POST, produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping("/login/scanCode/doLogin")
     @ResponseBody
     public ResultDTO<Boolean> scanCodeLogin(){
         ResultDTO result = new ResultDTO();

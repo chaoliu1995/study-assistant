@@ -7,12 +7,13 @@ import com.chaoliu1995.assistant.entity.CommonSet;
 import com.chaoliu1995.assistant.service.BookWordService;
 import com.chaoliu1995.assistant.service.UserService;
 import com.chaoliu1995.assistant.util.Consts;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @Description:
  * @Date: 2018/12/6 14:37
  */
+@Api(tags = "用户相关", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
 @RequestMapping("/user")
 public class UserController extends BaseController {
@@ -30,8 +32,8 @@ public class UserController extends BaseController {
     @Autowired
     private BookWordService bookWordService;
 
-    @ApiOperation(value="修改正在复习的单词本", notes="")
-    @RequestMapping(value="/reviewingBook/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation("修改正在复习的单词本")
+    @PostMapping("/reviewingBook/update")
     public BaseResult updateReviewingBook(@RequestBody CommonIdDTO commonIdDTO){
         BaseResult result = new BaseResult();
         commonIdDTO.setUserId(getUser().getId());
@@ -42,8 +44,8 @@ public class UserController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="修改正在添加单词的单词本", notes="")
-    @RequestMapping(value="/addingBook/update", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation("修改正在添加单词的单词本")
+    @PostMapping("/addingBook/update")
     public BaseResult updateAddingBook(@RequestBody CommonIdDTO commonIdDTO){
         BaseResult result = new BaseResult();
         commonIdDTO.setUserId(getUser().getId());
@@ -54,8 +56,8 @@ public class UserController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="获取当前用户正在复习的单词本", notes="")
-    @RequestMapping(value="/reviewingBook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation("获取当前用户正在复习的单词本")
+    @PostMapping("/reviewingBook")
     public ResultDTO<CommonSet> getReviewingBook(){
         ResultDTO<CommonSet> resultDTO = new ResultDTO<>();
         Integer bookId = getUser().getReviewingBookId();
@@ -67,8 +69,8 @@ public class UserController extends BaseController {
         return resultDTO;
     }
 
-    @ApiOperation(value="获取当前用户正在添加单词的单词本", notes="")
-    @RequestMapping(value="/addingBook", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation("获取当前用户正在添加单词的单词本")
+    @PostMapping("/addingBook")
     public ResultDTO<CommonSet> getAddingBook(){
         ResultDTO<CommonSet> resultDTO = new ResultDTO<>();
         Integer bookId = getUser().getAddingBookId();

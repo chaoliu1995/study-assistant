@@ -10,9 +10,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
  * @Description:
  * @Date: 2018/12/5 14:11
  */
-@Api(description = "单词本相关接口", basePath = "/wordBook")
+@Api(tags = "单词本相关接口", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
 @RequestMapping("/wordBook")
 public class BookWordController extends BaseController {
@@ -30,8 +30,8 @@ public class BookWordController extends BaseController {
     @Autowired
     private BookWordService bookWordService;
 
-    @ApiOperation(value="添加单词本", notes="")
-    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value="添加单词本")
+    @PostMapping(value = "/add")
     public BaseResult add(@RequestBody CommonAddDTO commonAddDTO){
         BaseResult result = new BaseResult();
         if(StringUtils.isEmpty(commonAddDTO.getCommonName())){
@@ -43,8 +43,8 @@ public class BookWordController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="删除单词本", notes="")
-    @RequestMapping(value = "/delete", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value="删除单词本")
+    @PostMapping(value = "/delete")
     public BaseResult delete(@RequestBody CommonIdDTO commonIdDTO){
         BaseResult result = new BaseResult();
         if (commonIdDTO.getCommonId() == null){
@@ -64,8 +64,8 @@ public class BookWordController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="给单词本中添加单词", notes="")
-    @RequestMapping(value = "/word/add", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value="给单词本中添加单词")
+    @PostMapping(value = "/word/add")
     public BaseResult addWord(@RequestBody @Valid InsertBookWordDTO insertBookWordDTO, BindingResult bindingResult){
         BaseResult result = new BaseResult();
         if (bindingResult.hasErrors()){
@@ -77,8 +77,8 @@ public class BookWordController extends BaseController {
         return result;
     }
 
-    @ApiOperation(value="分页获取单词本列表", notes="")
-    @RequestMapping(value = "/list", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ApiOperation(value="分页获取单词本列表")
+    @PostMapping(value = "/list")
     public ResultsDTO<CommonSet> listBook(@RequestBody @Valid CommonListDTO listDTO, BindingResult bindingResult){
         ResultsDTO<CommonSet> resultsDTO = new ResultsDTO<>();
         if (bindingResult.hasErrors()){
