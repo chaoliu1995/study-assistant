@@ -26,7 +26,7 @@ import javax.validation.Valid;
  */
 @Api(tags = "单词相关接口", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
-@RequestMapping("/word")
+@RequestMapping("/api/word")
 public class WordController extends BaseController{
 
     @Autowired

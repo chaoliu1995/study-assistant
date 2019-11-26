@@ -18,10 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.imageio.ImageIO;
 import javax.validation.Valid;
@@ -36,6 +33,7 @@ import java.util.UUID;
  */
 @Api(tags = "登录", produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
 @Controller
+@RequestMapping("/api/login")
 public class LoginController extends BaseController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -44,7 +42,7 @@ public class LoginController extends BaseController {
     private MemoryStorage memoryStorage;
 
     @ApiOperation(value="登录")
-    @PostMapping("/login")
+    @PostMapping("/doLogin")
     @ResponseBody
     public BaseResult login(@RequestBody @Valid LoginDTO loginDTO, BindingResult bindingResult){
         BaseResult baseResult = new BaseResult();
@@ -69,7 +67,7 @@ public class LoginController extends BaseController {
         try {
             subject.login(upToken);
         }catch (AccountException e){
-            e.printStackTrace();
+            logger.info(e.getMessage());
             baseResult.setMessage(e.getMessage());
             return baseResult;
         }
@@ -83,7 +81,7 @@ public class LoginController extends BaseController {
             @ApiImplicitParam(name = "width", value = "宽度", required = false, dataType = "integer"),
             @ApiImplicitParam(name = "height", value = "高度", required = false, dataType = "integer")
     })
-    @GetMapping(value = "/login/verifyCode", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/verifyCode", produces = MediaType.IMAGE_JPEG_VALUE)
     @ResponseBody
     public void verifyCode(Integer width,Integer height) throws IOException {
         String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
@@ -103,7 +101,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="查询登录状态")
-    @PostMapping("/login/status")
+    @PostMapping("/status")
     @ResponseBody
     public ResultDTO<Boolean> status(){
         ResultDTO<Boolean> resultDTO = new ResultDTO<>();
@@ -117,7 +115,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="退出登录")
-    @PostMapping("/login/out")
+    @PostMapping("/out")
     @ResponseBody
     public BaseResult loginOut(){
         BaseResult result = new BaseResult();
@@ -129,7 +127,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="微信小程序登录")
-    @PostMapping("/login/wechat/miniProgram")
+    @PostMapping("/wechat/miniProgram")
     @ResponseBody
     public ResultDTO<Boolean> miniProgramLogin(@RequestBody WeChatMiniProgramLoginDTO loginDTO){
         ResultDTO<Boolean> resultDTO = new ResultDTO<>();
@@ -152,7 +150,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="获取登录二维码")
-    @GetMapping(value = "/login/qrCode")
+    @GetMapping(value = "/qrCode")
     @ResponseBody
     public void qrCode() throws IOException{
         if(session.getAttribute(Consts.SESSION_USER) != null){
@@ -171,7 +169,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="扫码登录")
-    @PostMapping("/login/scanCode")
+    @PostMapping("/scanCode")
     @ResponseBody
     public BaseResult scanCode(@RequestBody ScanCodeLoginDTO loginDTO){
         BaseResult result = new BaseResult();
@@ -194,7 +192,7 @@ public class LoginController extends BaseController {
     }
 
     @ApiOperation(value="检测是否已扫码登录")
-    @PostMapping("/login/scanCode/doLogin")
+    @PostMapping("/scanCode/doLogin")
     @ResponseBody
     public ResultDTO<Boolean> scanCodeLogin(){
         ResultDTO result = new ResultDTO();

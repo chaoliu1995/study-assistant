@@ -81,18 +81,33 @@ public class MyShiroRealm extends AuthorizingRealm {
         if (user.getStatus() - Consts.USER_STATUS_LOCK == 0){
             throw new AccountException("用户被锁定，禁止登录!");
         }
+        if(user.getPwdErrorNum() >= Consts.PWD_ERROR_NUM_MAX_VALUE){
+            throw new AccountException("密码错误次数过多，禁止登录，请联系管理员重置密码!");
+        }
+        String decryptPwd;
+        String serverPwd;
         try{
             //客户端密文AES解密
-            String decryptPwd = passwordUtils.decryptAESForClient(password, passwordUtils.getCLIENT_SKEY(), passwordUtils.getCLIENT_IVV());
+            decryptPwd = passwordUtils.decryptAESForClient(password, passwordUtils.getCLIENT_SKEY(), passwordUtils.getCLIENT_IVV());
             //服务器密文AES解密
-            String serverPwd = passwordUtils.decryptAES(user.getPassword(), passwordUtils.getSERVER_CRYPT_KEY(),passwordUtils.getSERVER_IV());
-            if(!serverPwd.equals(decryptPwd)){
-                throw new AccountException("用户名或密码错误!");
-            }
+            serverPwd = passwordUtils.decryptAES(user.getPassword(), passwordUtils.getSERVER_CRYPT_KEY(),passwordUtils.getSERVER_IV());
         }catch (Exception e){
             e.printStackTrace();
             logger.info("密码解密错误，用户名："+username);
+            throw new AccountException("密码解密错误!");
+        }
+        if(!serverPwd.equals(decryptPwd)){
+            User updatePwdErrorNum = new User();
+            updatePwdErrorNum.setId(user.getId());
+            updatePwdErrorNum.setPwdErrorNum(user.getPwdErrorNum()+1);
+            userMapper.updateByPrimaryKeySelective(updatePwdErrorNum);
             throw new AccountException("用户名或密码错误!");
+        }
+        if(user.getPwdErrorNum() > 0){
+            User updatePwdErrorNum = new User();
+            updatePwdErrorNum.setId(user.getId());
+            updatePwdErrorNum.setPwdErrorNum(0);
+            userMapper.updateByPrimaryKeySelective(updatePwdErrorNum);
         }
         this.setSession(Consts.SESSION_USER, user);
         SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(username, password, getName());

@@ -91,17 +91,13 @@ public class ShiroConfig {
         shiroFilter.setSecurityManager(securityManager);
         shiroFilter.setLoginUrl("/");
         Map<String ,String> filterMap = new HashMap<String ,String>();
-        filterMap.put("/login/**","anon");
-        filterMap.put("/login","anon");
-        filterMap.put("/static/**","anon");
+        filterMap.put("/api/login/**","anon");
 
         //swagger
-        filterMap.put("/swagger-ui.html","anon");
-        filterMap.put("/api","anon");
-        filterMap.put("/api/**","anon");
+        /*filterMap.put("/swagger-ui.html","anon");
         filterMap.put("/v2/api-docs","anon");
         filterMap.put("/swagger-resources/**","anon");
-        filterMap.put("/webjars/springfox-swagger-ui/**","anon");
+        filterMap.put("/webjars/springfox-swagger-ui/**","anon");*/
 
         filterMap.put("/**","authc");
         shiroFilter.setFilterChainDefinitionMap(filterMap);

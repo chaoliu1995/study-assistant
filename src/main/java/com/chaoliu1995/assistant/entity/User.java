@@ -36,4 +36,5 @@ public class User implements Serializable {
     private Date createTime;
     private Integer reviewingBookId;
     private Integer addingBookId;
+    private Integer pwdErrorNum;
 }

@@ -24,7 +24,7 @@ import javax.validation.Valid;
  */
 @Api(tags = "单词本相关接口", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
-@RequestMapping("/wordBook")
+@RequestMapping("/api/wordBook")
 public class BookWordController extends BaseController {
 
     @Autowired

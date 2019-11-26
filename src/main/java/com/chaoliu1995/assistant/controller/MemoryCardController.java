@@ -24,7 +24,7 @@ import javax.validation.Valid;
  */
 @Api( tags = "记忆卡片", produces= MediaType.APPLICATION_JSON_UTF8_VALUE)
 @RestController
-@RequestMapping("/memoryCard")
+@RequestMapping("/api/memoryCard")
 public class MemoryCardController extends BaseController {
 
     @Autowired

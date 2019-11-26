@@ -21,6 +21,7 @@ public class Consts {
 	public static final String LOGIN_CODE = "loginCode";
 	public static final String SCAN_CODE = "scanCode";
 	public static final String CHARSET = "UTF-8";
+	public static final int PWD_ERROR_NUM_MAX_VALUE = 5;
 
 	public static final String MINI_PROGRAM = "MiniProgram";
 	public static final String WECHAT_MINI_PROGRAM_LOGIN_URL = "https://api.weixin.qq.com/sns/jscode2session";
