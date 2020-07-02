@@ -74,7 +74,13 @@ public class MyShiroRealm extends AuthorizingRealm {
             return info;
         }
         //账号密码登录
-        User user = userMapper.selectOne(new User(username));
+        User paramsUser = new User();
+        if(username.contains(Consts.EMAIL_MARK)){
+            paramsUser.setEmail(username);
+        }else{
+            paramsUser.setName(username);
+        }
+        User user = userMapper.selectOne(paramsUser);
         if (user == null) {
             throw new AccountException("用户不存在!");
         }
