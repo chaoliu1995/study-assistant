@@ -32,7 +32,13 @@ public class LoginServiceImpl implements LoginService {
     public void login(LoginDTO loginDTO, BaseResult resultDTO) {
         logger.info("用户登录："+loginDTO.getUsername());
         try {
-            User dbUser = userMapper.selectOne(new User(loginDTO.getUsername()));
+            User paramsUser = new User();
+            if(loginDTO.getUsername().contains(Consts.EMAIL_MARK)){
+                paramsUser.setEmail(loginDTO.getUsername());
+            }else{
+                paramsUser.setName(loginDTO.getUsername());
+            }
+            User dbUser = userMapper.selectOne(paramsUser);
             if(dbUser == null){
                 resultDTO.setMessage("账号不存在");
                 return;
