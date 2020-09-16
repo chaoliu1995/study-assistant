@@ -15,4 +15,8 @@ public class BaseResult {
     }
     protected String status;
     protected String message;
+
+    public void success(){
+        this.status = Consts.SUCCESS;
+    }
 }

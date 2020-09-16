@@ -2,6 +2,7 @@ package com.chaoliu1995.assistant.service;
 
 import com.chaoliu1995.assistant.dto.BaseResult;
 import com.chaoliu1995.assistant.dto.CommonIdDTO;
+import com.chaoliu1995.assistant.dto.PasswordUpdateDTO;
 
 /**
  * @Author: ChaoLiu
@@ -16,6 +17,13 @@ public interface UserService {
      * @param result
      */
     void updateCurrentBook(CommonIdDTO commonIdDTO, String type, BaseResult result);
+
+    /**
+     * 修改密码
+     * @param updateDTO
+     * @param result
+     */
+    void updatePassword(PasswordUpdateDTO updateDTO, BaseResult result);
 
 }
 

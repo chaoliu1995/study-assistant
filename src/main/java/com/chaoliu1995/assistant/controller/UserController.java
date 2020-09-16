@@ -2,6 +2,7 @@ package com.chaoliu1995.assistant.controller;
 
 import com.chaoliu1995.assistant.dto.BaseResult;
 import com.chaoliu1995.assistant.dto.CommonIdDTO;
+import com.chaoliu1995.assistant.dto.PasswordUpdateDTO;
 import com.chaoliu1995.assistant.dto.ResultDTO;
 import com.chaoliu1995.assistant.entity.CommonSet;
 import com.chaoliu1995.assistant.service.BookWordService;
@@ -11,10 +12,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * @Author: ChaoLiu
@@ -80,6 +84,19 @@ public class UserController extends BaseController {
         }
         resultDTO.setStatus(Consts.SUCCESS);
         return resultDTO;
+    }
+
+    @ApiOperation(value="修改密码")
+    @PostMapping("/password/update")
+    public BaseResult updatePassword(@RequestBody @Valid PasswordUpdateDTO updateDTO, BindingResult bindingResult){
+        BaseResult result = new BaseResult();
+        if (bindingResult.hasErrors()){
+            result.setMessage(bindingResult.getAllErrors().get(0).getDefaultMessage());
+            return result;
+        }
+        updateDTO.setUserId(getUserId());
+        userService.updatePassword(updateDTO,result);
+        return result;
     }
 
 }
