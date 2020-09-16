@@ -54,6 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void updatePassword(PasswordUpdateDTO updateDTO, BaseResult result) {
         User user = userMapper.selectByPrimaryKey(updateDTO.getUserId());
         if(user == null){
